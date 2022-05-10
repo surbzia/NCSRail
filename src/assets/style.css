@@ -1,0 +1,51 @@
+.bread-c ul {
+    padding: 15px 0 !important;
+}
+.sec-heading {
+    color: #fff;
+    background: rgb(59,162,18);
+    background: linear-gradient(97deg, rgba(59,162,18,1) 0%, rgba(15,107,81,1) 100%);
+    padding: 0 5px;
+    margin: 0 0 10px;
+}
+.sec-heading h2 {
+    text-transform: uppercase;
+}
+.btn-primary {
+    background-color: #3ba212 !important;
+    color: #fff !important;
+    padding: 22px 25px !important;
+}
+.v-picker--time {
+    width: 100%;
+}
+.v-time-picker-title__time .v-picker__title__btn, .v-time-picker-title__time span {
+   
+    height: 30px !important;
+    font-size: 40px !important;
+   
+}
+header .v-responsive__content {
+    max-width: 190px;
+}
+.v-application .mt-5 {
+    margin-top: 0px!important;
+}
+.v-navigation-drawer__content {
+    margin-top: -7px;
+}
+header.v-sheet.theme--dark {
+    background: #fff !important;
+}
+
+.v-application .mr-2 {
+    color: #000;
+}
+
+header i.v-icon {
+    color: #000 !important;
+}
+.v-application .grey.lighten-5.loginscreen {
+    background: #3ba212;
+    padding: 7px;
+}
