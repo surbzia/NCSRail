@@ -74,6 +74,18 @@ const routes = [
     component: ()=> import('@/views/cities/list.vue'),
     meta: { showsidebar: false }
   },
+  {
+    path: '/trains',
+    name: 'auth.trains.listing',
+    component: ()=> import('@/views/trains/list.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/train/routes',
+    name: 'auth.routes.listing',
+    component: ()=> import('@/views/traint_routes/list.vue'),
+    meta: { showsidebar: false }
+  },
 ]
 
 const router = new VueRouter({

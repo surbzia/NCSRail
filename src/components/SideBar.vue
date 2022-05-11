@@ -75,6 +75,14 @@
           <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
             <v-list-item-title>Cities</v-list-item-title>
           </v-list-item>
+          <v-list-item class="px-2" link :to="{ name: 'auth.trains.listing' }">
+            <v-list-item-title>Trains</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
+            <v-list-item-title>Routes</v-list-item-title>
+          </v-list-item>
+
+          
           <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">
             <v-list-item-title>Add Station</v-list-item-title>
           </v-list-item>

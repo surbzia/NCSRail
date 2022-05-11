@@ -32,7 +32,7 @@
                         <v-text-field
                           v-model="form.name"
                           :rules="nameRules"
-                          label="Station Name"
+                          label="City Name"
                           required
                         ></v-text-field>
                       </v-col>

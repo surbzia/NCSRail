@@ -17,7 +17,7 @@
           <v-dialog v-model="cityModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                Add City
+                Add Train
               </v-btn>
             </template>
             <v-card>
@@ -28,11 +28,19 @@
                 <v-form v-model="valid">
                   <v-container>
                     <v-row>
-                      <v-col cols="12" md="12">
+                      <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.name"
                           :rules="nameRules"
-                          label="Station Name"
+                          label="Train Name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="form.code"
+                          :rules="nameRules"
+                          label="Train Code"
                           required
                         ></v-text-field>
                       </v-col>
@@ -45,15 +53,6 @@
                   </v-container>
                 </v-form>
               </v-card-text>
-              <!-- <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false">
-                  Close
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="dialog = false">
-                  Save
-                </v-btn>
-              </v-card-actions> -->
             </v-card>
           </v-dialog>
         </v-row>
@@ -85,8 +84,8 @@ export default {
           exact: true,
         },
         {
-          text: "Cities",
-          to: { name: "auth.cities.listing" },
+          text: "Trains",
+          to: { name: "auth.trains.listing" },
           disabled: false,
           exact: true,
         },
@@ -94,11 +93,12 @@ export default {
       items: [],
       loading: true,
       button: "Submit",
-      title: "Add City",
+      title: "Add Train",
       totalRecords: 0,
       form: {
         id: null,
         name: "",
+        code: "",
       },
       nameRules: [
         // (v) => !!v || "Name is required",
@@ -110,14 +110,17 @@ export default {
         {
           id: 1,
           name: "Karachi",
+          code: 23234,
         },
         {
           id: 2,
           name: "Lahore",
+           code: 23234,
         },
         {
           id: 3,
           name: "Rawalpindi",
+           code: 23234,
         },
       ],
       headers: [
@@ -128,10 +131,16 @@ export default {
           value: "id",
         },
         {
-          text: "Name",
+          text: "Train Name",
           align: "start",
           sortable: true,
           value: "name",
+        },
+        {
+          text: "Train Code",
+          align: "start",
+          sortable: true,
+          value: "code",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -158,13 +167,14 @@ export default {
     edit(item) {
       this.form.id = item.id;
       this.form.name = item.name;
+      this.form.code = item.code;
       this.button = "Update";
-      this.title = "Update City";
+      this.title = "Update Train";
       this.cityModel = true;
     },
     deleteItem(item) {
-      if (confirm("Are you sure you want to delete this City.. ??")) {
-        alert("Your City has been deleted successfully");
+      if (confirm("Are you sure you want to delete this Train.. ??")) {
+        alert("Your Train has been deleted successfully");
       }
     },
     // del{eteuser: async function (id) {
