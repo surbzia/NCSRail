@@ -58,29 +58,34 @@
               </v-menu>
             </v-col>
             <v-col cols="6" md="6">
-              <v-dialog
-                ref="dialog"
+              <v-menu
+                ref="menu"
                 v-model="arrival_time_modal"
-                :return-value.sync="form.arrival_time"
-                persistent
-                width="290px"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="form.arrival_time"
-                    label="Waiting Time"
+                    v-model="time"
+                    label="Picker in menu"
                     prepend-icon="mdi-clock-time-four-outline"
+                    readonly
                     v-bind="attrs"
                     v-on="on"
                   ></v-text-field>
                 </template>
                 <v-time-picker
                   v-if="arrival_time_modal"
-                  v-model="form.arrival_time"
+                  v-model="time"
                   full-width
-                  @click:minute="$refs.menu.save(form.arrival_time)"
+                  @click:minute="$refs.menu[0].save(time)"
                 ></v-time-picker>
-              </v-dialog>
+              </v-menu>
             </v-col>
           </v-row>
 
@@ -173,6 +178,7 @@
 export default {
   data: () => ({
     valid: false,
+    time: null,
     waiting_time_picker: false,
     form: {
       id: null,
@@ -197,7 +203,12 @@ export default {
       {
         text: "Dashboard",
         disabled: false,
-        href: "#",
+       to: { name: "auth.dashboard" },
+      },
+      {
+        text: "Routes",
+        disabled: false,
+        to: { name: "auth.routes.listing" },
       },
       {
         text: "Add Routes",
@@ -224,6 +235,9 @@ export default {
     },
     removeStation(item) {
       this.form.stations.splice(this.form.stations.indexOf(item), 1);
+    },
+    close(time) {
+      this.$refs.menu[0].save(time);
     },
   },
 };

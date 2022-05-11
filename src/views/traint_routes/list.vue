@@ -3,6 +3,7 @@
     <div class="bread-c">
       <v-container>
         <v-breadcrumbs :items="bread" large></v-breadcrumbs>
+      
       </v-container>
     </div>
     <v-data-table
@@ -16,7 +17,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="RouteModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              <v-btn link :to="{ name: 'auth.addroutes' }" color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                 Add Routes
               </v-btn>
             </template>
@@ -207,8 +208,8 @@ export default {
           exact: true,
         },
         {
-          text: "Trains",
-          to: { name: "auth.trains.listing" },
+          text: "Routes",
+          to: { name: "auth.routes.listing" },
           disabled: false,
           exact: true,
         },
