@@ -24,6 +24,12 @@ const routes = [
     component: ()=> import('@/views/dashboard.vue'),
     meta: { showsidebar: false }
   },
+  {
+    path: '/dashboard',
+    name: 'auth.dashboard',
+    component: ()=> import('@/views/dashboard.vue'),
+    meta: { showsidebar: false }
+  },
   // {
   //   path: '/dashboard',
   //   name: 'auth.dashboard',
@@ -86,6 +92,31 @@ const routes = [
     component: ()=> import('@/views/traint_routes/list.vue'),
     meta: { showsidebar: false }
   },
+
+    {
+        path: '/bookings/',
+        name: 'auth.bookings',
+        component: ()=> import('@/views/bookings/main.vue'),
+        children: [
+            {
+                path: '',
+                component: ()=> import('@/views/bookings/list.vue'),
+                name: 'auth.bookings.listing'
+            },
+            {
+                path: 'detail/:id',
+                component: ()=> import('@/views/bookings/detail.vue'),
+                name: 'auth.bookings.detail'
+            },
+            // {
+            //     path: 'edit/:id',
+            //     component: ()=> import('@/views/Role/Form.vue'),
+            //     name: 'auth.bookings.edit'
+            // }
+        ],
+        // beforeEnter: admin,
+    },
+
 ]
 
 const router = new VueRouter({

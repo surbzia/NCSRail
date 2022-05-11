@@ -59,7 +59,7 @@
             </v-col>
             <v-col cols="6" md="6">
               <v-menu
-                ref="menu"
+                ref="arrival_time"
                 v-model="arrival_time_modal"
                 :close-on-content-click="false"
                 :nudge-right="40"
@@ -83,7 +83,7 @@
                   v-if="arrival_time_modal"
                   v-model="time"
                   full-width
-                  @click:minute="$refs.menu[0].save(time)"
+                  @click:minute="$refs.arrival_time.save(time)"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -96,6 +96,7 @@
             :key="index"
             class="mt-3"
           >
+          {{station.waiting_time}}
             <v-col cols="2" md="2">
               <v-text-field
                 v-model="station.sort_order"
@@ -113,7 +114,7 @@
             </v-col>
             <v-col cols="4" md="4">
               <v-menu
-                ref="menu"
+                ref="waiting_time_menu"
                 v-model="waiting_time_picker"
                 :close-on-content-click="false"
                 :nudge-right="40"
@@ -136,7 +137,7 @@
                   v-if="waiting_time_picker"
                   v-model="station.waiting_time"
                   full-width
-                  @click:minute="$refs.menu[index].save(station.waiting_time)"
+                  @click:minute="$refs.waiting_time_menu[index].save(station.waiting_time)"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -185,7 +186,7 @@ export default {
       name: "",
       train: "",
       stations: [
-        { id: 1, station: "23423", sort_order: 1, waiting_time: null },
+        { id: 1,sort_order: 1, station: '',  waiting_time: '' },
       ],
       arrival_date: "",
       arrival_time: "",
@@ -237,7 +238,8 @@ export default {
       this.form.stations.splice(this.form.stations.indexOf(item), 1);
     },
     close(time) {
-      this.$refs.menu[0].save(time);
+      this.form.arrival_time =  time;
+      // this.arrival_time_modal = false;
     },
   },
 };

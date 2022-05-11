@@ -68,15 +68,18 @@
           <v-list-item class="px-2" link :to="{ name: 'auth.dashboard' }">
             <v-list-item-title>DASHBOARD</v-list-item-title>
           </v-list-item>
-          <v-list-item
+          <v-list-item class="px-2" link :to="{ name: 'auth.bookings.listing' }">
+            <v-list-item-title>Bookings</v-list-item-title>
+          </v-list-item>
+          <!-- <v-list-item
             class="px-2"
             link
             :to="{ name: 'auth.stations.listing' }"
           >
 
             <v-list-item-title>Station</v-list-item-title>
-          </v-list-item>
-          <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
+          </v-list-item> -->
+          <!-- <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
             <v-list-item-title>Cities</v-list-item-title>
           </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.trains.listing' }">
@@ -84,10 +87,10 @@
           </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
             <v-list-item-title>Routes</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
 
           
-          <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">
+          <!-- <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">
             <v-list-item-title>Add Station</v-list-item-title>
           </v-list-item>
 
@@ -102,7 +105,7 @@
           </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.traincoaches' }">
             <v-list-item-title>Train Coaches</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-navigation-drawer>
     </v-hover>
