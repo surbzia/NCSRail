@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- <v-app-bar app></v-app-bar> -->
-    <side-bar :showsidebar="sideBarStatus"></side-bar>
+    <side-bar :showsidebar="sideBarStatus" ></side-bar>
     <v-main>
       <v-container :fluid="sideBarStatus" class="mt-5">
         <router-view />

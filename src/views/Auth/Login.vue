@@ -6,7 +6,7 @@
           <div class="justify-center">
             <v-form ref="form" v-model="loading" lazy-validation>
               <v-text-field
-                v-model="loggedinemail"
+                v-model="login_username"
                 :rules="[rules.required, rules.email]"
                 label="Email"
                 clearable
@@ -18,7 +18,7 @@
                 name="input-10-2"
                 label="Password"
                 value=""
-                v-model="loggedinpassword"
+                v-model="login_password"
                 class="input-group--focused"
                 @click:append="show3 = !show3"
                 clearable
@@ -66,8 +66,8 @@ export default {
       loading: false,
       btnloading: false,
       snackbar: false,
-      loggedinemail: "",
-      loggedinpassword: "",
+      login_username: "",
+      login_password: "",
       show3: false,
       password: "Password",
       erorrs: {
@@ -89,29 +89,26 @@ export default {
       if (this.$refs.form.validate()) {
         this.btnloading = true;
         var logindetail = await loginservice.dologin(
-          this.loggedinemail,
-          this.loggedinpassword
+          this.login_username,
+          this.login_password
         );
         this.btnloading = false;
-        if (logindetail.data) {
+       
           if (logindetail.status) {
+            console.log(logindetail.data);
             this.$store.commit("setLoginStatus", true);
             this.$store.commit("setAuthToken", logindetail.data);
-            var user = await loginservice.me();
-            this.$store.commit("setloggedInUser", user);
-            if (user.permissions.length > 0) {
-              let permissions = user.permissions.map((e) => {
-                return e.permission_id;
-              });
-              this.$store.commit("setPermissions", permissions);
-            }
+            // var user = await loginservice.me();
+            // this.$store.commit("setloggedInUser", user);
+            // if (user.permissions.length > 0) {
+            //   let permissions = user.permissions.map((e) => {
+            //     return e.permission_id;
+            //   });
+            //   this.$store.commit("setPermissions", permissions);
+            // }
+            // this.$router.push({ name: "auth.dashboard" });
             this.$router.push({ name: "auth.dashboard" });
-            // $route.push('auth.dashboard')
-          } else {
-            this.erorrs.email = logindetail.data;
-            this.snackbar = true;
           }
-        }
       }
     },
   },

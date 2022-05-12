@@ -10,7 +10,7 @@
         <span class="mr-2">Dashboard</span>
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>
-      <v-btn text>
+      <v-btn text @click="logout">
         <span class="mr-2">Logout</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -120,7 +120,14 @@ export default {
     drawer: false,
     mini: true,
   }),
-  methods: {},
+  methods: {
+        logout() {
+      this.$store.commit("setLoginStatus", false);
+      this.$store.commit("setAuthToken", "");
+      // this.$store.commit("setloggedInUser", {});
+      this.$router.push({ name: "auth.login" });
+    },
+  },
   computed: {},
 };
 </script>

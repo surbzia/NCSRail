@@ -1,23 +1,22 @@
 const axios = require('axios');
 class loginservice{
 	dologin(email,pass){
-		return axios.post(`/api/login`, {
-			email: email,
+		return axios.post(`/api/user/adminlogin`, {
+			username: email,
 			password: pass
 		})
-		.then(function (response) {
-			return {status: 1, data: response.data.token};
+			.then(function (response) {
+			return { status: 1,code:response.data.code, data: response.data.rspObj };
 		})
 		.catch(function (error) {
-			var data = error.response.data;
-			var msg = '';
-			if(data.message){
-				msg = data.message;
-			}
-			if(data.errors){
-				msg = data.errors.join(', ');
-			}
-			return {status: 0,data: msg};
+			// var msg = '';
+			// if(data.message){
+			// 	msg = data.message;
+			// }
+			// if(data.errors){
+			// 	msg = data.errors.join(', ');
+			// }
+			return {status: 0,code:error.status, data: error.title};
 		});
 	}
 	me(){

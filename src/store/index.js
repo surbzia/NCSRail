@@ -15,7 +15,7 @@ export default new Vuex.Store({
     mutations: {
            setAuthToken(state, authtoken) {
             localStorage.setItem('auth_token',authtoken);
-            window.axios.defaults.headers.common['Authorization'] = 'Bearer '+authtoken;
+            axios.defaults.headers.common['Authorization'] = 'Bearer '+authtoken;
             state.authtoken = authtoken
         },
         setLoginStatus(state, loggedIn) {

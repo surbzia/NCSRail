@@ -23,22 +23,37 @@ Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 
 
-// router.beforeEach(async (to, from, next) => {
-//   if(to.meta.guest){
-//     next()
-//   }
-//   else{
-//     var isAuthenticated = localStorage.getItem('auth_token')?true:false;
-//     if (to.name !== 'auth.login' && !isAuthenticated) next({ name: 'auth.login' })
-//     if (to.name === 'auth.login' && isAuthenticated) next({ name: 'auth.dashboard' })
-//     else next()
-//   }
-// })
+router.beforeEach(async (to, from, next) => {
+  if(to.meta.guest){
+    next()
+  }
+  else{
+    var isAuthenticated = localStorage.getItem('auth_token')?true:false;
+    if (to.name !== 'auth.login' && !isAuthenticated) next({ name: 'auth.login' })
+    if (to.name === 'auth.login' && isAuthenticated) next({ name: 'auth.dashboard' })
+    else next()
+  }
+})
 
 
 new Vue({
   router,
   store,
   vuetify,
+    async created(){
+    var token = localStorage.getItem('auth_token')?localStorage.getItem('auth_token'):'';
+    if(token){
+      this.$store.commit('setAuthToken',token);
+      this.$store.commit('setLoginStatus',true);
+      // var user = await loginservice.me()
+      // this.$store.commit('setloggedInUser',user);
+      // if(user.permissions.length>0){
+      //   let permissions = user.permissions.map((e)=>{
+      //     return e.permission_id
+      //   })
+      //   this.$store.commit('setPermissions',permissions);
+      // }
+    }
+  },
   render: h => h(App)
 }).$mount('#app')

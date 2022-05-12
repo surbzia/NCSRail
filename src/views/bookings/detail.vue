@@ -5,141 +5,116 @@
         <v-breadcrumbs :items="breads" large></v-breadcrumbs>
       </v-container>
     </div>
-    <v-card class="pt-3 pb-3 pr-3 pl-3">
-      <div class="row">
-        <div class="col-md-6">
-          <v-card class="pt-3 pb-3 pr-3 pl-3">
-            <h3>Contact Detail</h3>
-            <hr />
-            <v-simple-table>
-              <template v-slot:default>
-                <tbody>
-                  <tr>
-                    <td><b>Full Name :</b></td>
-                    <td>{{ form.full_name }}</td>
-                  </tr>
-                  <tr>
-                    <td><b>Email :</b></td>
-                    <td>{{ form.email }}</td>
-                  </tr>
-                  <tr>
-                    <td><b>Mobile number :</b></td>
-                    <td>{{ form.mobile_number }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-card>
-        </div>
-        <div class="col-md-6">
-          <v-card class="pt-3 pb-3 pr-3 pl-3">
-            <span class="d-flex justify-md-space-between"
-              ><h3>Amount Detail</h3>
-              <v-checkbox
-                v-model="form.amount_recived"
-                style="margin-bottom: -17px"
-                class="mt-0"
-                :label="`Recived`"
-              ></v-checkbox>
-            </span>
-            <hr />
-            <v-simple-table dense>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Type</th>
-                    <th class="text-left">Qty</th>
-                    <th class="text-left">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Child</td>
-                    <td>x 4</td>
-                    <td>PKR 2700</td>
-                  </tr>
-                  <tr>
-                    <td>Adult</td>
-                    <td>x 4</td>
-                    <td>PKR 2700</td>
-                  </tr>
-                  <tr>
-                    <td>Disabled Person</td>
-                    <td>x 4</td>
-                    <td>PKR 2700</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th>TOTAL</th>
-                    <th>PKR, 50,0002</th>
-                  </tr>
-                </tfoot>
-              </template>
-            </v-simple-table>
-          </v-card>
-        </div>
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <v-btn :to="{ name: 'auth.bookings.listing' }" rounded dark>
+          Back
+        </v-btn>
+        &nbsp;
+        <v-btn rounded color="info" dark> Receive </v-btn>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h3>Traveler Details</h3>
-          <hr />
-          <v-data-table
-            :headers="headers"
-            :items="traveler_details"
-            :loading="loading"
-            class="elevation-1"
-          >
-          </v-data-table>
-          <!-- <v-simple-table dense>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <v-card class="pt-3 pb-3 pr-3 pl-3">
+          <div class="sec-heading">
+            <v-container>
+              <h2>Contact Detail</h2>
+            </v-container>
+          </div>
+          <v-simple-table>
+            <template v-slot:default>
+              <tbody>
+                <tr>
+                  <td><b>Full Name :</b></td>
+                  <td>{{ bookingDetail.contactDetail.fullName }}</td>
+                </tr>
+                <tr>
+                  <td><b>Email :</b></td>
+                  <td>{{ bookingDetail.contactDetail.email }}</td>
+                </tr>
+                <tr>
+                  <td><b>Mobile number :</b></td>
+                  <td>{{  bookingDetail.contactDetail.mobileNo }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
+      </div>
+      <div class="col-md-6">
+        <v-card class="pt-3 pb-3 pr-3 pl-3">
+          <div class="sec-heading">
+            <v-container>
+              <span class="d-flex justify-md-space-between">
+                <h2>Fare Detail</h2>
+              </span>
+            </v-container>
+          </div>
+
+          <v-simple-table dense>
             <template v-slot:default>
               <thead>
                 <tr>
                   <th class="text-left">Type</th>
-                  <th class="text-left">Full Name</th>
-                  <th class="text-left">CNIC Number</th>
-                  <th class="text-left">Seat Number</th>
+                  <th class="text-left">Amount</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                  <td>23B</td>
-                </tr>
-                <tr>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                   <td>23B</td>
-                </tr>
-                <tr>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                  <td>sdfsd</td>
-                   <td>23B</td>
+                <tr v-for="(fare,index ) in bookingDetail.fares" :key="index">
+                  <td>{{fare.type}}</td>
+                  <td>PKR, {{fare.total}}</td>
                 </tr>
               </tbody>
+              <tfoot>
+                <tr>
+                  <th>TOTAL</th>
+                  <th>PKR, {{bookingDetail.totalAmount}}</th>
+                </tr>
+              </tfoot>
             </template>
-          </v-simple-table> -->
+          </v-simple-table>
+        </v-card>
+      </div>
+    </div>
+    <v-card class="pt-3 pb-3 pr-3 pl-3">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="sec-heading">
+            <v-container>
+              <h2>Passingers Details</h2>
+            </v-container>
+          </div>
+          <v-data-table
+            :headers="headers"
+            :items="bookingDetail.passengerDetails"
+            :loading="loading"
+            class="elevation-1"
+          >
+          </v-data-table>
         </div>
       </div>
     </v-card>
   </div>
 </template>
 <script>
+import bookingService from "@/services/booking";
 export default {
   data() {
     return {
       loading: false,
-      form: {
-        amount_recived: false,
-        full_name: "Saleem Ur Rehman",
-        email: "asdasdf@gmail.com",
-        mobile_number: +923166889,
+     bookingDetail:{
+      contactDetail: {
+        fullName: null,
+        email: null,
+        mobileNo: null,
       },
+      passengerDetails:[],
+      fares:[],
+      status:null,
+      totalAmount:null,
+     },
       options: {},
       trains: [
         {
@@ -163,7 +138,7 @@ export default {
         },
         {
           text: "Bookings",
-          disabled: true,
+          disabled: false,
           to: { name: "auth.bookings.listing" },
         },
         {
@@ -177,13 +152,13 @@ export default {
           text: "Full Name",
           align: "start",
           sortable: true,
-          value: "full_name",
+          value: "fullName",
         },
         {
           text: "CNIC Number",
           align: "start",
           sortable: true,
-          value: "cnic_number",
+          value: "cnic",
         },
         {
           text: "Type",
@@ -195,27 +170,27 @@ export default {
           text: "Seat Number",
           align: "start",
           sortable: true,
-          value: "seat_number",
+          value: "seatNo",
         },
         // { text: "Actions", value: "actions", sortable: false },
       ],
-      traveler_details: [
-        {
-          id: 1,
-          full_name: "saleem 2342",
-          cnic_number: "2341352353",
-          type: "Audult",
-          seat_number: "089",
-        },
-        {
-          id: 2,
-          full_name: "saleem 545",
-          cnic_number: "2341352353",
-          type: "Audult",
-          seat_number: "6756",
-        },
-      ],
+      
     };
+
+  },
+  methods:{
+   async getBookingDetail(){
+      let id = this.$route.params.id;
+      const res = await bookingService.get(id);
+      this.bookingDetail.contactDetail = res.contactDetail;
+      this.bookingDetail.passengerDetails = res.passengerDetails;
+      this.bookingDetail.fares = res.fares;
+      this.bookingDetail.status = res.status;
+      this.bookingDetail.totalAmount = res.totalAmount;
+    }
+  },
+   mounted() {
+    this.getBookingDetail();
   },
 };
 </script>
