@@ -6,11 +6,11 @@
       </v-container>
     </div>
     <div class="row">
-      <div class="col-md-12 d-flex justify-md-space-between ">
-        <div class="text-left">
+      <div class="col-md-12 ">
+        <!-- <div class="text-left">
               
-        <span><v-btn rounded outlined color="info" dark> {{bookingDetail.status}} </v-btn></span>
-        </div>
+        <span><v-btn rounded outlined v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" dark> {{bookingDetail.status}} </v-btn></span>
+        </div> -->
       <div class="text-right">
           <v-btn :to="{ name: 'auth.bookings.listing' }" rounded dark>
           Back
@@ -29,7 +29,7 @@
               <h2>Contact Detail</h2>
             </v-container>
           </div>
-          <v-simple-table>
+          <v-simple-table dense>
             <template v-slot:default>
               <tbody>
                 <tr>
@@ -43,6 +43,10 @@
                 <tr>
                   <td><b>Mobile number :</b></td>
                   <td>{{  bookingDetail.contactDetail.mobileNo }}</td>
+                </tr>
+                <tr>
+                  <td><b>Booking Status :</b></td>
+                  <td><v-btn rounded outlined v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" small> {{bookingDetail.status}} </v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -199,7 +203,7 @@ export default {
    async paynow(){
       let hash =  this.bookingDetail.bookingHash;
       const res = await bookingService.pay(hash);
-      if(res.code){
+      if(res.data.code == 200){
         this.getBookingDetail();
       }
     }

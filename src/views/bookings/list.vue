@@ -23,7 +23,7 @@
           PKR, {{item.totalFare}}
       </template> 
        <template v-slot:[`item.invoiceStatus`]="{ item }">
-        <v-btn  rounded color="info" light>
+        <v-btn  rounded v-bind:color="item.invoiceStatus == 'Booked' ? 'success' : 'info'" small>
           {{item.invoiceStatus}}
          </v-btn>
       </template> 
@@ -67,6 +67,7 @@ export default {
       ],
       valid: false,
       options: {},
+      bookings:[],
      headers: [
         {
           text: "Booker Name",
