@@ -95,7 +95,7 @@ export default {
         this.btnloading = false;
        
           if (logindetail.status) {
-            console.log(logindetail.data);
+            this.$toaster.success("You have login successfully.");
             this.$store.commit("setLoginStatus", true);
             this.$store.commit("setAuthToken", logindetail.data);
             // var user = await loginservice.me();

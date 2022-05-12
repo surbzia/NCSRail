@@ -45,7 +45,7 @@
                   <td>{{  bookingDetail.contactDetail.mobileNo }}</td>
                 </tr>
                 <tr>
-                  <td><b>Booking Status :</b></td>
+                  <td><b>Status :</b></td>
                   <td><v-btn rounded outlined v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" small> {{bookingDetail.status}} </v-btn></td>
                 </tr>
               </tbody>
