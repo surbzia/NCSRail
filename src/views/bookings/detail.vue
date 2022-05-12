@@ -204,6 +204,7 @@ export default {
       let hash =  this.bookingDetail.bookingHash;
       const res = await bookingService.pay(hash);
       if(res.data.code == 200){
+        this.$toaster.success("Payment recived successfully, status updated to Booked.");
         this.getBookingDetail();
       }
     }
