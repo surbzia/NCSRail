@@ -19,6 +19,14 @@
           class="mx-4"
         ></v-text-field>
       </template>
+       <template v-slot:[`item.totalFare`]="{ item }">
+          PKR, {{item.totalFare}}
+      </template> 
+       <template v-slot:[`item.invoiceStatus`]="{ item }">
+        <v-btn  rounded color="info" light>
+          {{item.invoiceStatus}}
+         </v-btn>
+      </template> 
        <template v-slot:[`item.actions`]="{ item }">
         <v-btn  :to="{ name: 'auth.bookings.detail', params: { id: item.bookingHASH } }"  class="ma-0"
       outlined
@@ -36,7 +44,6 @@ export default {
   name: "auth.station.listing",
   data() {
     return {
-      stationModel: false,
       search: "",
       bread: [
         {
@@ -52,26 +59,15 @@ export default {
           exact: true,
         },
       ],
-      items: [],
       loading: true,
-      button: "Submit",
-      title: "Add Station",
       totalRecords: 0,
-      form: {
-        id: null,
-        name: "",
-        code: "",
-        city: "",
-      },
       nameRules: [
         // (v) => !!v || "Name is required",
         // (v) => v.length <= 10 || "Name must be less than 10 characters",
       ],
       valid: false,
       options: {},
-     bookings:[],
      headers: [
-   
         {
           text: "Booker Name",
           align: "start",
@@ -133,20 +129,6 @@ export default {
     this.getDataFromApi();
   },
   methods: {
-    edit(item) {
-      this.form.id = item.id;
-      this.form.name = item.name;
-      this.form.code = item.code;
-      this.form.city = item.city;
-      this.button = "Update";
-      this.title = "Update Station";
-      this.stationModel = true;
-    },
-    deleteItem(item) {
-      if (confirm("Are you sure you want to delete this Station.. ??")) {
-        alert("Your Station has been deleted successfully");
-      }
-    },
     // del{eteuser: async function (id) {
     //   const isConfirmed = await Swal.fire({
     //     title: "Are you sure?",
@@ -200,31 +182,18 @@ export default {
     var query = "";
       var page = this.options.page;
       query += "?page=" + page;
-      // if (this.options.sortBy.length > 0) {
-      //   query += "&sortCol=" + this.options.sortBy[0];
-      // }
-      // if (this.options.sortDesc.length > 0) {
-      //   query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-      // }
+          if (this.options.sortBy.length > 0) {
+        query += "&sortCol=" + this.options.sortBy[0];
+      }
+      if (this.options.sortDesc.length > 0) {
+        query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
+      }
       query += "&perpage=" + this.options.itemsPerPage;
       if (this.search != "") {
         query += "&search=" + this.search;
       }
      return  bookingService.getlist(query);
-   
 }
-
   },
-  // watch: {
-  //   // options: {
-  //   //   handler() {
-  //   //     this.getDataFromApi();
-  //   //   },
-  //   //   deep: true,
-  //   // },
-  //   search() {
-  //     this.getDataFromApi();
-  //   },
-  // },
 };
 </script>

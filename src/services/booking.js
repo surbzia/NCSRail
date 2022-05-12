@@ -23,6 +23,9 @@ class bookingservice{
     get(id){
 		return axios.get(`/api/BookingService/GetBookingDetail/${id}`).then(e=>e.data);
 	}
+    pay(json){
+		return axios.post(`/api/BookingService/paynow`,{hash:json}).then(e=>e);
+	}
     async update(formData, id){
 		formData.append('_method','put')
 		var res = await  axios.post('/api/categories/'+id,formData).then(function(e){

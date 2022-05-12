@@ -6,12 +6,18 @@
       </v-container>
     </div>
     <div class="row">
-      <div class="col-md-12 text-right">
-        <v-btn :to="{ name: 'auth.bookings.listing' }" rounded dark>
+      <div class="col-md-12 d-flex justify-md-space-between ">
+        <div class="text-left">
+              
+        <span><v-btn rounded outlined color="info" dark> {{bookingDetail.status}} </v-btn></span>
+        </div>
+      <div class="text-right">
+          <v-btn :to="{ name: 'auth.bookings.listing' }" rounded dark>
           Back
         </v-btn>
         &nbsp;
-        <v-btn rounded color="info" dark> Receive </v-btn>
+        <v-btn rounded color="info" v-if="bookingDetail.status == 'Pending'" dark @click="paynow"> Receive </v-btn>
+      </div>
       </div>
     </div>
 
@@ -105,6 +111,7 @@ export default {
     return {
       loading: false,
      bookingDetail:{
+       bookingHash:'',
       contactDetail: {
         fullName: null,
         email: null,
@@ -182,11 +189,19 @@ export default {
    async getBookingDetail(){
       let id = this.$route.params.id;
       const res = await bookingService.get(id);
+      this.bookingDetail.bookingHash = res.bookingHash;
       this.bookingDetail.contactDetail = res.contactDetail;
       this.bookingDetail.passengerDetails = res.passengerDetails;
       this.bookingDetail.fares = res.fares;
       this.bookingDetail.status = res.status;
       this.bookingDetail.totalAmount = res.totalAmount;
+    },
+   async paynow(){
+      let hash =  this.bookingDetail.bookingHash;
+      const res = await bookingService.pay(hash);
+      if(res.code){
+        this.getBookingDetail();
+      }
     }
   },
    mounted() {
