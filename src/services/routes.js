@@ -1,7 +1,7 @@
 const axios = require('axios');
-class CoachService{
+class RouteService{
 	getlist(params){
-		return axios.get(`/api/TrainCoach/GetAllCoaches${params}`)
+		return axios.get(`/api/Route/GetAllRoutes${params}`)
             .then(function (response) {
 			return {data:response.data};
 		})
@@ -10,23 +10,20 @@ class CoachService{
 		});
 	}
     async create(formData){
-        var res = await  axios.post('/api/TrainCoach',formData).then(function(e){
+        var res = await  axios.post('/api/Route',formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
-            return {status: 0, data: e.response.data};
+            return {status: 0, data: e};
         });
         return res;
     }
-      get(id){
-		return axios.get(`/api/TrainCoach/Get/${id}`).then(e=>e.data);
-	}
     delete(id){
-        return axios.delete(`/api/TrainCoach/${id}`);
+        return axios.delete(`/api/Route/${id}`);
 	}
     async update(formData, id){ 
 		// formData.append('_method','put')
       
-		var res = await  axios.post(`/api/TrainCoach/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/Route/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -34,4 +31,4 @@ class CoachService{
         return res;
 	}
 }
-export default new CoachService();
+export default new RouteService();

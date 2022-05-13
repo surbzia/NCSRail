@@ -33,7 +33,7 @@ DELETE https://nscrail.himsportal.com/api/Route/{id}
 
 
 -- ------------------Train Coaches
-GET https://nscrail.himsportal.com/api/TrainCoach/GetAllCoaches
+-- GET https://nscrail.himsportal.com/api/TrainCoach/GetAllCoaches
 GET https://nscrail.himsportal.com/api/TrainCoach/Get/{id}
 POST https://nscrail.himsportal.com/api/TrainCoach
 PUT https://nscrail.himsportal.com/api/TrainCoach

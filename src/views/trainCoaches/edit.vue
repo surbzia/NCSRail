@@ -16,8 +16,10 @@
           <v-row>
             <v-col cols="12" md="12">
               <v-select
-                v-model="select"
-                :items="trainname"
+                v-model="form.train"
+                :items="trains"
+                  item-text="name"
+                item-value="id"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Train"
                 required
@@ -26,7 +28,7 @@
 
             <v-col cols="12" md="12">
               <v-select
-                v-model="select"
+                v-model="form.train_type"
                 :items="traintype"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Train Type"
@@ -36,7 +38,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="coachno"
+                v-model="form.coach_num"
                 :rules="nameRules"
                 label="Coach No"
                 required
@@ -45,7 +47,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="berthcount"
+                v-model="form.berth_count"
                 :rules="nameRules"
                 label="Berth Count"
                 required
@@ -54,7 +56,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="cabincount"
+                v-model="form.cabin_count"
                 :rules="nameRules"
                 label="Cabin Count"
                 required
@@ -63,7 +65,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="seatcount"
+                v-model="form.seat_count"
                 :rules="nameRules"
                 label="Seat Count"
                 required
@@ -72,7 +74,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="brthincab"
+                v-model="form.berth_in_cabin"
                 :rules="nameRules"
                 label="Berth in Cabin"
                 required
@@ -81,7 +83,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="seatfareadult"
+                v-model="form.seat_adult"
                 :rules="nameRules"
                 label="Seat Fare Adult"
                 required
@@ -90,7 +92,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="berthfareadult"
+                v-model="form.berth_adult"
                 :rules="nameRules"
                 label="Berth Fare Adult"
                 required
@@ -99,7 +101,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="seatfarechild"
+                v-model="form.seat_child"
                 :rules="nameRules"
                 label="Seat Fare Child"
                 required
@@ -108,7 +110,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="berthfarechild"
+                v-model="form.berth_child"
                 :rules="nameRules"
                 label="Berth Fare Child"
                 required
@@ -119,7 +121,7 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="reservenote"
+                v-model="form.reserve_note"
                 :rules="nameRules"
                 label="Reserve Note"
                 required
@@ -127,7 +129,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-checkbox
-                v-model="alreadyreserve"
+                v-model="form.is_reserved"
                 label="Is Already Reserve"
               ></v-checkbox>
             </v-col>
@@ -142,15 +144,29 @@
   </div>
 </template>
 <script>
+import CoachService from "@/services/coaches";
+import TrainService from "@/services/train";
 export default {
   data: () => ({
+     trains:[],
     valid: false,
-    stationname: "",
-    stationcode: "",
-    nameRules: [
-      // (v) => !!v || "Name is required",
-      // (v) => v.length <= 10 || "Name must be less than 10 characters",
-    ],
+    form:{
+      id:'',
+      train:'',
+      train_type:'',
+      coach_num:'',
+      berth_count:'',
+      cabin_count:'',
+      seat_count:'',
+      berth_in_cabin:'',
+      seat_adult:'',
+      berth_adult:'',
+      seat_child:'',
+      berth_child:'',
+      reserve_note:'',
+      is_reserved:false
+    },
+  
     cityname: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
     items: [
       {
@@ -170,5 +186,32 @@ export default {
       },
     ],
   }),
+  methods:{
+    async getallTrains(){
+ let res = await TrainService.getlist('');
+  this.trains = res.data;
+},
+       getCoachDetails: async function(){
+      let id = this.$route.params.id;
+      const res = await CoachService.get(id);
+      this.form.id = res.trainCoachID;
+      this.form.train = res.trainID;
+      this.form.coach_num = res.coachNo;
+      this.form.berth_count = res.berthCount;
+      this.form.cabin_count = res.cabinCount;
+      this.form.seat_count = res.seatCount;
+      this.form.berth_in_cabin = res.berthinCabin;
+      this.form.seat_adult = res.seatFareAdult;
+      this.form.berth_adult = res.berthFareAdult;
+      this.form.seat_child = res.seatFareChild;
+      this.form.berth_child = res.berthFareChild;
+      this.form.reserve_note = res.reservedNote;
+      this.form.is_reserved = res.isAlreadyReserved;
+    },
+  },
+  mounted(){
+    this.getCoachDetails();
+    this.getallTrains();
+  }
 };
 </script>

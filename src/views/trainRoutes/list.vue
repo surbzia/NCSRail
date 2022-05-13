@@ -8,8 +8,8 @@
     </div>
     <v-data-table
       :headers="headers"
-      :items="data"
-      :loading="!loading"
+      :items="routes"
+      :loading="loading"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -196,7 +196,9 @@
   </div>
 </template>
 <script>
+import RouteService from "@/services/routes";
 export default {
+  
   name: "auth.station.listing",
   data() {
     return {
@@ -242,98 +244,53 @@ export default {
       options: {},
       trains: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
       stations: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
-      data: [
-        {
-          id: 1,
-          name: "Karachi",
-          train: "adfasd",
-          station: "adfasd",
-          arrival_date: "25-52-2025",
-          arrival_time: "05:00:15",
-          waiting_time: "25-52-2025",
-        },
-        {
-          id: 2,
-          name: "Lahore",
-          train: "adfasd",
-          station: "adfasd",
-          arrival_date: "25-52-2025",
-          arrival_time: "05:00:15",
-          waiting_time: "25-52-2025",
-        },
-        {
-          id: 3,
-          name: "Rawalpindi",
-          train: "adfasd",
-          station: "adfasd",
-          arrival_date: "25-52-2025",
-          arrival_time: "05:00:15",
-          waiting_time: "25-52-2025",
-        },
-      ],
+    routes:[],
       headers: [
         {
-          text: "ID",
+          text: "Seq",
           align: "start",
           sortable: true,
-          value: "id",
+          value: "seq",
         },
         {
           text: "Route Name",
           align: "start",
           sortable: true,
-          value: "name",
+          value: "routeName",
         },
         {
           text: "Train",
           align: "start",
           sortable: true,
-          value: "train",
+          value: "trainID",
         },
         {
           text: "Station",
           align: "start",
           sortable: true,
-          value: "station",
+          value: "stationID",
         },
         {
-          text: "Arrival Date",
+          text: "Arrival",
           align: "start",
           sortable: true,
-          value: "arrival_date",
-        },
-        {
-          text: "Arrival Time",
-          align: "start",
-          sortable: true,
-          value: "arrival_time",
+          value: "departure",
         },
         {
           text: "Waiting Time",
           align: "start",
           sortable: true,
-          value: "waiting_time",
+          value: "waiting",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
     };
   },
   watch: {
-    $route() {
-      //   this.getDataFromApi();
-    },
-    perpage() {
-      //   this.getDataFromApi();
-    },
-    options: {
-      handler() {
-        // this.getDataFromApi();
-      },
-      deep: true,
-    },
+
   },
   mounted() {
-    // this.getDataFromApi();
+   this.getDataFromApi();
   },
   methods: {
     edit(item) {
@@ -352,6 +309,60 @@ export default {
       if (confirm("Are you sure you want to delete this Train.. ??")) {
         alert("Your Train has been deleted successfully");
       }
+    },
+     addStation: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        var res = await RouteService.create({
+          title: this.form.name,
+          code: this.form.code,
+          CityID: this.form.city,
+        });
+        if (res.status == 1) {
+          this.$toaster.success("Station Added Successfully.");
+          this.getDataFromApi();
+          this.stationModel = false;
+        }
+      }
+    },
+    async getCities() {
+      let res = await cityservice.getlist("");
+      this.cities = res.data;
+    },
+    updateStation: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        let formData = {
+          id: this.edit_form.id,
+          title: this.edit_form.name,
+          code: this.edit_form.code,
+          CityID: this.edit_form.city,
+        };
+
+        var res = await RouteService.update(
+          formData,
+          parseInt(this.edit_form.id)
+        );
+        if (res.status == 1) {
+          this.$toaster.success("Train Updated Successfully.");
+          this.getDataFromApi();
+          this.stationModelEdit = false;
+        }
+      }
+    },
+    async getDataFromApi() {
+      var res = await this.getAllTrainRoutes();
+      // console.log(res.data[0]);
+      this.routes = res.data;
+      this.loading = false;
+    },
+    getAllTrainRoutes() {
+      this.loading = true;
+      var query = "";
+      if (this.search != "") {
+        query += "&search=" + this.search;
+      }
+      return RouteService.getlist(query);
     },
   
   },
