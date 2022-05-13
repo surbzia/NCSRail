@@ -28,11 +28,11 @@
         </template>
 
         <v-list>
-          <v-list-item link :to="{ name: 'auth.users.add' }">
+          <!-- <v-list-item link :to="{ name: 'auth.users.add' }">
             <v-list-item-title
               ><v-icon>mdi-plus</v-icon>Users</v-list-item-title
             >
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
       </v-menu>
     </v-app-bar>
@@ -65,21 +65,18 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list dense>
-          <v-list-item class="px-2" link :to="{ name: 'auth.dashboard' }">
-            <v-list-item-title>DASHBOARD</v-list-item-title>
-          </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.bookings.listing' }">
-            <v-list-item-title>Bookings</v-list-item-title>
+            <v-list-item-title> Bookings</v-list-item-title>
           </v-list-item>
-          <!-- <v-list-item
+           <v-list-item
             class="px-2"
             link
             :to="{ name: 'auth.stations.listing' }"
           >
 
             <v-list-item-title>Station</v-list-item-title>
-          </v-list-item> -->
-          <!-- <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
+          </v-list-item> 
+          <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
             <v-list-item-title>Cities</v-list-item-title>
           </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.trains.listing' }">
@@ -87,7 +84,7 @@
           </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
             <v-list-item-title>Routes</v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>
 
           
           <!-- <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">
@@ -128,6 +125,16 @@ export default {
       this.$router.push({ name: "auth.login" });
     },
   },
-  computed: {},
+    computed: {
+    user() {
+      return this.$store.getters.loggedInUser;
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn;
+    },
+    permissions(){
+      return this.$store.getters.getPermissions
+    }
+  },
 };
 </script>

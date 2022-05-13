@@ -46,7 +46,7 @@
                 </tr>
                 <tr>
                   <td><b>Status :</b></td>
-                  <td><v-btn rounded outlined v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" small> {{bookingDetail.status}} </v-btn></td>
+                  <td><v-btn rounded  v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" small> {{bookingDetail.status}} </v-btn></td>
                 </tr>
               </tbody>
             </template>

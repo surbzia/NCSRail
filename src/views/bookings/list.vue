@@ -19,20 +19,26 @@
           class="mx-4"
         ></v-text-field>
       </template>
+       <template v-slot:[`item.trainName`]="{ item }">
+        <v-btn  rounded  color="light" small>
+          {{item.trainName}}
+         </v-btn>
+      </template>
        <template v-slot:[`item.totalFare`]="{ item }">
           PKR, {{item.totalFare}}
       </template> 
        <template v-slot:[`item.invoiceStatus`]="{ item }">
-        <v-btn  rounded v-bind:color="item.invoiceStatus == 'Booked' ? 'success' : 'info'" small>
+        <v-btn  rounded  v-bind:color="item.invoiceStatus == 'Booked' ? 'success' : 'info'" small>
           {{item.invoiceStatus}}
          </v-btn>
       </template> 
        <template v-slot:[`item.actions`]="{ item }">
         <v-btn  :to="{ name: 'auth.bookings.detail', params: { id: item.bookingHASH } }"  class="ma-0"
-      outlined
+      outlined rounded small
       
       color="teal">
-          <v-icon>mdi-format-list-bulleted-square</v-icon>
+          <!-- <v-icon>mdi-format-list-bulleted-square</v-icon> -->
+          Detail
          </v-btn>
       </template> 
     </v-data-table>
@@ -155,41 +161,20 @@ export default {
     async getDataFromApi() {
       var res = await this.getAllBookings();
      this.bookings = res.data;
-      // try {
-      //   this.totalRecords = res.meta.total;
-      // } catch (ex) {}
       this.loading = false;
     },
-    // fakeApiCall() {
-    //   this.loading = true;
-    //   var query = "";
-    //   var page = this.options.page;
-    //   query += "?page=" + page;
-    //   if (this.options.sortBy.length > 0) {
-    //     query += "&sortCol=" + this.options.sortBy[0];
-    //   }
-    //   if (this.options.sortDesc.length > 0) {
-    //     query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-    //   }
-    //   query += "&perpage=" + this.options.itemsPerPage;
-    //   if (this.search != "") {
-    //     query += "&search=" + this.search;
-    //   }
-    //   return brandservice.getlist(query);
-    // },
-
    getAllBookings(){
      this.loading = true;
     var query = "";
-      var page = this.options.page;
-      query += "?page=" + page;
-          if (this.options.sortBy.length > 0) {
-        query += "&sortCol=" + this.options.sortBy[0];
-      }
-      if (this.options.sortDesc.length > 0) {
-        query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-      }
-      query += "&perpage=" + this.options.itemsPerPage;
+      // var page = this.options.page;
+      // query += "?page=" + page;
+      //     if (this.options.sortBy.length > 0) {
+      //   query += "&sortCol=" + this.options.sortBy[0];
+      // }
+      // if (this.options.sortDesc.length > 0) {
+      //   query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
+      // }
+      // query += "&perpage=" + this.options.itemsPerPage;
       if (this.search != "") {
         query += "&search=" + this.search;
       }

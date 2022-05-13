@@ -13,9 +13,10 @@ export default new Vuex.Store({
         notificationText: '',
     },
     mutations: {
-           setAuthToken(state, authtoken) {
+        setAuthToken(state, authtoken) {
             localStorage.setItem('auth_token',authtoken);
-            axios.defaults.headers.common['Authorization'] = 'Bearer '+authtoken;
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + authtoken;
+            //  axios.defaults.headers.common['Authorization'] = authtoken;
             state.authtoken = authtoken
         },
         setLoginStatus(state, loggedIn) {
@@ -28,7 +29,6 @@ export default new Vuex.Store({
           setPermissions(state, permissions){
             state.permissions = permissions
         },
-
         setSideBarStatus(status, sideBarStatus){
             status.sideBarStatus = sideBarStatus
         },
@@ -50,7 +50,7 @@ export default new Vuex.Store({
         loggedInUser(state){
             return state.loggedInUser
         },
-          getPermissions(state){
+        getPermissions(state){
             return state.permissions
         },
         sideBarStatus(state){

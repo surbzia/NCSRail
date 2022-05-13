@@ -7,8 +7,8 @@
     </div>
     <v-data-table
       :headers="headers"
-      :items="data"
-      :loading="!loading"
+      :items="stations"
+      :loading="loading"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -49,8 +49,9 @@
                       <v-col cols="12" md="12">
                         <v-select
                           v-model="form.city"
-                          :items="cityname"
-                          :rules="[(v) => !!v || 'Item is required']"
+                          :items="cities"
+                          item-text="name"
+                          item-value="cityID"
                           label="Select City"
                           required
                         ></v-select>
@@ -76,25 +77,89 @@
             </v-card>
           </v-dialog>
         </v-row>
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="stationModelEdit" max-width="800px">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Update Station</span>
+              </v-card-title>
+              <v-card-text>
+                <v-form v-model="valid">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="edit_form.name"
+                          :rules="nameRules"
+                          label="Station Name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="edit_form.code"
+                          :rules="nameRules"
+                          label="Station Code"
+                          required
+                        ></v-text-field>
+                      </v-col>
+
+                      <v-col cols="12" md="12">
+                        <v-select
+                          v-model="edit_form.city"
+                          :items="cities"
+                          item-text="name"
+                          item-value="cityID"
+                          label="Select City"
+                          required
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" md="4">
+                        <v-btn class="mr-4 btn-primary" type="submit">
+                          Update
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-row>
         <v-text-field
           v-model="search"
           label="Search"
           class="mx-4"
         ></v-text-field>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
-        <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn rounded outlined color="info" v-on:click="edit(item)" small>
+          Edit
+        </v-btn>
+        <v-btn
+          rounded
+          outlined
+          color="error"
+          v-on:click="deleteItem(item)"
+          small
+        >
+          Delete
+        </v-btn>
       </template>
     </v-data-table>
   </div>
 </template>
 <script>
+import Stationservice from "@/services/station";
+import cityservice from "@/services/city";
 export default {
   name: "auth.station.listing",
   data() {
     return {
       stationModel: false,
+      stationModelEdit: false,
       search: "",
       bread: [
         {
@@ -121,39 +186,26 @@ export default {
         code: "",
         city: "",
       },
+      edit_form: {
+        id: null,
+        name: "",
+        code: "",
+        city: "",
+      },
       nameRules: [
         // (v) => !!v || "Name is required",
         // (v) => v.length <= 10 || "Name must be less than 10 characters",
       ],
       valid: false,
       options: {},
-      cityname: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
-      data: [
-        {
-          id: 1,
-          name: "ABCD",
-          code: 159,
-          city: "Karachi",
-        },
-        {
-          id: 2,
-          name: "EFG",
-          code: 234,
-          city: "Lahore",
-        },
-        {
-          id: 3,
-          name: "HIJK",
-          code: 234,
-          city: "Rawalpindi",
-        },
-      ],
+      cities: [],
+      stations: [],
       headers: [
         {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "id",
+          value: "stationID",
         },
         {
           text: "Station Name",
@@ -177,96 +229,66 @@ export default {
       ],
     };
   },
-  watch: {
-    $route() {
-      //   this.getDataFromApi();
-    },
-    perpage() {
-      //   this.getDataFromApi();
-    },
-    options: {
-      handler() {
-        // this.getDataFromApi();
-      },
-      deep: true,
-    },
-  },
+  watch: {},
   mounted() {
-    // this.getDataFromApi();
+    this.getDataFromApi();
+    this.getCities();
   },
   methods: {
     edit(item) {
-      this.form.id = item.id;
-      this.form.name = item.name;
-      this.form.code = item.code;
-      this.form.city = item.city;
-      this.button = "Update";
-      this.title = "Update Station";
-      this.stationModel = true;
+      this.edit_form.id = item.stationID;
+      this.edit_form.name = item.name;
+      this.edit_form.code = item.code;
+      this.edit_form.city = item.cityID;
+      this.stationModelEdit = true;
     },
     deleteItem(item) {
-      if (confirm("Are you sure you want to delete this Station.. ??")) {
-        alert("Your Station has been deleted successfully");
+      if (confirm("Are you sure you want to delete this City.. ??")) {
+        var res = Stationservice.delete(item.cityID);
       }
     },
-    // del{eteuser: async function (id) {
-    //   const isConfirmed = await Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       return true;
-    //     }
-    //   });
-    //   if (isConfirmed) {
-    //     await brandservice.delete({
-    //       id: id,
-    //     });
-    //     Swal.fire("Deleted!", "Your record has been deleted.", "success");
-    //     this.getDataFromApi();
-    //   }
-    // },
-    // async getDataFromApi() {
-    //   var data = await this.fakeApiCall();
-    //   this.items = data.data;
-    //   try {
-    //     this.totalRecords = data.meta.total;
-    //   } catch (ex) {}
-    //   this.loading = false;
-    // },
-    // fakeApiCall() {
-    //   this.loading = true;
-    //   var query = "";
-    //   var page = this.options.page;
-    //   query += "?page=" + page;
-    //   if (this.options.sortBy.length > 0) {
-    //     query += "&sortCol=" + this.options.sortBy[0];
-    //   }
-    //   if (this.options.sortDesc.length > 0) {
-    //     query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-    //   }
-    //   query += "&perpage=" + this.options.itemsPerPage;
-    //   if (this.search != "") {
-    //     query += "&search=" + this.search;
-    //   }
-    //   return brandservice.getlist(query);
-    // },
+    async addCity() {
+      var res = await Stationservice.create(this.form.name);
+      if (res.status == 1) {
+        this.$toaster.success("City Added Successfully.");
+        this.getDataFromApi();
+        this.cityModel = false;
+      }
+    },
+    async getCities() {
+      let res = await cityservice.getlist("");
+      this.cities = res.data;
+    },
+    async UpdateCity() {
+      let formData = {
+        id: this.editform.id,
+        name: this.editform.name,
+      };
+
+      var res = await Stationservice.update(
+        formData,
+        parseInt(this.editform.id)
+      );
+      if (res.status == 1) {
+        this.$toaster.success("City Updated Successfully.");
+        this.getDataFromApi();
+        this.cityModelEdit = false;
+      }
+    },
+    async getDataFromApi() {
+      var res = await this.getAllBookings();
+      this.stations = res.data;
+      this.loading = false;
+    },
+    getAllBookings() {
+      this.loading = true;
+      var query = "";
+      if (this.search != "") {
+        query += "&search=" + this.search;
+      }
+      return Stationservice.getlist(query);
+    },
   },
-  watch: {
-    // options: {
-    //   handler() {
-    //     this.getDataFromApi();
-    //   },
-    //   deep: true,
-    // },
-    // search() {
-    //   this.getDataFromApi();
-    // },
-  },
+  watch: {},
 };
 </script>

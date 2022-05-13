@@ -63,8 +63,10 @@
         ></v-text-field>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
-        <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon>
+        <!-- <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
+        <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon> -->
+          <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
+        <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
       </template>
     </v-data-table>
   </div>

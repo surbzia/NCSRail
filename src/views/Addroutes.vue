@@ -72,7 +72,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="time"
-                    label="Picker in menu"
+                    label="Arrival Time"
                     prepend-icon="mdi-clock-time-four-outline"
                     readonly
                     v-bind="attrs"
@@ -96,7 +96,6 @@
             :key="index"
             class="mt-3"
           >
-          {{station.waiting_time}}
             <v-col cols="2" md="2">
               <v-text-field
                 v-model="station.sort_order"
