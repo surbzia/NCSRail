@@ -5,16 +5,25 @@
         <v-breadcrumbs :items="items" large></v-breadcrumbs>
       </v-container>
     </div>
+        <div class="row">
+      <div class="col-md-12 mb-2">
+      <div class="text-right">
+          <v-btn :to="{ name: 'auth.coaches.listing' }" rounded dark>
+          Back
+        </v-btn>
+      </div>
+      </div>
+    </div>
     <div class="content-body">
       <div class="sec-heading">
         <v-container>
-          <h2>Train Coaches</h2>
+          <h2>Edit Train Coach </h2>
         </v-container>
       </div>
       <v-form v-model="valid">
         <v-container>
           <v-row>
-            <v-col cols="12" md="12">
+            <v-col cols="6" md="6">
               <v-select
                 v-model="form.train"
                 :items="trains"
@@ -26,7 +35,7 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="12" md="12">
+            <v-col cols="6" md="6">
               <v-select
                 v-model="form.train_type"
                 :items="traintype"
@@ -35,8 +44,9 @@
                 required
               ></v-select>
             </v-col>
-
-            <v-col cols="12" md="6">
+          </v-row>
+          <v-row>
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.coach_num"
                 :rules="nameRules"
@@ -45,7 +55,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.berth_count"
                 :rules="nameRules"
@@ -54,7 +64,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.cabin_count"
                 :rules="nameRules"
@@ -63,7 +73,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.seat_count"
                 :rules="nameRules"
@@ -72,7 +82,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.berth_in_cabin"
                 :rules="nameRules"
@@ -81,7 +91,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.seat_adult"
                 :rules="nameRules"
@@ -90,7 +100,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.berth_adult"
                 :rules="nameRules"
@@ -99,7 +109,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.seat_child"
                 :rules="nameRules"
@@ -108,7 +118,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col cols="3" md="3">
               <v-text-field
                 v-model="form.berth_child"
                 :rules="nameRules"
@@ -119,7 +129,7 @@
 
             
 
-            <v-col cols="12" md="6">
+            <v-col cols="9" md="9">
               <v-text-field
                 v-model="form.reserve_note"
                 :rules="nameRules"
@@ -127,15 +137,15 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="6" md="6">
               <v-checkbox
                 v-model="form.is_reserved"
                 label="Is Already Reserve"
               ></v-checkbox>
             </v-col>
 
-            <v-col cols="12" md="12">
-              <v-btn class="mr-4 btn-primary" type="submit"> Save </v-btn>
+            <v-col cols="6" md="6" class="text-right">
+              <v-btn class="mr-4 btn-primary" type="submit"> Update </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -167,7 +177,7 @@ export default {
       is_reserved:false
     },
   
-    cityname: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
+   traintype: ["Economy", "Power Plant", "AC Business"],
     items: [
       {
         text: "Dashboard",
@@ -196,6 +206,7 @@ export default {
       const res = await CoachService.get(id);
       this.form.id = res.trainCoachID;
       this.form.train = res.trainID;
+      this.form.train_type = res.classType;
       this.form.coach_num = res.coachNo;
       this.form.berth_count = res.berthCount;
       this.form.cabin_count = res.cabinCount;

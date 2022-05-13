@@ -25,7 +25,7 @@ DELETE https://nscrail.himsportal.com/api/Train/{id}
 
 
 ------------------- Route
-GET https://nscrail.himsportal.com/api/Route/GetAllRoutes
+-- GET https://nscrail.himsportal.com/api/Route/GetAllRoutes
 GET https://nscrail.himsportal.com/api/Route/Get/{id}
 POST https://nscrail.himsportal.com/api/Route
 PUT https://nscrail.himsportal.com/api/Route/{id}
@@ -34,8 +34,8 @@ DELETE https://nscrail.himsportal.com/api/Route/{id}
 
 -- ------------------Train Coaches
 -- GET https://nscrail.himsportal.com/api/TrainCoach/GetAllCoaches
-GET https://nscrail.himsportal.com/api/TrainCoach/Get/{id}
-POST https://nscrail.himsportal.com/api/TrainCoach
+-- GET https://nscrail.himsportal.com/api/TrainCoach/Get/{id}
+-- POST https://nscrail.himsportal.com/api/TrainCoach
 PUT https://nscrail.himsportal.com/api/TrainCoach
 DELETE https://nscrail.himsportal.com/api/TrainCoach/{id}
 

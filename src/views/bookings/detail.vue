@@ -7,10 +7,6 @@
     </div>
     <div class="row">
       <div class="col-md-12 ">
-        <!-- <div class="text-left">
-              
-        <span><v-btn rounded outlined v-bind:color="bookingDetail.status == 'Booked' ? 'success' : 'info'" dark> {{bookingDetail.status}} </v-btn></span>
-        </div> -->
       <div class="text-right">
           <v-btn :to="{ name: 'auth.bookings.listing' }" rounded dark>
           Back
