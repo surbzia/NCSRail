@@ -182,7 +182,6 @@ export default {
   },
   mounted() {
     this.getDataFromApi();
-    this.getCities();
   },
   methods: {
     edit(item) {
@@ -206,10 +205,6 @@ export default {
         this.getDataFromApi();
         this.TrainModel = false;
       }
-    },
-    async getCities() {
-      let res = await cityservice.getlist("");
-      this.cities = res.data;
     },
     async updateTrain() {
       let formData = {

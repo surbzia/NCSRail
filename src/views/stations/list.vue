@@ -22,16 +22,16 @@
             </template>
             <v-card>
               <v-card-title>
-                <span class="text-h5">{{ title }}</span>
+                <span class="text-h5">Add Station</span>
               </v-card-title>
               <v-card-text>
-                <v-form v-model="valid">
+                <v-form @submit="addStation" ref="form" lazy-validation>
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.name"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Station Name"
                           required
                         ></v-text-field>
@@ -40,7 +40,7 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.code"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Station Code"
                           required
                         ></v-text-field>
@@ -53,27 +53,18 @@
                           item-text="name"
                           item-value="cityID"
                           label="Select City"
-                          required
+                          :rules="[rules.required]"
                         ></v-select>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="button" @click="addStation">
-                        Submit
+                        <v-btn class="mr-4 btn-primary" type="submit">
+                          Submit
                         </v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
                 </v-form>
               </v-card-text>
-              <!-- <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false">
-                  Close
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="dialog = false">
-                  Save
-                </v-btn>
-              </v-card-actions> -->
             </v-card>
           </v-dialog>
         </v-row>
@@ -85,13 +76,13 @@
                 <span class="text-h5">Update Station</span>
               </v-card-title>
               <v-card-text>
-                <v-form v-model="valid">
+               <v-form @submit="updateStation" ref="form" lazy-validation>
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="edit_form.name"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Station Name"
                           required
                         ></v-text-field>
@@ -100,7 +91,7 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="edit_form.code"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Station Code"
                           required
                         ></v-text-field>
@@ -113,11 +104,14 @@
                           item-text="name"
                           item-value="id"
                           label="Select City"
-                          required
+                          :rules="[rules.required]"
                         ></v-select>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" @click="updateStation" type="button">
+                        <v-btn
+                          class="mr-4 btn-primary"
+                          type="submit"
+                        >
                           Update
                         </v-btn>
                       </v-col>
@@ -192,10 +186,9 @@ export default {
         code: "",
         city: "",
       },
-      nameRules: [
-        // (v) => !!v || "Name is required",
-        // (v) => v.length <= 10 || "Name must be less than 10 characters",
-      ],
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
       valid: false,
       options: {},
       cities: [],
@@ -229,9 +222,11 @@ export default {
       ],
     };
   },
-  watch: {  search() {
+  watch: {
+    search() {
       this.getDataFromApi();
-    },},
+    },
+  },
   mounted() {
     this.getDataFromApi();
     this.getCities();
@@ -249,38 +244,44 @@ export default {
         var res = Stationservice.delete(parseInt(item.stationID));
       }
     },
-    async addStation() {
-      var res = await Stationservice.create({
-        "title":this.form.name,
-        "code":this.form.code,
-        "CityID": this.form.city
-      });
-      if (res.status == 1) {
-        this.$toaster.success("Station Added Successfully.");
-        this.getDataFromApi();
-        this.stationModel = false;
+    addStation: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        var res = await Stationservice.create({
+          title: this.form.name,
+          code: this.form.code,
+          CityID: this.form.city,
+        });
+        if (res.status == 1) {
+          this.$toaster.success("Station Added Successfully.");
+          this.getDataFromApi();
+          this.stationModel = false;
+        }
       }
     },
     async getCities() {
       let res = await cityservice.getlist("");
       this.cities = res.data;
     },
-    async updateStation() {
-      let formData = {
-        "id":this.edit_form.id,
-        "title":this.edit_form.name,
-        "code":this.edit_form.code,
-        "CityID": this.edit_form.city
-      };
+    updateStation: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        let formData = {
+          id: this.edit_form.id,
+          title: this.edit_form.name,
+          code: this.edit_form.code,
+          CityID: this.edit_form.city,
+        };
 
-      var res = await Stationservice.update(
-        formData,
-        parseInt(this.edit_form.id)
-      );
-      if (res.status == 1) {
-        this.$toaster.success("Train Updated Successfully.");
-        this.getDataFromApi();
-        this.stationModelEdit = false;
+        var res = await Stationservice.update(
+          formData,
+          parseInt(this.edit_form.id)
+        );
+        if (res.status == 1) {
+          this.$toaster.success("Train Updated Successfully.");
+          this.getDataFromApi();
+          this.stationModelEdit = false;
+        }
       }
     },
     async getDataFromApi() {

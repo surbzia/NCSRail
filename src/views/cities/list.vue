@@ -8,7 +8,7 @@
     <v-data-table
       :headers="headers"
       :items="cities"
-      :items-per-page=5
+      :items-per-page="5"
       :loading="loading"
       class="elevation-1"
     >
@@ -26,58 +26,69 @@
                 <span class="text-h5">Add City</span>
               </v-card-title>
               <v-card-text>
-                <v-form >
+                <v-form
+                  ref="form"
+                  lazy-validation
+                  @submit="addCity"
+                  id="check-city-form"
+                >
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="12">
                         <v-text-field
                           v-model="form.name"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="City Name"
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="button" @click="addCity">
-                         Submit
-                        </v-btn>
-                      </v-col>
                     </v-row>
                   </v-container>
+                  <v-col cols="12" md="4">
+                    <v-btn
+                      class="mr-4 btn-primary"
+                      type="submit"
+                      form="check-city-form"
+                    >
+                      Submit
+                    </v-btn>
+                  </v-col>
                 </v-form>
               </v-card-text>
             </v-card>
           </v-dialog>
-          
         </v-row>
         <v-row>
-           <v-spacer></v-spacer>
-           <v-dialog v-model="cityModelEdit" max-width="800px">
+          <v-spacer></v-spacer>
+          <v-dialog v-model="cityModelEdit" max-width="800px">
             <v-card>
               <v-card-title>
                 <span class="text-h5">Update</span>
               </v-card-title>
               <v-card-text>
-                <v-form v-model="valid">
+                <v-form  ref="form"
+                  lazy-validation
+                  @submit="UpdateCity"
+                  id="updatecity_form">
                   <v-container>
                     <v-row>
                       <v-col cols="6" md="6">
                         <v-text-field
                           v-model="editform.name"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="City Name"
                           required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" md="6">
                         <v-checkbox
-                        v-model="editform.isActive"
-                        :label="`Active`"
-                      ></v-checkbox>
+                          v-model="editform.isActive"
+                          :label="`Active`"
+                        ></v-checkbox>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary"  @click="UpdateCity">
-                         Update
+                        <v-btn class="mr-4 btn-primary" type="submit" form="updatecity_form">
+                          Update
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -94,11 +105,23 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.isActive`]="{ item }">
-        <v-btn rounded v-bind:color="item.isActive?'success' : 'error'"  small> {{item.isActive == true ? 'Active' : 'In-Active'}} </v-btn>
+        <v-btn rounded v-bind:color="item.isActive ? 'success' : 'error'" small>
+          {{ item.isActive == true ? "Active" : "In-Active" }}
+        </v-btn>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-          <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
-        <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
+        <v-btn rounded outlined color="info" v-on:click="edit(item)" small>
+          Edit
+        </v-btn>
+        <v-btn
+          rounded
+          outlined
+          color="error"
+          v-on:click="deleteItem(item)"
+          small
+        >
+          Delete
+        </v-btn>
       </template>
     </v-data-table>
   </div>
@@ -138,13 +161,9 @@ export default {
         name: "",
         isActive: "",
       },
-      nameRules: [
-        // (v) => !!v || "Name is required",
-        // (v) => v.length <= 10 || "Name must be less than 10 characters",
-      ],
       valid: false,
       options: {},
-      cities:[],
+      cities: [],
       headers: [
         {
           text: "ID",
@@ -166,13 +185,16 @@ export default {
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
     };
   },
-  watch: {   
+  watch: {
     search() {
       this.getDataFromApi();
     },
-    },
+  },
   mounted() {
     this.getDataFromApi();
   },
@@ -183,44 +205,55 @@ export default {
       this.editform.isActive = item.isActive;
       this.cityModelEdit = true;
     },
-   deleteItem(item) {
+    deleteItem(item) {
       if (confirm("Are you sure you want to delete this City.. ??")) {
-         var res = cityservice.delete(item.cityID);
+        var res = cityservice.delete(item.cityID);
       }
     },
-   async addCity(){
-       var res = await cityservice.create(this.form.name);
-       if(res.status == 1){
-        this.$toaster.success("City Added Successfully.");
-         this.getDataFromApi();
-         this.cityModel = false;
-       }
-    },
-   async UpdateCity(){
-      let formData ={
-        "id": this.editform.id,
-        "name": this.editform.name,
+    addCity: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        var res = await cityservice.create(this.form.name);
+
+        if (res.status == 1) {
+          this.$toaster.success("City Added Successfully.");
+          this.getDataFromApi();
+          this.cityModel = false;
+        }
       }
-       var res = await cityservice.update(formData,parseInt(this.editform.id));
-       if(res.status == 1){
-        this.$toaster.success("City Updated Successfully.");
-         this.getDataFromApi();
-         this.cityModelEdit = false;
-       }
     },
-        async getDataFromApi() {
+    UpdateCity: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        let formData = {
+          id: this.editform.id,
+          name: this.editform.name,
+        };
+
+        var res = await cityservice.update(
+          formData,
+          parseInt(this.editform.id)
+        );
+        if (res.status == 1) {
+          this.$toaster.success("City Updated Successfully.");
+          this.getDataFromApi();
+          this.cityModelEdit = false;
+        }
+      }
+    },
+    async getDataFromApi() {
       var res = await this.getAllCities();
-     this.cities = res.data;
+      this.cities = res.data;
       this.loading = false;
     },
-   getAllCities(){
-     this.loading = true;
-       var query = "";
+    getAllCities() {
+      this.loading = true;
+      var query = "";
       if (this.search != "") {
         query += "&search=" + this.search;
       }
-     return  cityservice.getlist(query);
-}
+      return cityservice.getlist(query);
+    },
   },
 };
 </script>
