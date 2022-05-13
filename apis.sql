@@ -17,9 +17,9 @@ GET https://nscrail.himsportal.com/api/Station/Get/{id}
 
 
 ------------------- Train
-GET https://nscrail.himsportal.com/api/Train/GetAllTrains
+-- GET https://nscrail.himsportal.com/api/Train/GetAllTrains
 GET https://nscrail.himsportal.com/api/Train/Get/{id}
-POST https://nscrail.himsportal.com/api/Train
+-- POST https://nscrail.himsportal.com/api/Train
 PUT https://nscrail.himsportal.com/api/Train/{id}
 DELETE https://nscrail.himsportal.com/api/Train/{id}
 

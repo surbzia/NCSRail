@@ -82,9 +82,12 @@
           <v-list-item class="px-2" link :to="{ name: 'auth.trains.listing' }">
             <v-list-item-title>Trains</v-list-item-title>
           </v-list-item>
-          <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
-            <v-list-item-title>Routes</v-list-item-title>
+          <v-list-item class="px-2" link :to="{ name: 'auth.coaches.listing' }">
+            <v-list-item-title>Coaches</v-list-item-title>
           </v-list-item>
+          <!-- <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
+            <v-list-item-title>Routes</v-list-item-title>
+          </v-list-item> -->
 
           
           <!-- <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">

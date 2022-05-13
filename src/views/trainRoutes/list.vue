@@ -17,7 +17,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="RouteModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn link :to="{ name: 'auth.addroutes' }" color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+              <v-btn link :to="{ name: 'auth.routes.add' }" color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                 Add Routes
               </v-btn>
             </template>
@@ -186,7 +186,7 @@
           class="mx-4"
         ></v-text-field>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <!-- <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
         <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon> -->
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
@@ -353,64 +353,8 @@ export default {
         alert("Your Train has been deleted successfully");
       }
     },
-    // del{eteuser: async function (id) {
-    //   const isConfirmed = await Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       return true;
-    //     }
-    //   });
-    //   if (isConfirmed) {
-    //     await brandservice.delete({
-    //       id: id,
-    //     });
-    //     Swal.fire("Deleted!", "Your record has been deleted.", "success");
-    //     this.getDataFromApi();
-    //   }
-    // },
-    // async getDataFromApi() {
-    //   var data = await this.fakeApiCall();
-    //   this.items = data.data;
-    //   try {
-    //     this.totalRecords = data.meta.total;
-    //   } catch (ex) {}
-    //   this.loading = false;
-    // },
-    // fakeApiCall() {
-    //   this.loading = true;
-    //   var query = "";
-    //   var page = this.options.page;
-    //   query += "?page=" + page;
-    //   if (this.options.sortBy.length > 0) {
-    //     query += "&sortCol=" + this.options.sortBy[0];
-    //   }
-    //   if (this.options.sortDesc.length > 0) {
-    //     query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-    //   }
-    //   query += "&perpage=" + this.options.itemsPerPage;
-    //   if (this.search != "") {
-    //     query += "&search=" + this.search;
-    //   }
-    //   return brandservice.getlist(query);
-    // },
+  
   },
-  watch: {
-    // options: {
-    //   handler() {
-    //     this.getDataFromApi();
-    //   },
-    //   deep: true,
-    // },
-    // search() {
-    //   this.getDataFromApi();
-    // },
-  },
+
 };
 </script>

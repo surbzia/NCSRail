@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Addcity from '../views/Addcity.vue'
-import Addroutes from '../views/Addroutes.vue'
 import Addstation from '../views/Addstation.vue'
 import Addtrain from '../views/Addtrain.vue'
 import Traincoaches from '../views/Traincoaches.vue'
@@ -48,12 +47,12 @@ const routes = [
     component: Addtrain,
     meta: { showsidebar: false }
   },
-  {
-    path: '/addroutes',
-    name: 'auth.addroutes',
-    component: Addroutes,
-    meta: { showsidebar: false }
-  },
+  // {
+  //   path: '/addroutes',
+  //   name: 'auth.addroutes',
+  //   component: Addroutes,
+  //   meta: { showsidebar: false }
+  // },
   {
     path: '/addstation',
     name: 'auth.addstation',
@@ -87,36 +86,47 @@ const routes = [
     meta: { showsidebar: false }
   },
   {
-    path: '/train/routes',
+    path: '/trains/route',
     name: 'auth.routes.listing',
-    component: ()=> import('@/views/traint_routes/list.vue'),
+    component: ()=> import('@/views/trainRoutes/list.vue'),
     meta: { showsidebar: false }
   },
-
-    {
-        path: '/bookings/',
-        name: 'auth.bookings',
-        component: ()=> import('@/views/bookings/main.vue'),
-        children: [
-            {
-                path: '',
-                component: ()=> import('@/views/bookings/list.vue'),
-                name: 'auth.bookings.listing'
-            },
-            {
-                path: 'detail/:id',
-                component: ()=> import('@/views/bookings/detail.vue'),
-                name: 'auth.bookings.detail'
-            },
-            // {
-            //     path: 'edit/:id',
-            //     component: ()=> import('@/views/Role/Form.vue'),
-            //     name: 'auth.bookings.edit'
-            // }
-        ],
-        // beforeEnter: admin,
-    },
-
+  {
+    path: '/trains/route/add',
+    name: 'auth.routes.add',
+    component: ()=> import('@/views/trainRoutes/form.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/bookings',
+    name: 'auth.bookings.listing',
+    component: ()=> import('@/views/bookings/list.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/bookings/detail/:id',
+    name: 'auth.bookings.detail',
+    component: ()=> import('@/views/bookings/detail.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/trainCoaches',
+    name: 'auth.coaches.listing',
+    component: ()=> import('@/views/trainCoaches/list.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/trainCoaches/add',
+    name: 'auth.coaches.add',
+    component: ()=> import('@/views/trainCoaches/form.vue'),
+    meta: { showsidebar: false }
+  },
+  {
+    path: '/trainCoaches/edit/:id',
+    name: 'auth.coaches.edit',
+    component: ()=> import('@/views/trainCoaches/edit.vue'),
+    meta: { showsidebar: false }
+  },
 ]
 
 const router = new VueRouter({
