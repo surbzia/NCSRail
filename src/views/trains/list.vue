@@ -25,13 +25,13 @@
                 <span class="text-h5">Add Train</span>
               </v-card-title>
               <v-card-text>
-                <v-form v-model="valid">
+                <v-form @submit="addTrain" ref="form" lazy-validation>
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.name"
-                          :rules="nameRules"
+                         :rules="[rules.required]"
                           label="Train Name"
                           required
                         ></v-text-field>
@@ -39,13 +39,13 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="form.code"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Train Code"
                           required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="button" @click="addTrain">
+                        <v-btn class="mr-4 btn-primary" type="submit" >
                          Submit
                         </v-btn>
                       </v-col>
@@ -64,13 +64,13 @@
                 <span class="text-h5">Update Train</span>
               </v-card-title>
               <v-card-text>
-                <v-form v-model="valid">
+                <v-form @submit="updateTrain" ref="form" lazy-validation>
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="edit_form.name"
-                          :rules="nameRules"
+                          :rules="[rules.required]"
                           label="Train Name"
                           required
                         ></v-text-field>
@@ -78,13 +78,13 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="edit_form.code"
-                          :rules="nameRules"
+                         :rules="[rules.required]"
                           label="Train Code"
                           required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="button" @click="updateTrain">
+                        <v-btn class="mr-4 btn-primary" type="submit" >
                          Update
                         </v-btn>
                       </v-col>
@@ -144,10 +144,6 @@ export default {
         name: "",
         code: "",
       },
-      nameRules: [
-        // (v) => !!v || "Name is required",
-        // (v) => v.length <= 10 || "Name must be less than 10 characters",
-      ],
       valid: false,
       options: {},
       trains:[],
@@ -173,6 +169,9 @@ export default {
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
+         rules: {
+        required: (value) => !!value || "Required.",
+      },
     };
   },
   watch: {
@@ -195,7 +194,9 @@ export default {
         var res = TrainService.delete(parseInt(item.id));
       }
     },
-    async addTrain() {
+      addTrain: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
       var res = await TrainService.create({
         "name":this.form.name,
         "code":this.form.code,
@@ -205,8 +206,11 @@ export default {
         this.getDataFromApi();
         this.TrainModel = false;
       }
+      }
     },
-    async updateTrain() {
+      updateTrain: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
       let formData = {
         "name":this.edit_form.name,
         "code":this.edit_form.code,
@@ -217,6 +221,7 @@ export default {
         this.$toaster.success("Station Updated Successfully.");
         this.getDataFromApi();
         this.stationModelEdit = false;
+      }
       }
     },
     async getDataFromApi() {
