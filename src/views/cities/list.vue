@@ -94,7 +94,7 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.isActive`]="{ item }">
-        <v-btn rounded v-bind:color="item.isActive?'success' : 'error'"  small> {{item.isActive == true ? 'Active' : 'Not Active'}} </v-btn>
+        <v-btn rounded v-bind:color="item.isActive?'success' : 'error'"  small> {{item.isActive == true ? 'Active' : 'In-Active'}} </v-btn>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
@@ -150,7 +150,7 @@ export default {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "cityID",
+          value: "id",
         },
         {
           text: "Name",
@@ -168,7 +168,11 @@ export default {
       ],
     };
   },
-  watch: { },
+  watch: {   
+    search() {
+      this.getDataFromApi();
+    },
+    },
   mounted() {
     this.getDataFromApi();
   },
@@ -182,11 +186,6 @@ export default {
    deleteItem(item) {
       if (confirm("Are you sure you want to delete this City.. ??")) {
          var res = cityservice.delete(item.cityID);
-      //  if(res.status == 1){
-      //   this.$toaster.success("City Added Successfully.");
-      //    this.getDataFromApi();
-      //    this.cityModel = false;
-      //  }
       }
     },
    async addCity(){
@@ -198,14 +197,10 @@ export default {
        }
     },
    async UpdateCity(){
-//  var formData = new FormData();
-// formData.append('name',this.editform.name);
-// formData.append('is_active',this.editform.isActive);
-let formData ={
-  "id": this.editform.id,
-  "name": this.editform.name,
-}
-
+      let formData ={
+        "id": this.editform.id,
+        "name": this.editform.name,
+      }
        var res = await cityservice.update(formData,parseInt(this.editform.id));
        if(res.status == 1){
         this.$toaster.success("City Updated Successfully.");
@@ -214,11 +209,11 @@ let formData ={
        }
     },
         async getDataFromApi() {
-      var res = await this.getAllBookings();
+      var res = await this.getAllCities();
      this.cities = res.data;
       this.loading = false;
     },
-   getAllBookings(){
+   getAllCities(){
      this.loading = true;
        var query = "";
       if (this.search != "") {
@@ -227,6 +222,5 @@ let formData ={
      return  cityservice.getlist(query);
 }
   },
-  watch: {},
 };
 </script>

@@ -111,7 +111,7 @@
                           v-model="edit_form.city"
                           :items="cities"
                           item-text="name"
-                          item-value="cityID"
+                          item-value="id"
                           label="Select City"
                           required
                         ></v-select>
@@ -205,13 +205,13 @@ export default {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "stationID",
+          value: "id",
         },
         {
           text: "Station Name",
           align: "start",
           sortable: true,
-          value: "name",
+          value: "title",
         },
         {
           text: "Station Code",
@@ -223,21 +223,23 @@ export default {
           text: "City",
           align: "start",
           sortable: true,
-          value: "city",
+          value: "cityName",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
     };
   },
-  watch: {},
+  watch: {  search() {
+      this.getDataFromApi();
+    },},
   mounted() {
     this.getDataFromApi();
     this.getCities();
   },
   methods: {
     edit(item) {
-      this.edit_form.id = item.stationID;
-      this.edit_form.name = item.name;
+      this.edit_form.id = item.id;
+      this.edit_form.name = item.title;
       this.edit_form.code = item.code;
       this.edit_form.city = item.cityID;
       this.stationModelEdit = true;
@@ -276,17 +278,17 @@ export default {
         parseInt(this.edit_form.id)
       );
       if (res.status == 1) {
-        this.$toaster.success("Station Updated Successfully.");
+        this.$toaster.success("Train Updated Successfully.");
         this.getDataFromApi();
         this.stationModelEdit = false;
       }
     },
     async getDataFromApi() {
-      var res = await this.getAllBookings();
+      var res = await this.getAllTrains();
       this.stations = res.data;
       this.loading = false;
     },
-    getAllBookings() {
+    getAllTrains() {
       this.loading = true;
       var query = "";
       if (this.search != "") {
@@ -295,6 +297,5 @@ export default {
       return Stationservice.getlist(query);
     },
   },
-  watch: {},
 };
 </script>

@@ -7,14 +7,14 @@
     </div>
     <v-data-table
       :headers="headers"
-      :items="data"
-      :loading="!loading"
+      :items="trains"
+      :loading="loading"
       class="elevation-1"
     >
       <template v-slot:top>
         <v-row>
           <v-spacer></v-spacer>
-          <v-dialog v-model="cityModel" max-width="800px">
+          <v-dialog v-model="TrainModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                 Add Train
@@ -22,7 +22,7 @@
             </template>
             <v-card>
               <v-card-title>
-                <span class="text-h5">{{ title }}</span>
+                <span class="text-h5">Add Train</span>
               </v-card-title>
               <v-card-text>
                 <v-form v-model="valid">
@@ -45,8 +45,47 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="submit">
-                          {{ button }}
+                        <v-btn class="mr-4 btn-primary" type="button" @click="addTrain">
+                         Submit
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-row>
+         <v-row>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="TrainModelEdit" max-width="800px">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Update Train</span>
+              </v-card-title>
+              <v-card-text>
+                <v-form v-model="valid">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="edit_form.name"
+                          :rules="nameRules"
+                          label="Train Name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="edit_form.code"
+                          :rules="nameRules"
+                          label="Train Code"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="4">
+                        <v-btn class="mr-4 btn-primary" type="button" @click="updateTrain">
+                         Update
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -62,9 +101,7 @@
           class="mx-4"
         ></v-text-field>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <!-- <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
-        <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon> -->
+      <template v-slot:[`item.actions`]="{ item }">
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
         <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
       </template>
@@ -72,11 +109,13 @@
   </div>
 </template>
 <script>
+import TrainService from "@/services/train";
 export default {
   name: "auth.station.listing",
   data() {
     return {
-      cityModel: false,
+      TrainModel: false,
+      TrainModelEdit: false,
       search: "",
       bread: [
         {
@@ -94,10 +133,13 @@ export default {
       ],
       items: [],
       loading: true,
-      button: "Submit",
-      title: "Add Train",
       totalRecords: 0,
       form: {
+        id: null,
+        name: "",
+        code: "",
+      },
+      edit_form: {
         id: null,
         name: "",
         code: "",
@@ -108,23 +150,8 @@ export default {
       ],
       valid: false,
       options: {},
-      data: [
-        {
-          id: 1,
-          name: "Karachi",
-          code: 23234,
-        },
-        {
-          id: 2,
-          name: "Lahore",
-           code: 23234,
-        },
-        {
-          id: 3,
-          name: "Rawalpindi",
-           code: 23234,
-        },
-      ],
+      trains:[],
+   
       headers: [
         {
           text: "ID",
@@ -149,94 +176,68 @@ export default {
     };
   },
   watch: {
-    $route() {
-      //   this.getDataFromApi();
-    },
-    perpage() {
-      //   this.getDataFromApi();
-    },
-    options: {
-      handler() {
-        // this.getDataFromApi();
-      },
-      deep: true,
+     search() {
+      this.getDataFromApi();
     },
   },
   mounted() {
-    // this.getDataFromApi();
+    this.getDataFromApi();
+    this.getCities();
   },
   methods: {
     edit(item) {
-      this.form.id = item.id;
-      this.form.name = item.name;
-      this.form.code = item.code;
-      this.button = "Update";
-      this.title = "Update Train";
-      this.cityModel = true;
+      this.edit_form.id = item.id;
+      this.edit_form.name = item.name;
+      this.edit_form.code = item.code;
+      this.TrainModelEdit = true;
     },
     deleteItem(item) {
-      if (confirm("Are you sure you want to delete this Train.. ??")) {
-        alert("Your Train has been deleted successfully");
+      if (confirm("Are you sure you want to delete this station.. ??")) {
+        var res = TrainService.delete(parseInt(item.id));
       }
     },
-    // del{eteuser: async function (id) {
-    //   const isConfirmed = await Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       return true;
-    //     }
-    //   });
-    //   if (isConfirmed) {
-    //     await brandservice.delete({
-    //       id: id,
-    //     });
-    //     Swal.fire("Deleted!", "Your record has been deleted.", "success");
-    //     this.getDataFromApi();
-    //   }
-    // },
-    // async getDataFromApi() {
-    //   var data = await this.fakeApiCall();
-    //   this.items = data.data;
-    //   try {
-    //     this.totalRecords = data.meta.total;
-    //   } catch (ex) {}
-    //   this.loading = false;
-    // },
-    // fakeApiCall() {
-    //   this.loading = true;
-    //   var query = "";
-    //   var page = this.options.page;
-    //   query += "?page=" + page;
-    //   if (this.options.sortBy.length > 0) {
-    //     query += "&sortCol=" + this.options.sortBy[0];
-    //   }
-    //   if (this.options.sortDesc.length > 0) {
-    //     query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-    //   }
-    //   query += "&perpage=" + this.options.itemsPerPage;
-    //   if (this.search != "") {
-    //     query += "&search=" + this.search;
-    //   }
-    //   return brandservice.getlist(query);
-    // },
+    async addTrain() {
+      var res = await TrainService.create({
+        "name":this.form.name,
+        "code":this.form.code,
+      });
+      if (res.status == 1) {
+        this.$toaster.success("Station Added Successfully.");
+        this.getDataFromApi();
+        this.TrainModel = false;
+      }
+    },
+    async getCities() {
+      let res = await cityservice.getlist("");
+      this.cities = res.data;
+    },
+    async updateTrain() {
+      let formData = {
+        "name":this.edit_form.name,
+        "code":this.edit_form.code,
+      };
+
+      var res = await TrainService.update(formData,parseInt(this.edit_form.id));
+      if (res.status == 1) {
+        this.$toaster.success("Station Updated Successfully.");
+        this.getDataFromApi();
+        this.stationModelEdit = false;
+      }
+    },
+    async getDataFromApi() {
+      var res = await this.getAllBookings();
+      this.trains = res.data;
+      this.loading = false;
+    },
+    getAllBookings() {
+      this.loading = true;
+      var query = "";
+      if (this.search != "") {
+        query += "&search=" + this.search;
+      }
+      return TrainService.getlist(query);
+    },
   },
-  watch: {
-    // options: {
-    //   handler() {
-    //     this.getDataFromApi();
-    //   },
-    //   deep: true,
-    // },
-    // search() {
-    //   this.getDataFromApi();
-    // },
-  },
+
 };
 </script>
