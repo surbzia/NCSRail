@@ -57,8 +57,8 @@
                         ></v-select>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="submit">
-                          {{ button }}
+                        <v-btn class="mr-4 btn-primary" type="button" @click="addStation">
+                        Submit
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -117,7 +117,7 @@
                         ></v-select>
                       </v-col>
                       <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="submit">
+                        <v-btn class="mr-4 btn-primary" @click="updateStation" type="button">
                           Update
                         </v-btn>
                       </v-col>
@@ -243,36 +243,42 @@ export default {
       this.stationModelEdit = true;
     },
     deleteItem(item) {
-      if (confirm("Are you sure you want to delete this City.. ??")) {
-        var res = Stationservice.delete(item.cityID);
+      if (confirm("Are you sure you want to delete this station.. ??")) {
+        var res = Stationservice.delete(parseInt(item.stationID));
       }
     },
-    async addCity() {
-      var res = await Stationservice.create(this.form.name);
+    async addStation() {
+      var res = await Stationservice.create({
+        "title":this.form.name,
+        "code":this.form.code,
+        "CityID": this.form.city
+      });
       if (res.status == 1) {
-        this.$toaster.success("City Added Successfully.");
+        this.$toaster.success("Station Added Successfully.");
         this.getDataFromApi();
-        this.cityModel = false;
+        this.stationModel = false;
       }
     },
     async getCities() {
       let res = await cityservice.getlist("");
       this.cities = res.data;
     },
-    async UpdateCity() {
+    async updateStation() {
       let formData = {
-        id: this.editform.id,
-        name: this.editform.name,
+        "id":this.edit_form.id,
+        "title":this.edit_form.name,
+        "code":this.edit_form.code,
+        "CityID": this.edit_form.city
       };
 
       var res = await Stationservice.update(
         formData,
-        parseInt(this.editform.id)
+        parseInt(this.edit_form.id)
       );
       if (res.status == 1) {
-        this.$toaster.success("City Updated Successfully.");
+        this.$toaster.success("Station Updated Successfully.");
         this.getDataFromApi();
-        this.cityModelEdit = false;
+        this.stationModelEdit = false;
       }
     },
     async getDataFromApi() {

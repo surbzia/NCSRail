@@ -20,6 +20,7 @@ library.add(faUserSecret,faBed, faLocationDot)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 axios.defaults.baseURL = process.env.VUE_APP_API_ENDPOINT;
+axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false

@@ -10,7 +10,7 @@ class StationService{
 		});
 	}
     async create(formData){
-        var res = await  axios.post('/api/Station',{name:formData}).then(function(e){
+        var res = await  axios.post('/api/Station',formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -18,7 +18,7 @@ class StationService{
         return res;
     }
     delete(id){
-		return axios.delete(`/api/Station/${id}`);
+        return axios.delete(`/api/Station/${id}`);
 	}
     async update(formData, id){ 
 		// formData.append('_method','put')
