@@ -22,7 +22,10 @@ const routes = [
     path: '/dashboard',
     name: 'auth.dashboard',
     component: ()=> import('@/views/dashboard/dashboard.vue'),
-    meta: { showsidebar: false }
+    meta: {
+      showsidebar: false,
+      title: 'Dashboard'
+    }
   },
   // {
   //   path: '/addcity',
@@ -60,61 +63,61 @@ const routes = [
     path: '/stations',
     name: 'auth.stations.listing',
     component: ()=> import('@/views/stations/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Stations' }
   },
   {
     path: '/cities',
     name: 'auth.cities.listing',
     component: ()=> import('@/views/cities/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Cities' }
   },
   {
     path: '/trains',
     name: 'auth.trains.listing',
     component: ()=> import('@/views/trains/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Trains' }
   },
   {
     path: '/trains/route',
     name: 'auth.routes.listing',
     component: ()=> import('@/views/trainRoutes/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Train Routes' }
   },
   {
     path: '/trains/route/add',
     name: 'auth.routes.add',
     component: ()=> import('@/views/trainRoutes/form.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Train Routes Add' }
   },
   {
     path: '/bookings',
     name: 'auth.bookings.listing',
     component: ()=> import('@/views/bookings/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Bookings' }
   },
   {
     path: '/bookings/detail/:id',
     name: 'auth.bookings.detail',
     component: ()=> import('@/views/bookings/detail.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false , title: 'booking Details'}
   },
   {
     path: '/trainCoaches',
     name: 'auth.coaches.listing',
     component: ()=> import('@/views/trainCoaches/list.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false, title: 'Train Coaches' }
   },
   {
     path: '/trainCoaches/add',
     name: 'auth.coaches.add',
     component: ()=> import('@/views/trainCoaches/form.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false,  title: 'Train Coaches Add' }
   },
   {
     path: '/trainCoaches/edit/:id',
     name: 'auth.coaches.edit',
     component: ()=> import('@/views/trainCoaches/form.vue'),
-    meta: { showsidebar: false }
+    meta: { showsidebar: false , title: 'Train Coaches Edit'}
   },
 ]
 

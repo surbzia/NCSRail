@@ -6,6 +6,9 @@
       </div>
 
       <v-spacer></v-spacer>
+      <v-btn href="https://nscrail.himsportal.com/"  target="_blank" text>
+        <v-icon style="font-size: 35px;">mdi-web</v-icon>
+      </v-btn>
       <v-btn :to="{ name: 'auth.dashboard' }" text>
         <span class="mr-2">Dashboard</span>
         <v-icon>mdi-account-circle</v-icon>

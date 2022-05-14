@@ -6,8 +6,7 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import Toaster from 'v-toaster';
 import 'v-toaster/dist/v-toaster.css';
-
-
+// document.title = 'Admin | NCS-Rail';
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
@@ -30,7 +29,10 @@ router.beforeEach(async (to, from, next) => {
   if(to.meta.guest){
     next()
   }
-  else{
+  else {
+       Vue.nextTick(() => {
+        document.title = to.meta.title + ' | NCS-Rail' ;
+    });
     var isAuthenticated = localStorage.getItem('auth_token')?true:false;
     if (to.name !== 'auth.login' && !isAuthenticated) next({ name: 'auth.login' })
     if (to.name === 'auth.login' && isAuthenticated) next({ name: 'auth.dashboard' })
