@@ -20,8 +20,8 @@ GET https://nscrail.himsportal.com/api/Station/Get/{id}
 -- GET https://nscrail.himsportal.com/api/Train/GetAllTrains
 GET https://nscrail.himsportal.com/api/Train/Get/{id}
 -- POST https://nscrail.himsportal.com/api/Train
-PUT https://nscrail.himsportal.com/api/Train/{id}
-DELETE https://nscrail.himsportal.com/api/Train/{id}
+-- PUT https://nscrail.himsportal.com/api/Train/{id}
+-- DELETE https://nscrail.himsportal.com/api/Train/{id}
 
 
 ------------------- Route
@@ -37,7 +37,7 @@ DELETE https://nscrail.himsportal.com/api/Route/{id}
 -- GET https://nscrail.himsportal.com/api/TrainCoach/Get/{id}
 -- POST https://nscrail.himsportal.com/api/TrainCoach
 PUT https://nscrail.himsportal.com/api/TrainCoach
-DELETE https://nscrail.himsportal.com/api/TrainCoach/{id}
+-- DELETE https://nscrail.himsportal.com/api/TrainCoach/{id}
 
 
 

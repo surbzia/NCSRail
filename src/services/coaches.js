@@ -24,12 +24,10 @@ class CoachService{
         return axios.delete(`/api/TrainCoach/${id}`);
 	}
     async update(formData, id){ 
-		// formData.append('_method','put')
-      
 		var res = await  axios.post(`/api/TrainCoach/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
-            return {status: 0, data: e};
+            return {status: 0, data: e.response.data};
         });
         return res;
 	}

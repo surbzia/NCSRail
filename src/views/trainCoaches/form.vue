@@ -17,7 +17,7 @@
     <div class="content-body">
       <div class="sec-heading">
         <v-container>
-          <h2>Train Coaches</h2>
+          <h2>{{ title }}</h2>
         </v-container>
       </div>
       <v-form ref="form" lazy-validation @submit="addTrainCoach">
@@ -149,7 +149,9 @@
             </v-col>
 
             <v-col cols="6" md="6" class="text-right">
-              <v-btn class="mr-4 btn-primary" type="submit"> Save </v-btn>
+              <v-btn class="mr-4 btn-primary" type="submit">
+                {{ button }}
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -163,6 +165,9 @@ import CoachService from "@/services/coaches";
 export default {
   data: () => ({
     valid: false,
+    is_edit: false,
+    title: "Add Train Coach",
+    button: "Submit",
     form: {
       id: "",
       train: "",
@@ -211,11 +216,6 @@ export default {
         disabled: false,
         to: { name: "auth.coaches.listing" },
       },
-      {
-        text: "add",
-        disabled: true,
-        href: "#",
-      },
     ],
   }),
   methods: {
@@ -223,10 +223,37 @@ export default {
       let res = await TrainService.getlist("");
       this.trains = res.data;
     },
+    getCoachDetails: async function () {
+      let id = this.$route.params.id;
+      const res = await CoachService.get(id);
+      this.form.id = res.trainCoachID;
+      this.form.train = res.trainID;
+      this.form.ClassType = res.classType;
+      this.form.coach_num = res.coachNo;
+      this.form.berth_count = res.berthCount;
+      this.form.cabin_count = res.cabinCount;
+      this.form.seat_count = res.seatCount;
+      this.form.berth_in_cabin = res.berthinCabin;
+      this.form.seat_adult = res.seatFareAdult;
+      this.form.berth_adult = res.berthFareAdult;
+      this.form.seat_child = res.seatFareChild;
+      this.form.berth_child = res.berthFareChild;
+      this.form.ReserveNote = res.reservedNote;
+      this.form.is_reserved = res.isAlreadyReserved;
+
+      this.items.push({text:'Edit',disabled:true,href:'#'});
+      this.is_edit = true;
+      this.title = "Edit Train Coach";
+      this.button = "Update";
+    },
     addTrainCoach: async function (event) {
       event.preventDefault();
       if (this.$refs.form.validate()) {
+        if(!this.is_edit){
         var res = await CoachService.create(this.form);
+        }else{
+        var res = await CoachService.update(this.form,this.form.id);
+        }
         if (res.status == 1) {
           this.$toaster.success("Train Coach Added Successfully.");
           this.getDataFromApi();
@@ -247,6 +274,11 @@ export default {
   },
   mounted() {
     this.getallTrains();
+    if (this.$route.params.id) {
+      this.getCoachDetails();
+    }else{
+      this.items.push({text:'Add',disabled:true,href:'#'});
+    }
   },
 };
 </script>

@@ -183,7 +183,7 @@ export default {
     },
     deleteItem(item) {
       if (confirm("Are you sure you want to delete this station.. ??")) {
-        var res = CoachService.delete(parseInt(item.stationID));
+        var res = CoachService.delete(parseInt(item.id));
       }
     },
     addStation: async function (event) {

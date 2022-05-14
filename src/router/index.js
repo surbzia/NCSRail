@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import Addcity from '../views/Addcity.vue'
-import Addstation from '../views/Addstation.vue'
-import Addtrain from '../views/Addtrain.vue'
-import Traincoaches from '../views/Traincoaches.vue'
-import AuthLogin from '../views/Auth/Login.vue'
+// import HomeView from '../views/HomeView.vue'
+// import Addcity from '../views/Addcity.vue'
+// import Addstation from '../views/Addstation.vue'
+// import Addtrain from '../views/Addtrain.vue'
+// import Traincoaches from '../views/Traincoaches.vue'
+// import AuthLogin from '../views/Auth/Login.vue'
 
 
 Vue.use(VueRouter)
@@ -14,57 +14,46 @@ const routes = [
   {
     path: '/login',
     name: 'auth.login',
-    component: AuthLogin,
+    component: ()=> import('@/views/Auth/Login.vue'),
     meta: { showsidebar: true }
   },
+
   {
     path: '/dashboard',
     name: 'auth.dashboard',
-    component: ()=> import('@/views/dashboard.vue'),
-    meta: { showsidebar: false }
-  },
-  {
-    path: '/dashboard',
-    name: 'auth.dashboard',
-    component: ()=> import('@/views/dashboard.vue'),
+    component: ()=> import('@/views/dashboard/dashboard.vue'),
     meta: { showsidebar: false }
   },
   // {
-  //   path: '/dashboard',
-  //   name: 'auth.dashboard',
-  //   component: HomeView,
+  //   path: '/addcity',
+  //   name: 'auth.addcity',
+  //   component: Addcity,
   //   meta: { showsidebar: false }
   // },
-  {
-    path: '/addcity',
-    name: 'auth.addcity',
-    component: Addcity,
-    meta: { showsidebar: false }
-  },
-  {
-    path: '/addtrain',
-    name: 'auth.addtrain',
-    component: Addtrain,
-    meta: { showsidebar: false }
-  },
+  // {
+  //   path: '/addtrain',
+  //   name: 'auth.addtrain',
+  //   component: Addtrain,
+  //   meta: { showsidebar: false }
+  // },
   // {
   //   path: '/addroutes',
   //   name: 'auth.addroutes',
   //   component: Addroutes,
   //   meta: { showsidebar: false }
   // },
-  {
-    path: '/addstation',
-    name: 'auth.addstation',
-    component: Addstation,
-    meta: { showsidebar: false }
-  },
-  {
-    path: '/traincoaches',
-    name: 'auth.traincoaches',
-    component: Traincoaches,
-    meta: { showsidebar: false }
-  },
+  // {
+  //   path: '/addstation',
+  //   name: 'auth.addstation',
+  //   component: Addstation,
+  //   meta: { showsidebar: false }
+  // },
+  // {
+  //   path: '/traincoaches',
+  //   name: 'auth.traincoaches',
+  //   component: Traincoaches,
+  //   meta: { showsidebar: false }
+  // },
 
 
   {
@@ -124,7 +113,7 @@ const routes = [
   {
     path: '/trainCoaches/edit/:id',
     name: 'auth.coaches.edit',
-    component: ()=> import('@/views/trainCoaches/edit.vue'),
+    component: ()=> import('@/views/trainCoaches/form.vue'),
     meta: { showsidebar: false }
   },
 ]
