@@ -282,7 +282,7 @@ export default {
           sortable: true,
           value: "waiting",
         },
-        { text: "Actions", value: "actions", sortable: false },
+        { text: "Actions",  align: 'end', value: "actions", sortable: false },
       ],
     };
   },

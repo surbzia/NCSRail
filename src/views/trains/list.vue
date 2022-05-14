@@ -167,7 +167,7 @@ export default {
           sortable: true,
           value: "code",
         },
-        { text: "Actions", value: "actions", sortable: false },
+       { text: "Actions",  align: 'end', value: "actions", sortable: false },
       ],
          rules: {
         required: (value) => !!value || "Required.",

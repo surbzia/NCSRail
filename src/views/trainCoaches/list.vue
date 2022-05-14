@@ -160,7 +160,7 @@ export default {
           sortable: true,
           value: "isReserved",
         },
-        { text: "Actions", value: "actions", sortable: false },
+         { text: "Actions",  align: 'end', value: "actions", sortable: false },
       ],
     };
   },
