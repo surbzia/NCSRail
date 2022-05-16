@@ -18,7 +18,11 @@ class TrainService{
         return res;
     }
     delete(id){
-        return axios.delete(`/api/Train/${id}`);
+        return axios.delete(`/api/Train/${id}`).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e};
+        });
 	}
     async update(formData, id){ 
 		// formData.append('_method','put')

@@ -189,9 +189,13 @@ export default {
       this.edit_form.code = item.code;
       this.TrainModelEdit = true;
     },
-    deleteItem(item) {
+   async deleteItem(item) {
       if (confirm("Are you sure you want to delete this station.. ??")) {
-        var res = TrainService.delete(parseInt(item.id));
+        var res = await TrainService.delete(parseInt(item.id));
+         if(res.status == 1){
+          this.$toaster.success("Train has been deleted successfully.");
+          this.getDataFromApi();
+       }
       }
     },
       addTrain: async function (event) {

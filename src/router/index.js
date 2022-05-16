@@ -15,7 +15,7 @@ const routes = [
     path: '/login',
     name: 'auth.login',
     component: ()=> import('@/views/Auth/Login.vue'),
-    meta: { showsidebar: true }
+    meta: { showsidebar: true ,title: 'Login'}
   },
 
   {

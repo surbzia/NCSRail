@@ -7,7 +7,7 @@
     </div>
     <v-data-table
       :headers="headers"
-      :items="cities"
+      :items="CitiesComputed"
       :items-per-page="5"
       :loading="loading"
       class="elevation-1"
@@ -169,7 +169,7 @@ export default {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "id",
+          value: "index",
         },
         {
           text: "Name",
@@ -198,6 +198,14 @@ export default {
   mounted() {
     this.getDataFromApi();
   },
+  computed:{
+     CitiesComputed () {
+        return this.cities.map((item, index) => {
+          item.index = index +1;
+          return item;
+        })
+      }
+  },
   methods: {
     edit(item) {
       this.editform.id = item.id;
@@ -205,9 +213,9 @@ export default {
       this.editform.isActive = item.isActive;
       this.cityModelEdit = true;
     },
-    deleteItem(item) {
+    async deleteItem(item) {
       if (confirm("Are you sure you want to delete this City.. ??")) {
-        var res = cityservice.delete(item.id);
+        var res = await cityservice.delete(item.id);
        if(res.status == 1){
           this.$toaster.success("City has been deleted successfully.");
           this.getDataFromApi();
@@ -230,8 +238,8 @@ export default {
       event.preventDefault();
       if (this.$refs.form.validate()) {
         let formData = {
-          id: this.editform.id,
           name: this.editform.name,
+          isActive: this.editform.isActive,
         };
 
         var res = await cityservice.update(
@@ -254,7 +262,7 @@ export default {
       this.loading = true;
       var query = "";
       if (this.search != "") {
-        query += "&search=" + this.search;
+        query += "?search=" + this.search;
       }
       return cityservice.getlist(query);
     },

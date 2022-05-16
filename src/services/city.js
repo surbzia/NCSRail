@@ -18,7 +18,7 @@ class cityservice{
         return res;
     }
     delete(id){
-		return axios.delete(`/api/City/${id}`).then(function(e){
+		return axios.post(`/api/City/delete/${id}`).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -27,7 +27,7 @@ class cityservice{
     async update(formData, id){ 
 		// formData.append('_method','put')
       
-		var res = await  axios.put(`/api/City/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/City/update/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
