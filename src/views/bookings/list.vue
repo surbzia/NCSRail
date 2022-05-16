@@ -94,7 +94,7 @@ export default {
           value: "route",
         },
         {
-          text: "Passingers",
+          text: "Passengers",
           align: "start",
           sortable: true,
           value: "noOfPassengers",

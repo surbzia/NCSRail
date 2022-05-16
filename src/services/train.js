@@ -18,16 +18,14 @@ class TrainService{
         return res;
     }
     delete(id){
-        return axios.delete(`/api/Train/${id}`).then(function(e){
+        return axios.post(`/api/Train/delete/${id}`).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
         });
 	}
     async update(formData, id){ 
-		// formData.append('_method','put')
-      
-		var res = await  axios.post(`/api/Train/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/Train/update/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};

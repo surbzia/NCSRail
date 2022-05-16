@@ -18,12 +18,16 @@ class StationService{
         return res;
     }
     delete(id){
-        return axios.delete(`/api/Station/${id}`);
+        return axios.post(`/api/Station/delete/${id}`).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e};
+        });
 	}
     async update(formData, id){ 
 		// formData.append('_method','put')
       
-		var res = await  axios.post(`/api/Station/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/Station/update/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};

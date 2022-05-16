@@ -51,7 +51,7 @@
                           v-model="form.city"
                           :items="cities"
                           item-text="name"
-                          item-value="cityID"
+                          item-value="id"
                           label="Select City"
                           :rules="[rules.required]"
                         ></v-select>
@@ -128,6 +128,11 @@
           class="mx-4"
         ></v-text-field>
       </template>
+               <template v-slot:[`item.code`]="{ item }">
+        <v-btn  rounded  color="light" small>
+          {{item.code}}
+         </v-btn>
+      </template> 
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn rounded outlined color="info" v-on:click="edit(item)" small>
           Edit
@@ -236,12 +241,20 @@ export default {
       this.edit_form.id = item.id;
       this.edit_form.name = item.title;
       this.edit_form.code = item.code;
-      this.edit_form.city = item.cityID;
+      this.edit_form.city = item.id;
       this.stationModelEdit = true;
     },
-    deleteItem(item) {
+    async deleteItem(item) {
       if (confirm("Are you sure you want to delete this station.. ??")) {
-        var res = Stationservice.delete(parseInt(item.stationID));
+        var res = await Stationservice.delete(parseInt(item.id));
+          if (res.status == 1) {
+          this.$toaster.success("Station has been deleeted Successfully.");
+          this.getDataFromApi();
+          this.stationModel = false;
+        }else{
+          this.$toaster.error(res.data);
+            this.getDataFromApi();
+        }
       }
     },
     addStation: async function (event) {
@@ -253,7 +266,7 @@ export default {
           CityID: this.form.city,
         });
         if (res.status == 1) {
-          this.$toaster.success("Station Added Successfully.");
+          this.$toaster.success("Station has been added successfully.");
           this.getDataFromApi();
           this.stationModel = false;
         }
@@ -278,7 +291,7 @@ export default {
           parseInt(this.edit_form.id)
         );
         if (res.status == 1) {
-          this.$toaster.success("Train Updated Successfully.");
+          this.$toaster.success("Station has been updated successfully.");
           this.getDataFromApi();
           this.stationModelEdit = false;
         }
@@ -293,7 +306,7 @@ export default {
       this.loading = true;
       var query = "";
       if (this.search != "") {
-        query += "&search=" + this.search;
+        query += "?search=" + this.search;
       }
       return Stationservice.getlist(query);
     },

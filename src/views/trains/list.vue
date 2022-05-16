@@ -101,6 +101,11 @@
           class="mx-4"
         ></v-text-field>
       </template>
+         <template v-slot:[`item.code`]="{ item }">
+        <v-btn  rounded  color="light" small>
+          {{item.code}}
+         </v-btn>
+      </template> 
       <template v-slot:[`item.actions`]="{ item }">
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
         <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
@@ -224,7 +229,7 @@ export default {
       if (res.status == 1) {
         this.$toaster.success("Station Updated Successfully.");
         this.getDataFromApi();
-        this.stationModelEdit = false;
+        this.TrainModelEdit = false;
       }
       }
     },
@@ -237,7 +242,7 @@ export default {
       this.loading = true;
       var query = "";
       if (this.search != "") {
-        query += "&search=" + this.search;
+        query += "?search=" + this.search;
       }
       return TrainService.getlist(query);
     },
