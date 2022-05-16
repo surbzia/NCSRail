@@ -200,14 +200,18 @@ export default {
   },
   methods: {
     edit(item) {
-      this.editform.id = item.cityID;
+      this.editform.id = item.id;
       this.editform.name = item.name;
       this.editform.isActive = item.isActive;
       this.cityModelEdit = true;
     },
     deleteItem(item) {
       if (confirm("Are you sure you want to delete this City.. ??")) {
-        var res = cityservice.delete(item.cityID);
+        var res = cityservice.delete(item.id);
+       if(res.status == 1){
+          this.$toaster.success("City has been deleted successfully.");
+          this.getDataFromApi();
+       }
       }
     },
     addCity: async function (event) {
