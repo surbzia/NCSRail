@@ -1,6 +1,6 @@
 <template>
-    <div>
-         <v-row>
+  <div>
+    <v-row>
       <v-col md="12">
         <v-data-table
           :headers="data.trainsHeader"
@@ -15,61 +15,71 @@
             {{ item.fromStationCode }} - {{ item.toStationCode }}
           </template>
           <template v-slot:expanded-item="{ headers, item }">
-            <v-simple-table dense :colspan="headers.length" v-if="item.fares.length > 0">
-              <template v-slot:default :colspan="headers.length">
-                <thead :colspan="headers.length">
-                  <tr>
-                    <th>Class Type</th>
-                    <th>Coaches</th>
-                    <th>Vacant Seats</th>
-                    <th>Berth Fare PKR</th>
-                    <th>Seats Fare PKR</th>
-                    <th>Berth Count</th>
-                    <th>Seats Count</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody :colspan="headers.length">
-                  <tr v-for="fare in item.fares" :key="fare.hash">
-                    <td>{{ fare.classType }}</td>
-                    <td>{{ fare.coachesCount }}</td>
-                    <td>{{ fare.vacantSeats }}</td>
-                    <td>{{ fare.fareBerthAdult }}</td>
-                    <td>{{ fare.fareSeatAdult }}</td>
-                    <td>{{ fare.berthCount }}</td>
-                    <td>{{ fare.seatsCount }}</td>
-                    <td>
-                         <v-btn @click="selectTrain(item,fare)" class="ma-0" outlined rounded small
-                        color="teal">
-                           Select
-                          </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-            <td :colspan="headers.length" v-else>
-        No Data Found
-      </td>
+            <td
+              :colspan="headers.length"
+              v-if="item.fares.length > 0"
+              class="pa-0"
+            >
+              <v-simple-table dense style="background-color: #dfdfdf">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th>Class Type</th>
+                      <th>Coaches</th>
+                      <th>Vacant Seats</th>
+                      <th>Berth Fare PKR</th>
+                      <th>Seats Fare PKR</th>
+                      <th>Berth Count</th>
+                      <th>Seats Count</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="fare in item.fares" :key="fare.hash">
+                      <td>{{ fare.classType }}</td>
+                      <td>{{ fare.coachesCount }}</td>
+                      <td>{{ fare.vacantSeats }}</td>
+                      <td>{{ fare.fareBerthAdult }}</td>
+                      <td>{{ fare.fareSeatAdult }}</td>
+                      <td>{{ fare.berthCount }}</td>
+                      <td>{{ fare.seatsCount }}</td>
+                      <td>
+                        <v-btn
+                          @click="selectTrain(item, fare)"
+                          class="ma-0"
+                          outlined
+                          rounded
+                          small
+                          color="teal"
+                        >
+                          Select
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </td>
+            <td :colspan="headers.length" v-else>No Data Found</td>
           </template>
         </v-data-table>
       </v-col>
     </v-row>
-    </div>
+  </div>
 </template>
 <script>
 export default {
   props: {
-      data: {
+    data: {
       default: {},
       type: Object,
     },
   },
-  data(){
-      return{
- expanded: [],
+  data() {
+    return {
+      expanded: [],
       singleExpand: true,
-      };
+    };
   },
 };
 </script>
