@@ -5,6 +5,82 @@
         <v-breadcrumbs :items="bread" large></v-breadcrumbs>
       </v-container>
     </div>
+    <v-container>
+        <v-card style="padding: 29px 27px;">
+      <v-row class="inline d-flex">
+        <v-text-field
+          v-model="filter.ticket_num"
+          label="Ticket Number"
+          class="mx-4"
+        ></v-text-field>
+        <v-text-field
+          v-model="filter.cnic"
+          label="CNIC Number"
+          class="mx-4"
+        ></v-text-field>
+        <v-select
+        :items="['BOOKED','PANDING']"
+          label="Status"
+          item-text="name"
+          v-model="filter.status"
+          item-value="id"
+          dense
+          class="pt-5"
+        ></v-select>
+      </v-row>
+      <v-row>
+        <v-col md="8">
+           <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        :return-value.sync="filter.booking_date"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="filter.booking_date"
+            label="Booking Date"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="filter.booking_date"
+          no-title
+          scrollable
+        >
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="primary"
+            @click="menu = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            @click="$refs.menu.save(filter.booking_date)"
+          >
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+        </v-col>
+     <v-col md="4" class="text-right">
+      
+          <v-btn elevation="1" color="primary" class="mt-5" raised v-on:click="applyFilter()"
+          >Search Booking</v-btn
+        >
+     </v-col>
+      </v-row>
+        </v-card>
+    </v-container>
     <v-data-table
       :headers="headers"
       :items="bookings"
@@ -12,13 +88,6 @@
        :options.sync="options"
       class="elevation-1"
     >
-      <template v-slot:top>
-        <v-text-field
-          v-model="search"
-          label="Search"
-          class="mx-4"
-        ></v-text-field>
-      </template>
        <template v-slot:[`item.trainName`]="{ item }">
         <v-btn  rounded  color="light" small>
           {{item.trainName}}
@@ -50,6 +119,13 @@ export default {
   name: "auth.station.listing",
   data() {
     return {
+      menu: false,
+      filter: {
+        ticket_num: "",
+        cnic: "",
+        booking_date: "",
+        status: "",
+      },
       search: "",
       bread: [
         {
@@ -65,12 +141,8 @@ export default {
           exact: true,
         },
       ],
-      loading: true,
+      loading: false,
       totalRecords: 0,
-      nameRules: [
-        // (v) => !!v || "Name is required",
-        // (v) => v.length <= 10 || "Name must be less than 10 characters",
-      ],
       valid: false,
       options: {},
       bookings:[],
@@ -116,48 +188,13 @@ export default {
     };
   },
   watch: {
-    $route() {
-         this.getDataFromApi();
-    },
-    perpage() {
-         this.getDataFromApi();
-    },
-    options: {
-      handler() {
-         this.getDataFromApi();
-      },
-      deep: true,
-    },
-     search() {
-      this.getDataFromApi();
-    },
   },
   mounted() {
-    this.getDataFromApi();
   },
   methods: {
-    // del{eteuser: async function (id) {
-    //   const isConfirmed = await Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       return true;
-    //     }
-    //   });
-    //   if (isConfirmed) {
-    //     await brandservice.delete({
-    //       id: id,
-    //     });
-    //     Swal.fire("Deleted!", "Your record has been deleted.", "success");
-    //     this.getDataFromApi();
-    //   }
-    // },
+    applyFilter(){
+      this.getDataFromApi();
+    },
     async getDataFromApi() {
       var res = await this.getAllBookings();
      this.bookings = res.data;
@@ -165,18 +202,18 @@ export default {
     },
    getAllBookings(){
      this.loading = true;
-    var query = "";
-      // var page = this.options.page;
-      // query += "?page=" + page;
-      //     if (this.options.sortBy.length > 0) {
-      //   query += "&sortCol=" + this.options.sortBy[0];
-      // }
-      // if (this.options.sortDesc.length > 0) {
-      //   query += "&sortByDesc=" + (this.options.sortDesc[0] == true ? 1 : 0);
-      // }
-      // query += "&perpage=" + this.options.itemsPerPage;
-      if (this.search != "") {
-        query += "&search=" + this.search;
+      var query = "?filter=true";
+      if (this.filter.ticket_num != "") {
+        query += "&ticket_num=" + this.filter.ticket_num;
+      }
+      if (this.filter.cnic != "") {
+        query += "&cnic=" + this.filter.cnic;
+      }
+      if (this.filter.status != "") {
+        query += "&status=" + this.filter.status;
+      }
+      if (this.filter.booking_date != "") {
+        query += "&booking_date=" + this.filter.booking_date;
       }
      return  bookingService.getlist(query);
 }
