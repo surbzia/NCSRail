@@ -21,10 +21,14 @@ class CoachService{
 		return axios.get(`/api/TrainCoach/Get/${id}`).then(e=>e.data);
 	}
     delete(id){
-        return axios.delete(`/api/TrainCoach/${id}`);
+        return axios.post(`/api/TrainCoach/delete/${id}`).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e};
+        });
 	}
     async update(formData, id){ 
-		var res = await  axios.post(`/api/TrainCoach/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/TrainCoach/update/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e.response.data};

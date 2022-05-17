@@ -255,8 +255,11 @@ export default {
         var res = await CoachService.update(this.form,this.form.id);
         }
         if (res.status == 1) {
-          this.$toaster.success("Train Coach Added Successfully.");
-          this.getDataFromApi();
+          if(!this.is_edit){
+          this.$toaster.success("Train Coach has been added Successfully.");
+          }else{
+          this.$toaster.success("Train Coach has been updated Successfully.");
+          }
           this.$router.push({ name: "auth.coaches.listing" });
         } else {
           if (res.data.errors) {

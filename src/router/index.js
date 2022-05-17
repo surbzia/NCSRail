@@ -78,6 +78,12 @@ const routes = [
     meta: { showsidebar: false, title: 'Trains' }
   },
   {
+    path: '/trains/detail/:id',
+    name: 'auth.trains.detail',
+    component: ()=> import('@/views/trains/detail.vue'),
+    meta: { showsidebar: false, title: 'Train Detail' }
+  },
+  {
     path: '/trains/route',
     name: 'auth.routes.listing',
     component: ()=> import('@/views/trainRoutes/list.vue'),
@@ -118,6 +124,36 @@ const routes = [
     name: 'auth.coaches.edit',
     component: ()=> import('@/views/trainCoaches/form.vue'),
     meta: { showsidebar: false , title: 'Train Coaches Edit'}
+  },
+  {
+    path: '/users/',
+    name: 'auth.users.listing',
+    component: ()=> import('@/views/users/list.vue'),
+    meta: { showsidebar: false , title: 'Users'}
+  },
+  {
+    path: '/users/add',
+    name: 'auth.users.add',
+    component: ()=> import('@/views/users/form.vue'),
+    meta: { showsidebar: false , title: 'User Add'}
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'auth.users.edit',
+    component: ()=> import('@/views/users/form.vue'),
+    meta: { showsidebar: false , title: 'User Edit'}
+  },
+  {
+    path: '/roles',
+    name: 'auth.roles.listing',
+    component: ()=> import('@/views/roles/list.vue'),
+    meta: { showsidebar: false , title: 'Roles'}
+  },
+  {
+    path: '/roles/permissions/:id',
+    name: 'auth.roles.permissions',
+    component: ()=> import('@/views/roles/permissions.vue'),
+    meta: { showsidebar: false , title: 'Permissions'}
   },
 ]
 

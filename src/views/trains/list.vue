@@ -107,6 +107,7 @@
          </v-btn>
       </template> 
       <template v-slot:[`item.actions`]="{ item }">
+         <v-btn rounded outlined color="primary"  :to="{ name: 'auth.trains.detail',params: { id: item.id }  }" small> Manage Train </v-btn>
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
         <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
       </template>

@@ -91,6 +91,13 @@
            <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
             <v-list-item-title>Routes</v-list-item-title>
           </v-list-item> 
+          </v-list-item>
+           <v-list-item class="px-2" link :to="{ name: 'auth.users.listing' }">
+            <v-list-item-title>Users</v-list-item-title>
+          </v-list-item> 
+           <v-list-item class="px-2" link :to="{ name: 'auth.roles.listing' }">
+            <v-list-item-title>Roles</v-list-item-title>
+          </v-list-item> 
 
           
           <!-- <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">

@@ -184,6 +184,14 @@ export default {
     deleteItem(item) {
       if (confirm("Are you sure you want to delete this station.. ??")) {
         var res = CoachService.delete(parseInt(item.id));
+         if (res.status == 1) {
+          this.$toaster.success("Coach has been deleted Successfully.");
+          this.getDataFromApi();
+          this.stationModel = false;
+        }else{
+          this.$toaster.error(res.data);
+            this.getDataFromApi();
+        }
       }
     },
     addStation: async function (event) {
@@ -235,7 +243,7 @@ export default {
       this.loading = true;
       var query = "";
       if (this.search != "") {
-        query += "&search=" + this.search;
+        query += "?search=" + this.search;
       }
       return CoachService.getlist(query);
     },

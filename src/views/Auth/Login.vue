@@ -1,21 +1,22 @@
 <template>
   <div>
-    <v-row no-gutters class="pa-10">
-      <v-col md="12" offset="3"  d-flex align-content-center>
+    <v-row no-gutters class="pa-10 mt-10">
+      <v-col class="text-center align-content-center">
         <img src="https://nscrail.himsportal.com/images/logo.png" alt="" />
       </v-col>
     </v-row>
 
-    <v-container class="grey lighten-5 loginscreen">
-      <v-card class="d-flex align-content-center flex-wrap " style="padding: 22px;" outlined tile>
+    <v-container class="grey lighten-5 loginscreen col-md-4 mt-10">
+      <v-card class="d-flex align-content-center flex-wrap " style="padding: 22px;" outlined >
         <v-row>
-          <v-col md="6" offset="3">
+          <v-col md="12">
             <div class="justify-center">
               <v-form ref="form" v-model="loading" lazy-validation>
                 <v-text-field
                   v-model="login_username"
                   :rules="[rules.required, rules.email]"
                   label="Email"
+                   solo
                   clearable
                 ></v-text-field>
                 <v-text-field
@@ -28,9 +29,11 @@
                   v-model="login_password"
                   class="input-group--focused"
                   @click:append="show3 = !show3"
+                  solo
                   clearable
                 ></v-text-field>
                 <v-btn
+                class="col"
                   elevation="1"
                   @click="dologin"
                   color="primary"

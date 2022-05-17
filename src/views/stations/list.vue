@@ -241,7 +241,7 @@ export default {
       this.edit_form.id = item.id;
       this.edit_form.name = item.title;
       this.edit_form.code = item.code;
-      this.edit_form.city = item.id;
+      this.edit_form.city = item.cityID;
       this.stationModelEdit = true;
     },
     async deleteItem(item) {

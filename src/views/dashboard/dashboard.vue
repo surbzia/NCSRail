@@ -59,5 +59,8 @@ export default {
       ],
     };
   },
+  mounted(){
+     this.$router.push({ name: "auth.bookings.listing" });
+  }
 };
 </script>
