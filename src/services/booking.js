@@ -10,10 +10,26 @@ class bookingservice{
 		});
 	}
     async create(formData){
-        var res = await  axios.post('/api/categories',formData).then(function(e){
-            return {status: 1, data: e.data.data}
+        var res = await axios.post('/api/categories',formData).then(function(e){
+            return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e.response.data.errors};
+        });
+        return res;
+    }
+    async checkAvailableTrains(formData){
+        var res = await axios.post('/api/TrainService/AvailableTrain',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e.response.data};
+        });
+        return res;
+    }
+    async GetTrainDetails(formData){
+        var res = await axios.post('/api/TrainService/GetTrainDetails',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e.response.data};
         });
         return res;
     }

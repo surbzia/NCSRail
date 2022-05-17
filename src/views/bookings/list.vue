@@ -5,6 +5,15 @@
         <v-breadcrumbs :items="bread" large></v-breadcrumbs>
       </v-container>
     </div>
+    <div class="row">
+      <div class="col-md-12 mb-2">
+        <div class="text-right">
+          <v-btn :to="{ name: 'auth.bookings.add' }" rounded color="success">
+            Add Booking
+          </v-btn>
+        </div>
+      </div>
+    </div>
     <v-container>
         <v-card style="padding: 29px 27px;">
       <v-row class="inline d-flex">
@@ -106,7 +115,6 @@
       outlined rounded small
       
       color="teal">
-          <!-- <v-icon>mdi-format-list-bulleted-square</v-icon> -->
           Detail
          </v-btn>
       </template> 

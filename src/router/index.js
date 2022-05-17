@@ -108,6 +108,12 @@ const routes = [
     meta: { showsidebar: false , title: 'booking Details'}
   },
   {
+    path: '/bookings/add',
+    name: 'auth.bookings.add',
+    component: ()=> import('@/views/bookings/bookingForm.vue'),
+    meta: { showsidebar: false , title: 'Booking Add'}
+  },
+  {
     path: '/trainCoaches',
     name: 'auth.coaches.listing',
     component: ()=> import('@/views/trainCoaches/list.vue'),
