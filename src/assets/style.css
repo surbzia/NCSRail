@@ -49,3 +49,120 @@ header i.v-icon {
     background: #3ba212;
     padding: 7px;
 }
+.all-coach {
+    display: inline-block;
+    width: 100%;
+}
+
+.coach-9.selected {
+    background-color: #bb8131;
+    padding: 5px 10px;
+    color: white;
+    width: 120px;
+    text-align: center;
+}
+
+.all-coach>div {
+    float: left;
+    width: 16.666%;
+}
+
+.coach-9 {
+    background-color: transparent;
+    padding: 5px 10px;
+    border: 1px solid #bb8131;
+    width: 120px;
+    text-align: center;
+}
+
+.coach-9 p {
+    font-size: 22px;
+    color: #bb8131;
+    margin-bottom: 1px !important;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+.haz-exp {
+    background-color: #f3f3f3;
+    padding: 10px 10px 1px 10px;
+}
+
+.haz-may {
+    margin-bottom: 25px;
+}
+
+.haz-exp .row {
+    align-items: center;
+}
+
+.haz-may h5 {
+    font-size: 20px;
+    color: #50534e;
+    font-weight: 500;
+}
+
+.dn {
+    display: flex;
+}
+
+.dn img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.dn h4 {
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 32px;
+}
+
+.dn span {
+    font-size: 19px;
+    color: #5b5454;
+}
+
+.haz-eco .container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.haz-eco .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.haz-exp .row {
+    align-items: center;
+}
+
+.kh-rw {
+    border-right: 1px solid #ccc;
+}
+
+.kh-rw p {
+    font-size: 16px;
+    margin: 0 auto;
+    color: #5b5454;
+}
+
+.kh-rw span {
+    display: block;
+    color: #000000;
+    font-size: 16px;
+}

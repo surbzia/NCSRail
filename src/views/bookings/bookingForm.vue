@@ -77,7 +77,8 @@
         </v-row>
       </v-card>
     </v-container>
-   <AvailabeTrains v-if="availableTrainsSection" :data="{ trains:trains, trainsHeader:trainsHeader}"></AvailabeTrains>
+   <AvailabeTrains v-if="availableTrainsSection" :data="{ trains:trains}"></AvailabeTrains>
+  
   </div>
 </template>
 <script>
@@ -105,39 +106,7 @@ AvailabeTrains
       expanded: [],
       singleExpand: true,
       trains: [],
-      trainsHeader: [
-        {
-          text: "Train Name",
-          align: "start",
-          sortable: true,
-          value: "trainName",
-        },
-        {
-          text: "Train Code",
-          align: "start",
-          sortable: true,
-          value: "trainCode",
-        },
-        {
-          text: "Route",
-          align: "start",
-          sortable: true,
-          value: "fromStationCode",
-        },
-        {
-          text: "Duration",
-          align: "start",
-          sortable: true,
-          value: "duration",
-        },
-        {
-          text: "Stops",
-          align: "start",
-          sortable: true,
-          value: "stops",
-        },
-        { text: "", value: "data-table-expand" },
-      ],
+     
     };
   },
   methods: {
@@ -159,14 +128,14 @@ AvailabeTrains
       let res = await Stationservice.getlist("");
       this.stations = res.data;
     },
-   async selectTrain(selectedTrain,selectedClass) {
-     let res = await bookingService.GetTrainDetails({selectedTrain:selectedTrain,selectedClass:selectedClass});
-     if(res.status){
-         this.availableTrainsSection = false;
-         this.CoachesSection = true;
-        this.trainCoachDTO = res.trainCoachDTO;
-     }
-    },
+//    async selectTrainClass(selectedTrain,selectedClass) {
+//      let res = await bookingService.GetTrainDetails({selectedTrain:selectedTrain,selectedClass:selectedClass});
+//      if(res.status){
+//          this.availableTrainsSection = false;
+//          this.CoachesSection = true;
+//         this.trainCoachDTO = res.trainCoachDTO;
+//      }
+//     },
   },
   mounted() {
     this.getAllStations();

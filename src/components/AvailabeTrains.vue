@@ -3,7 +3,7 @@
     <v-row>
       <v-col md="12">
         <v-data-table
-          :headers="data.trainsHeader"
+          :headers="trainsHeader"
           :items="data.trains"
           :single-expand="singleExpand"
           :expanded.sync="expanded"
@@ -45,7 +45,7 @@
                       <td>{{ fare.seatsCount }}</td>
                       <td>
                         <v-btn
-                          @click="selectTrain(item, fare)"
+                          :to="{ name: 'auth.bookings.getseats', params: { selectedTrain: item,selectedClass: fare,} }"
                           class="ma-0"
                           outlined
                           rounded
@@ -68,6 +68,7 @@
   </div>
 </template>
 <script>
+import bookingService from "@/services/booking";
 export default {
   props: {
     data: {
@@ -79,7 +80,51 @@ export default {
     return {
       expanded: [],
       singleExpand: true,
+      trainCoachDTO:[],
+       trainsHeader: [
+        {
+          text: "Train Name",
+          align: "start",
+          sortable: true,
+          value: "trainName",
+        },
+        {
+          text: "Train Code",
+          align: "start",
+          sortable: true,
+          value: "trainCode",
+        },
+        {
+          text: "Route",
+          align: "start",
+          sortable: true,
+          value: "fromStationCode",
+        },
+        {
+          text: "Duration",
+          align: "start",
+          sortable: true,
+          value: "duration",
+        },
+        {
+          text: "Stops",
+          align: "start",
+          sortable: true,
+          value: "stops",
+        },
+        { text: "", value: "data-table-expand" },
+      ],
     };
   },
+  methods:{
+    //   async selectTrainClass(selectedTrain,selectedClass) {
+    //  let res = await bookingService.GetTrainDetails({selectedTrain:selectedTrain,selectedClass:selectedClass});
+    //  if(res.status){
+    //     this.$emit('availableTrainsSection',false);
+    //     this.$emit('CoachesSection',true);
+    //     this.trainCoachDTO = res.trainCoachDTO;
+    //  }
+    // },
+  }
 };
 </script>
