@@ -31,11 +31,11 @@
         </template>
 
         <v-list>
-          <!-- <v-list-item link :to="{ name: 'auth.users.add' }">
+           <v-list-item link :to="{ name: 'auth.bookings.add' }">
             <v-list-item-title
-              ><v-icon>mdi-plus</v-icon>Users</v-list-item-title
+              ><v-icon>mdi-plus</v-icon>Add Booking</v-list-item-title
             >
-          </v-list-item> -->
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
