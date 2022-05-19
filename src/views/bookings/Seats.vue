@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="haz-exp">
-           <div class="row">
+          <div class="row">
               <div class="col-md-5">
                 <div class="dn">
                   <img
@@ -67,48 +67,61 @@
           </div>
         </div>
 
-        <div class="col-md-12"> 
-          <div class="all-coach">
-            <div
-              class="coach-9"
-              v-for="(trainCoach, index) in trainCoachDTO"
-              :key="index"
-               @click="selectCoach($event,trainCoach)"
-            >
-              <p class="par">
-                Coach #{{ trainCoach.coachNo }}
-                <span>Vacant: {{ trainCoach.vacantSeats }}</span>
-              </p>
-           
+         <div class="col-md-12"> 
+                      <div class="row mt-1">
+               
+<div class="coach" v-for="trainCoach in trainCoachDTO" :key="trainCoach" @click="selectCoach($event,trainCoach)" >
+    Coach# {{trainCoach.coachNo}} <br>
+    Vacant: {{ trainCoach.vacantSeats }} 
+  </div>
             </div>
-          </div>
         </div>
-           <div class="col-md-12">
-              <div class="container" v-if="selectedTrain.fares[0].classType == 'Economy'"> 
-             <EconomyClass></EconomyClass>
-            </div> 
+          
+          <div class="container" >
+            <h4>Seats</h4>
+            <hr>
+           <div class="row mt-1">
+
+            
+  <div class="seat" v-for="seat in parseInt(seatsCount)" :key="seat" @click="select($event)"  :class="{reserved:IsReserved(berth+'S')}">
+    {{seat}}S
+  </div>
+
+
+
+            </div>
+            </div>
+             <div class="container" >
+            <h4>Berth</h4>
+            <hr>
+            <div class="row mt-1">
+               
+<div class="seat" v-for="berth in parseInt(berthCount)" :key="berth" @click="select($event)" :class="{reserved:IsReserved(berth+'B')}" >
+    {{berth}}B
+  </div>
+            </div>
+           </div>
            </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import bookingService from "@/services/booking";
 import EconomyClass from "@/components/EconomyClass.vue";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
-  components:{
+  components: {
     EconomyClass,
-},
+  },
   data() {
     return {
+      berthCount: 0,
+      seatsCount: 0,
       selectedTrain: null,
       isActive: false,
       trainCoachDTO: [],
-      coach:{
-        trainCoachBookedDTOs:[],
-      }
+      trainCoachBookedDTOs: [],
     };
   },
   mounted() {
@@ -118,7 +131,7 @@ export default {
     GetSearchedRequest() {
       return this.$store.getters.GetSearchedRequest;
     },
-    },
+  },
   methods: {
     async selectTrainClass() {
       let selectedTrain = this.$route.params.selectedTrain;
@@ -130,23 +143,44 @@ export default {
       if (res.status) {
         this.selectedTrain = res.data.selectedTrain;
         this.trainCoachDTO = res.data.trainCoachDTO;
+        this.berthCount = this.trainCoachDTO[0].berthCount;
+        this.seatsCount = this.trainCoachDTO[0].seatsCount;
       }
     },
-    date_formated(date){
-        return moment(date).subtract(1,'days').format('h:mm a')
+    date_formated(date) {
+      return moment(date).subtract(1, "days").format("h:mm a");
     },
-    get_duration(date){
-        let time = moment(date).subtract(1,'days').format('h:mm a');
-        let res = moment.duration(time,"hours").hours();
-        console.log(res);
+    get_duration(date) {
+      let time = moment(date).subtract(1, "days").format("h:mm a");
+      let res = moment.duration(time, "hours").hours();
+      console.log(res);
     },
-      selectCoach(event,coach) {
-      if (event.currentTarget.className == "coach-9") {
-        event.currentTarget.className = "coach-9 selected";
+    select(event){
+    if (event.currentTarget.className == "seat" && event.currentTarget.className != "seat reserved") {
+        event.currentTarget.className = "booked";
       } else {
-        event.currentTarget.className = "coach-9";
+        if(event.currentTarget.className == "booked"){
+          event.currentTarget.className = "seat";
+        }
+        // event.currentTarget.className = "seat";
       }
-       this.coach.trainCoachBookedDTOs =  coach.trainCoachBookedDTOs;
+    },
+    IsReserved(num){
+   if (this.trainCoachBookedDTOs.find(x => x.seatNo === num)) {
+      return true;
+    } else {
+      return false;
+    }
+    },
+    selectCoach(event, coach) {
+      if (event.currentTarget.className == "coach") {
+        event.currentTarget.className = "selected";
+      } else {
+        event.currentTarget.className = "coach";
+      }
+      this.trainCoachBookedDTOs = coach.trainCoachBookedDTOs;
+      this.berthCount = coach.berthCount;
+      this.seatsCount = coach.seatsCount;
     },
   },
 };
