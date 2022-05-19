@@ -2,6 +2,11 @@
   <div>
     <v-container>
       <v-card style="padding: 29px 27px">
+ <span v-if="errors">
+        <p v-if="seat_error != null" class="pa-2 "  style="color:white; background-color: brown;">{{seat_error}}</p>
+<br>
+ </span>
+
         <v-row class="inline d-flex" style="margin-bottom: -47px; margin-top: -35px !important;">
           <!-- <v-select
             :items="stations"
@@ -55,6 +60,7 @@
             dense
             filled
           ></v-text-field>
+          
         </v-row>
         <v-row class="mt-0" style="margin-bottom: -48px;">
           <v-col md="8">
@@ -133,6 +139,8 @@ export default {
         adultsCount: 0,
       },
       stations: [],
+      errors:false,
+      seat_error:null,
       expanded: [],
       singleExpand: true,
       trains: [],
@@ -140,7 +148,8 @@ export default {
   },
   methods: {
     async CheckAvailabeTrains() {
-      let res = await bookingService.checkAvailableTrains(this.form);
+     if(this.form.childernsCount != 0 || this.form.adultsCount != 0){
+        let res = await bookingService.checkAvailableTrains(this.form);
       if (res.status == 1) {
          this.$store.commit("setSearchedRequest", {selectedTrain:this.form});
         this.availableTrainsSection = true;
@@ -150,9 +159,15 @@ export default {
         this.form.fromStation = "";
         this.form.toStation = "";
         this.form.date = "";
-        this.form.childernsCount = "";
-        this.form.adultsCount = "";
+        this.form.childernsCount = 0;
+        this.form.adultsCount = 0;
       }
+     }else{
+        this.$toaster.error("Seats count can not be 0.");
+        this.errors = true;
+        this.seat_error = 'Seats count can not be 0.';
+     }
+     setTimeout(() => this.errors = false, 5000);
     },
     async getAllStations() {
       let res = await Stationservice.getlist("");

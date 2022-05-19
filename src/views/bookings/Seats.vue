@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container" v-if="display">
       <div class="row">
         <div class="col-md-12">
           <div class="haz-exp">
@@ -82,7 +82,7 @@
             <div
               class="coach" id="coach-div"
               v-for="trainCoach in trainCoachDTO"
-              :key="trainCoach"
+              :key="trainCoach.coachNo"
               @click="selectCoach($event, trainCoach)"
             >
               Coach# {{ trainCoach.coachNo }} <br />
@@ -99,7 +99,7 @@
               class="seat"
               v-for="seat in parseInt(seatsCount)"
               :key="seat"
-              @click="select($event)"
+              @click="select($event,seat+'S')"
               :class="{ reserved: IsReserved(seat + 'S') }"
             >
               {{ seat }}S
@@ -114,7 +114,7 @@
               class="seat"
               v-for="berth in parseInt(berthCount)"
               :key="berth"
-              @click="select($event)"
+              @click="select($event,berth+'B')"
               :class="{ reserved: IsReserved(berth + 'B') }"
             >
               {{ berth }}B
@@ -136,8 +136,13 @@ export default {
   },
   data() {
     return {
+      display:false,
       berthCount: 0,
       seatsCount: 0,
+      count:{
+        requested_count :0,
+        selected_count :[],
+      },
       selectedTrain: null,
       isActive: false,
       trainCoachDTO: [],
@@ -146,10 +151,13 @@ export default {
   },
   mounted() {
     this.selectTrainClass();
+    this.GetSearchedRequest();
   },
   computed: {
     GetSearchedRequest() {
-      return this.$store.getters.GetSearchedRequest;
+      const res =  this.$store.getters.GetSearchedRequest;
+      this.count.requested_count = parseInt(res.selectedTrain.childernsCount) + parseInt(res.selectedTrain.adultsCount);
+      return res;
     },
   },
   methods: {
@@ -166,6 +174,7 @@ export default {
         this.berthCount = this.trainCoachDTO[0].berthCount;
         this.seatsCount = this.trainCoachDTO[0].seatsCount;
       }
+      this.display = true;
     },
     date_formated(date) {
       return moment(date).subtract(1, "days").format("h:mm a");
@@ -174,17 +183,22 @@ export default {
       let time = moment(date).subtract(1, "days").format("h:mm a");
       let res = moment.duration(time, "hours").hours();
     },
-    select(event) {
+    select(event,seat) {
       if (
         event.currentTarget.className == "seat" &&
         event.currentTarget.className != "seat reserved"
       ) {
+        if(this.count.selected_count.length != this.count.requested_count){
         event.currentTarget.className = "booked";
+        this.count.selected_count.push(seat);
+        }else{
+            this.$toaster.error("You can only select " +this.count.requested_count+ " Seats");
+        }
       } else {
         if (event.currentTarget.className == "booked") {
           event.currentTarget.className = "seat";
+           this.count.selected_count.splice(this.count.selected_count.indexOf(seat), 1);
         }
-        // event.currentTarget.className = "seat";
       }
     },
     IsReserved(num) {
