@@ -173,19 +173,22 @@ header i.v-icon {
 .permission-body {
     padding: 5px;
     border: 1px solid #33910e;
-    margin: 0px -12px 7px -13px;
+    /* margin: 0px -12px 7px -13px; */
     padding-bottom: 17px;
+    height: 46px;
 }
 
 .permissions {
-    margin-bottom: -29px;
+    /* margin-bottom: -29px; */
+        margin-top: -5px !important;
+        margin-left: 9px;
 }
 
 .permission-title {
     background-color: #33910e;
     color: white;
     padding: 8px 6px 8px 10px;
-    margin-top: -12px;
+        height: 46px;
     margin-left: -13px;
     margin-right: -13px;
 }

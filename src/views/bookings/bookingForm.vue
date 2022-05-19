@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-card style="padding: 29px 27px">
-        <v-row class="inline d-flex" style="margin-bottom: -47px">
+        <v-row class="inline d-flex" style="margin-bottom: -47px; margin-top: -35px !important;">
           <!-- <v-select
             :items="stations"
             label="From Station"
@@ -56,7 +56,7 @@
             filled
           ></v-text-field>
         </v-row>
-        <v-row class="mt-0">
+        <v-row class="mt-0" style="margin-bottom: -48px;">
           <v-col md="8">
             <v-menu
               ref="menu"
