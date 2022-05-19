@@ -8,7 +8,7 @@
     <v-data-table
       :headers="headers"
       :items="users"
-      :loading="!loading"
+      :loading="loading"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -45,7 +45,7 @@
           rounded
           outlined
           color="info"
-          :to="{ name: 'auth.users.edit', params: { id: item.id } }"
+          :to="{ name: 'auth.users.edit', params: { id: item.systemUserID } }"
           small
         >
           Edit
@@ -64,9 +64,7 @@
   </div>
 </template>
 <script>
-import RouteService from "@/services/routes";
-import TrainService from "@/services/train";
-import Stationservice from "@/services/station";
+import UserService from "@/services/user";
 export default {
   name: "auth.station.listing",
   data() {
@@ -89,51 +87,26 @@ export default {
       loading: true,
       valid: false,
       options: {},
-      users: [
-        {
-          id: 1,
-          name: "ABCD",
-          emp_id: "ABCD",
-          email: "abcd@gmail.com",
-          role: "Admin",
-          is_active:true,
-        },
-        {
-          id: 2,
-          name: "EFG",
-          emp_id: "EFG",
-          email: "abcd@gmail.com",
-          role: "Sub-Admin",
-          is_active:false,
-        },
-        {
-          id: 3,
-          name: "HIJ",
-          emp_id: "HIJ",
-          email: "abcd@gmail.com",
-          role: "Customer",
-          is_active:true,
-        },
-      ],
+      users: [],
       routes: [],
       headers: [
         {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "id",
+          value: "systemUserID",
         },
-        {
-          text: "Employee ID",
-          align: "start",
-          sortable: true,
-          value: "emp_id",
-        },
+        // {
+        //   text: "Employee ID",
+        //   align: "start",
+        //   sortable: true,
+        //   value: "emp_id",
+        // },
         {
           text: "User Name",
           align: "start",
           sortable: true,
-          value: "name",
+          value: "fullName",
         },
         {
           text: "Email",
@@ -145,20 +118,22 @@ export default {
           text: "Role",
           align: "start",
           sortable: true,
-          value: "role",
+          value: "roleID",
         },
         {
           text: "Status",
           align: "start",
           sortable: true,
-          value: "is_active",
+          value: "isActive",
         },
         { text: "Actions", align: "end", value: "actions", sortable: false },
       ],
     };
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getDataFromApi();
+  },
   methods: {
     deleteItem(item) {
       if (confirm("Are you sure you want to delete this User.. ??")) {
@@ -209,17 +184,17 @@ export default {
       }
     },
     async getDataFromApi() {
-      var res = await this.getAllTrainRoutes();
-      this.routes = res.data;
+      var res = await this.getAllUsers();
+      this.users = res.data;
       this.loading = false;
     },
-    getAllTrainRoutes() {
+    getAllUsers() {
       this.loading = true;
       var query = "";
       if (this.search != "") {
         query += "&search=" + this.search;
       }
-      return RouteService.getlist(query);
+      return UserService.getlist(query);
     },
   },
 };

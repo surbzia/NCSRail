@@ -58,6 +58,8 @@ new Vue({
       //   })
       //   this.$store.commit('setPermissions',permissions);
       // }
+    } else {
+      this.$router.push({ name: "auth.login" });
     }
   },
   render: h => h(App)

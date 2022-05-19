@@ -58,7 +58,6 @@ header i.v-icon {
     background-color: #bb8131;
     padding: 5px 10px;
     color: white;
-    width: 120px;
     text-align: center;
 }
 
@@ -166,3 +165,262 @@ header i.v-icon {
     color: #000000;
     font-size: 16px;
 }
+.permission-div {
+    border: 1px solid #ffffff;
+    margin-bottom: -17px;
+}
+
+.permission-body {
+    padding: 5px;
+    border: 1px solid #33910e;
+    margin: 0px -12px 7px -13px;
+    padding-bottom: 17px;
+}
+
+.permissions {
+    margin-bottom: -29px;
+}
+
+.permission-title {
+    background-color: #33910e;
+    color: white;
+    padding: 8px 6px 8px 10px;
+    margin-top: -12px;
+    margin-left: -13px;
+    margin-right: -13px;
+}
+/* Train Seats */
+
+@charset "utf-8";
+
+/* CSS Document */
+body,
+html {
+    height: 100%;
+}
+
+body {
+    background: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+ul,
+li {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+a {
+    text-decoration: none !important;
+    transition: all 0.5s;
+}
+
+.carousel-item img {
+    width: 100%;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+div#navbarCollapse {
+    flex-direction: row-reverse;
+}
+
+
+
+
+
+
+
+
+
+
+/* Css Start */
+.w-view {
+    background-color: #636363;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 10px;
+}
+
+.mcol-left {
+    width: 30%;
+    margin-top: -12px;
+}
+
+.mcol-right {
+    width: 70%;
+}
+
+.w-view p {
+    margin: 0;
+    color: #fff;
+}
+
+.mcol {
+    padding: 0 15px;
+}
+
+.title-view p {
+    margin: 0;
+}
+
+.w-view img {
+    margin-right: 10px;
+}
+
+.a-box {
+    background-color: #23c552;
+    color: #fff;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+}
+
+.a-box p {
+    margin: 0;
+    line-height: 14px;
+    font-size: 12px;
+}
+
+.a-box .i-side {
+    min-width: 55px;
+    height: 55px;
+    text-align: center;
+    line-height: 47px;
+    background-color: #18a440;
+}
+
+.a-box .p-side {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.pad-5 {
+    padding: 0 5px !important;
+}
+
+.table-box p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.table-box p {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.table-box {
+    padding: 15px 0;
+}
+
+.b-box,
+.b-box.d-flex.b-box.s-box {
+    background-color: #f84f31 !important;
+    cursor: not-allowed;
+}
+
+.b-box .i-side,
+.b-box.d-flex.b-box.s-box {
+    background-color: #f84f31 !important;
+    width: 100%;
+}
+
+.b-box .p-side {
+    display: none;
+}
+
+.c-view {
+    background-color: #f3f3f3;
+    padding: 30px;
+}
+
+.mcol-right .a-box .i-side {
+    width: 50%;
+    min-width: 50%;
+}
+
+.mcol-right .a-box .i-side span {
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.mcol-right .b-box .i-side {
+    width: 100%;
+}
+
+.s-box {
+    background-color: #4285f4;
+}
+
+.s-box .i-side {
+    background-color: #2460c4;
+}
+
+.m-row {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    /* margin-bottom: -55px !important;
+    margin-top: 0px !important; */
+}
+
+/* Css End */
+
+
+
+
+@media only screen and (min-device-width:520px) and (max-device-width:767px) and (orientation:portrait) {}
+
+@media only screen and (min-device-width:120px) and (max-device-width:750px) and (orientation:landscape) {}
+
+@media only screen and (min-device-width:751px) and (max-device-width:999px) and (orientation:portrait) {}
+
+@media only screen and (min-device-width:751px) and (max-device-width:999px) and (orientation:landscape) {}
+
+@media only screen and (min-device-width:1000px) and (max-device-width:1030px) and (orientation:portrait) {}
+
+@media only screen and (min-device-width:1000px) and (max-device-width:1030px) and (orientation:landscape) {}
+
+@media only screen and (min-width: 1366px) and (max-width: 1920px) {}
+
+@media only screen and (min-width: 1200px) and (max-width: 1365px) {}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {}
+
+@media only screen and (min-width: 520px) and (max-width: 767px) {}
+
+@media only screen and (min-width: 300px) and (max-width: 519px) {}

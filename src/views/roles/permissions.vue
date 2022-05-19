@@ -10,16 +10,89 @@
     <div class="row">
       <h4>Permissions</h4>
       <hr />
-      <div class="col-md-12">
+      <div class="col-md-12 container">
            <v-row>
-      <v-col md="3" v-for="permission in permissions" :key="permission.id">
-        <v-checkbox
-      v-model="form.permissions"
-       v-bind:id="permission.id"
-                v-bind:value="permission.id"
-      :label="permission.name"
-    ></v-checkbox>
-      </v-col>
+             <v-col md="4" lg="4" class="permission-div">
+                 <div class="permission-title">Module</div>
+                 <div class="permission-body">
+                   <v-checkbox
+                   class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                 </div>
+             </v-col>
+             <v-col md="4"  lg="4" class="permission-div">
+                 <div class="permission-title">Module</div>
+                 <div class="permission-body">
+                   <v-checkbox
+                   class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                 </div>
+             </v-col>
+             <v-col md="4" lg="4"  class="permission-div">
+                 <div class="permission-title">Module</div>
+                 <div class="permission-body">
+                   <v-checkbox
+                   class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                 </div>
+             </v-col>
+             <v-col md="4"  lg="4" class="permission-div">
+                 <div class="permission-title">Module</div>
+                 <div class="permission-body">
+                   <v-checkbox
+                   class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                   <v-checkbox
+                    class="permissions"
+                    v-model="form.permissions"
+                    label="Permission Name"
+                  ></v-checkbox>
+                 </div>
+             </v-col>
+            
     </v-row>
       </div>
     </div>

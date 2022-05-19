@@ -108,6 +108,7 @@
       v-if="availableTrainsSection"
       :data="{ trains: trains }"
     ></AvailabeTrains>
+    
   </div>
 </template>
 <script>
@@ -141,6 +142,7 @@ export default {
     async CheckAvailabeTrains() {
       let res = await bookingService.checkAvailableTrains(this.form);
       if (res.status == 1) {
+         this.$store.commit("setSearchedRequest", {selectedTrain:this.form});
         this.availableTrainsSection = true;
         this.trains = res.data;
       } else {
@@ -168,6 +170,10 @@ export default {
   mounted() {
     this.getAllStations();
   },
-  computed: {},
+    computed: {
+    GetSearchedRequest() {
+      return this.$store.getters.GetSearchedRequest;
+    },
+    }
 };
 </script>

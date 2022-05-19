@@ -117,14 +117,8 @@ export default {
     };
   },
   methods:{
-    //   async selectTrainClass(selectedTrain,selectedClass) {
-    //  let res = await bookingService.GetTrainDetails({selectedTrain:selectedTrain,selectedClass:selectedClass});
-    //  if(res.status){
-    //     this.$emit('availableTrainsSection',false);
-    //     this.$emit('CoachesSection',true);
-    //     this.trainCoachDTO = res.trainCoachDTO;
-    //  }
-    // },
-  }
+
+  },
+ 
 };
 </script>

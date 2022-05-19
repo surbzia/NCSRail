@@ -20,7 +20,7 @@
           <h2>{{ title }}</h2>
         </v-container>
       </div>
-      <v-form v-model="valid">
+      <v-form @submit="AddUser" ref="form" lazy-validation>
         <v-container>
           <v-row>
             <v-col cols="6" md="6">
@@ -71,12 +71,18 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" md="12">
+            <v-col cols="8" md="8">
                <v-file-input
                v-model="form.image"
                show-size
                label="File input"
              ></v-file-input>
+            </v-col>
+            <v-col cols="4" md="4">
+                <v-checkbox
+                    v-model="form.isActive"
+                    label="Active"
+                  ></v-checkbox>
             </v-col>
           </v-row>
           <v-row>
@@ -92,6 +98,7 @@
   </div>
 </template>
 <script>
+import UserService from "@/services/user";
 export default {
   data: () => ({
     is_edit :false,
@@ -110,6 +117,7 @@ export default {
       role_id: "",
       employee_id: "",
       password: "",
+      isActive: "",
     },
       bread: [
         {
@@ -127,13 +135,46 @@ export default {
       ],
   }),
   methods: {
+async getUser(){
+ let res = await UserService.get(this.form.id);
+ this.form.id = res.systemUserID;
+ this.form.name = res.fullName;
+ this.form.email = res.email;
+ this.form.role_id = res.roleID;
+ this.form.isActive = res.isActive;
 
+},
+    AddUser: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        var res = await UserService.create({
+          fullName: this.form.name,
+          email: this.form.email,
+          roleID: this.form.role_id,
+          emp_id: this.form.employee_id,
+          password: this.form.password,
+          isActive: this.form.isActive,
+          image: this.form.image,
+        });
+        if (res.status == 1) {
+            if(!this.is_edit){
+          this.$toaster.success("User has been added Successfully.");
+          }else{
+          this.$toaster.success("User has been updated Successfully.");
+          }
+          this.$router.push({ name: "auth.users.listing" });
+          
+        }
+      }
+    },
   },
   mounted(){
      if (this.$route.params.id) {
+    this.form.id = this.$route.params.id;
      this.is_edit = true;
      this.title= 'Update User';
      this.button = 'Update';
+     this.getUser();
       this.bread.push({text:'Update',disabled:true,href:'#'});
      }else{
       this.bread.push({text:'Add',disabled:true,href:'#'});
