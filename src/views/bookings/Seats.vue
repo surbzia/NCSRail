@@ -29,8 +29,8 @@
                     >
                   </h4>
                 </div>
-              </div>
 
+              </div>
               <div class="col-md-7">
                 <div class="row">
                   <div class="col-md-3">
@@ -141,6 +141,8 @@ export default {
       seatsCount: 0,
       count:{
         requested_count :0,
+        adult:0,
+        child:0,
         selected_count :[],
       },
       selectedTrain: null,
@@ -156,6 +158,8 @@ export default {
   computed: {
     GetSearchedRequest() {
       const res =  this.$store.getters.GetSearchedRequest;
+      this.count.adult = res.selectedTrain.adultsCount;
+      this.count.child = res.selectedTrain.childernsCount;
       this.count.requested_count = parseInt(res.selectedTrain.childernsCount) + parseInt(res.selectedTrain.adultsCount);
       return res;
     },

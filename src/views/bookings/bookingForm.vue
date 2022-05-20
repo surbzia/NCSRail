@@ -8,15 +8,6 @@
  </span>
 
         <v-row class="inline d-flex" style="margin-bottom: -47px; margin-top: -35px !important;">
-          <!-- <v-select
-            :items="stations"
-            label="From Station"
-            item-text="title"
-            v-model="form.fromStation"
-            item-value="title"
-            dense
-            class="pt-5"
-          ></v-select> -->
           <v-autocomplete
             v-model="form.fromStation"
             :items="stations"
@@ -27,15 +18,6 @@
             filled
             label="From Station"
           ></v-autocomplete>
-          <!-- <v-select
-            :items="stations"
-            label="To Station"
-            item-text="title"
-            v-model="form.toStation"
-            item-value="title"
-            dense
-            class="pt-5"
-          ></v-select> -->
           <v-autocomplete
             v-model="form.toStation"
             :items="stations"

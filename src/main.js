@@ -40,7 +40,6 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
-
 new Vue({
   router,
   store,
