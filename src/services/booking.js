@@ -33,6 +33,32 @@ class bookingservice{
         });
         return res;
     }
+    async BookingHold(formData){
+        var res = await axios.post('/api/TrainService/BookingHold',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e.response.data};
+        });
+        return res;
+    }
+    async PassengerInfo(formData){
+        var res = await axios.post('/api/TrainService/PassengerInfo',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e.response.data};
+        });
+        return res;
+    }
+    async Confirm(formData){
+        var res = await axios.post('/api/TrainService/Confirm',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e.response.data};
+        });
+        return res;
+    }
+
+
     delete({query,id}){
 		return axios.delete(`/api/categories/${id}`);
 	}
