@@ -68,18 +68,22 @@ Vue.use(Vuex)
 const booking = {
         state: {
         searched_request: 'sdfsdf',
-        searched_train: '',
+        selectedTrain: '',
+        selected_seats: '',
         selectedClass: '',
     },
     mutations: {
-         setSearchedRequest(state, searched_request){
+        setSearchedRequest(state, searched_request){
             state.searched_request = searched_request
         },
-        setsearched_train(state, searched_train) {
-            state.searched_train = searched_train
+        SetSelectedTrain(state, selectedTrain) {
+            state.selectedTrain = selectedTrain
         },
-        setselectedClass(state, selectedClass){
+        SetselectedClass(state, selectedClass){
             state.selectedClass = selectedClass
+        },
+        setSelectedSeats(state, selected_seats){
+            state.selected_seats = selected_seats
         },
        
     },
@@ -87,11 +91,14 @@ const booking = {
         GetSearchedRequest(state) {
             return state.searched_request
         },
-        GetSearchedTrain(state) {
-            return state.searched_train
+        GetSelectedTrain(state) {
+            return state.selectedTrain
         },
         GetSelectedClass(state) {
             return state.selectedClass
+        },
+        GetSelectedSeats(state) {
+            return state.selected_seats
         },
       
     }

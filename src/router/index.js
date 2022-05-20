@@ -114,10 +114,16 @@ const routes = [
     meta: { showsidebar: false , title: 'Booking Add'}
   },
   {
-    path: '/bookings/add/:selectedTrain/:selectedClass',
-    name: 'auth.bookings.getseats',
+    path: '/bookings/seats',
+    name: 'auth.bookings.seats',
     component: ()=> import('@/views/bookings/Seats.vue'),
     meta: { showsidebar: false , title: 'Booking Add'}
+  },
+  {
+    path: '/bookings/contact',
+    name: 'auth.bookings.contact',
+    component: ()=> import('@/views/bookings/contactDetails.vue'),
+    meta: { showsidebar: false , title: 'Contact Details'}
   },
   {
     path: '/trainCoaches',

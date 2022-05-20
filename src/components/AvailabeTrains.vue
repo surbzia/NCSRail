@@ -45,7 +45,7 @@
                       <td>{{ fare.seatsCount }}</td>
                       <td>
                         <v-btn
-                          :to="{ name: 'auth.bookings.getseats', params: { selectedTrain: item,selectedClass: fare,} }"
+                         @click="selectTrain(item,fare)"
                           class="ma-0"
                           outlined
                           rounded
@@ -117,7 +117,11 @@ export default {
     };
   },
   methods:{
-
+    selectTrain(train,classType){
+      this.$store.commit("SetSelectedTrain", train);
+      this.$store.commit("SetselectedClass", classType);
+      this.$router.push({ name: "auth.bookings.seats" });
+    }
   },
  
 };
