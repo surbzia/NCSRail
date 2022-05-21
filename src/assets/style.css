@@ -150,12 +150,13 @@ header i.v-icon {
 }
 
 .permission-title {
-    background-color: #33910e;
+    /* background-color: #33910e; */
+        background: linear-gradient(0deg, rgb(31 110 0) 0%, rgb(0 48 35) 100%);
     color: white;
     padding: 8px 6px 8px 10px;
         height: 46px;
     margin-left: -13px;
-    margin-right: -13px;
+    margin-right: 0px;
 }
 .seat {
     background-color: transparent;

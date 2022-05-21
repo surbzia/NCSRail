@@ -18,6 +18,7 @@
 import SideBar from "@/components/SideBar";
 import notifications from "@/components/notifications";
 require("@/assets/style.css");
+require("@/assets/toaster.css");
 export default {
   name: "App",
   components: {

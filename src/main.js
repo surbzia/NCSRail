@@ -5,7 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import Toaster from 'v-toaster';
-import 'v-toaster/dist/v-toaster.css';
+// import 'v-toaster/dist/v-toaster.css';
 // document.title = 'Admin | NCS-Rail';
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
