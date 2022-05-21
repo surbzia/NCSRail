@@ -51,15 +51,14 @@
             <h2>Traveler Details</h2>
           </v-container>
         </div>
-        <v-container >
+        <v-container>
           <v-row
             v-for="(traveler_detail, index) in travelerdata"
             :key="traveler_detail.SeatNo"
           >
             <v-col cols="2" md="2">
-              
               <v-chip large>
-                Passinger {{ index + 1 }} -   {{traveler_detail.seatNo}}
+                Passinger {{ index + 1 }} - {{ traveler_detail.seatNo }}
               </v-chip>
             </v-col>
             <v-col cols="3" md="3">
@@ -96,7 +95,7 @@
 
           <v-row>
             <v-col cols="12" md="12">
-              <v-btn class="mr-4 btn-primary"  @click="confirm"> Submit </v-btn>
+              <v-btn class="mr-4 btn-primary" @click="confirm"> Submit </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -114,60 +113,65 @@ export default {
         fullname: [],
         tmobile: [],
       },
-      contactDetail:{
-          contactNumber:null,
-          fullName:null,
-          email:null,
-          isAgreed:false,
+      contactDetail: {
+        contactNumber: null,
+        fullName: null,
+        email: null,
+        isAgreed: false,
       },
-      travelerdata:[],
-      bookingHoldDetails:{},
-      
+      travelerdata: [],
+      bookingHoldDetails: {},
     };
   },
-  methods:{
-async confirm(){
-    let searchPrams = this.$store.getters.GetSearchedRequest;
-    let selectedSeat = this.$store.getters.GetSelectedSeats;
-   let BookingHold = {
-            searchPrams:searchPrams.selectedTrain, 
-            selectedSeats:selectedSeat.selected_seats, 
-            selectedTrain: {
-                selectedTrain:this.$store.getters.GetSelectedTrain,
-                selectedClass:this.$store.getters.GetSelectedClass,
-                }, 
-            };
+  methods: {
+    async confirm() {
+      let searchPrams = this.$store.getters.GetSearchedRequest;
+      let selectedSeat = this.$store.getters.GetSelectedSeats;
+      let BookingHold = {
+        searchPrams: searchPrams.selectedTrain,
+        selectedSeats: selectedSeat.selected_seats,
+        selectedTrain: {
+          selectedTrain: this.$store.getters.GetSelectedTrain,
+          selectedClass: this.$store.getters.GetSelectedClass,
+        },
+      };
 
- 
- let res = await bookingService.BookingHold(BookingHold);
- if(res.status == 1){
-     this.bookingHoldDetails = res.data;
+      let res = await bookingService.BookingHold(BookingHold);
+      if (res.status == 1) {
+        this.bookingHoldDetails = res.data;
 
         let PassengerInfo = {
-            travelerdata:this.travelerdata, 
-            contactDetail:this.contactDetail,
-            bookingHoldDetails: this.bookingHoldDetails
-            };
-     let res1 = await bookingService.PassengerInfo(PassengerInfo);
-   if(res1.status == 1){
-     let res2 = await bookingService.Confirm({paymentType:'CASH',bookingDetails: res1.data.rspObj});
-      if(res2.status == 1){
-      this.$store.commit("setSearchedRequest", '');
-      this.$store.commit("SetSelectedTrain", '');
-      this.$store.commit("SetselectedClass", '');
-      this.$store.commit("setSelectedSeats", '');
-      this.$toaster.success("Booking successfull");
-      this.$router.push({ name: "auth.bookings.listing" });
-     }
-     }
- }
-
-}
+          travelerdata: this.travelerdata,
+          contactDetail: this.contactDetail,
+          bookingHoldDetails: this.bookingHoldDetails,
+        };
+        let res1 = await bookingService.PassengerInfo(PassengerInfo);
+        if (res1.status == 1) {
+          let res2 = await bookingService.Confirm({
+            paymentType: "CASH",
+            bookingDetails: res1.data.rspObj,
+          });
+          if (res2.status == 1) {
+            this.$store.commit("setSearchedRequest", "");
+            this.$store.commit("SetSelectedTrain", "");
+            this.$store.commit("SetselectedClass", "");
+            this.$store.commit("setSelectedSeats", "");
+            this.$toaster.success("Booking successfull");
+            this.$router.push({ name: "auth.bookings.listing" });
+          }
+        }
+      }
+    },
   },
   mounted() {
     let traveler_details = this.$store.getters.GetSelectedSeats.selected_seats;
-    traveler_details.forEach(item => {
-    this.travelerdata.push({cnic:null,fullName:null,seatNo:item.seatNo,type:null,});
+    traveler_details.forEach((item) => {
+      this.travelerdata.push({
+        cnic: null,
+        fullName: null,
+        seatNo: item.seatNo,
+        type: null,
+      });
     });
     console.log(this.travelerdata);
     if (this.traveler_details == "") {

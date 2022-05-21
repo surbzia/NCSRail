@@ -105,6 +105,7 @@ export default {
           align: "start",
           sortable: true,
           value: "classType",
+          width: '8%' 
         },
         {
           text: "Seats",
@@ -154,13 +155,13 @@ export default {
           sortable: true,
           value: "cabinCount",
         },
-        {
-          text: "Reserved",
-          align: "start",
-          sortable: true,
-          value: "isReserved",
-        },
-         { text: "Actions",  align: 'end', value: "actions", sortable: false },
+        // {
+        //   text: "Reserved",
+        //   align: "start",
+        //   sortable: true,
+        //   value: "isReserved",
+        // },
+         { text: "Actions",  align: 'end', value: "actions", sortable: false, width: '10%' },
       ],
     };
   },
