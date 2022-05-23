@@ -34,8 +34,8 @@
 }
 
 .v-toaster .v-toast.v-toast-warning {
-    background: rgba(255, 183, 0, .9);
-    border-color: #ffb700
+    background: rgba(206, 119, 6, 0.9);
+        border-color: rgba(206, 119, 6, 0.9);
 }
 
 .v-toaster .v-toast.v-toast-info {

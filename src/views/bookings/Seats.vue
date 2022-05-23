@@ -221,7 +221,7 @@ selectedClass: null,
         this.count.selected_count.push(seat);
         this.selected_seats.push({coachNo:this.coachNo,seatNo:seat});
         }else{
-            this.$toaster.error("You can only select " +this.count.requested_count+ " Seats");
+            this.$toaster.warning("You can only select " +this.count.requested_count+ " Seats");
         }
       } else {
         if (event.currentTarget.className == "seat booked") {
