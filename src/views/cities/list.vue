@@ -104,11 +104,18 @@
           class="mx-4"
         ></v-text-field>
       </template>
-      <template v-slot:[`item.isActive`]="{ item }">
+          <template v-slot:[`item.status`]="{ item }">
+        <v-switch
+      v-model="item.isActive"
+      @change="updateStatus(item)"
+       color="info"
+    ></v-switch>
+        </template>
+      <!-- <template v-slot:[`item.isActive`]="{ item }">
         <v-btn rounded v-bind:color="item.isActive ? 'success' : 'error'" small>
           {{ item.isActive == true ? "Active" : "In-Active" }}
         </v-btn>
-      </template>
+      </template> -->
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn rounded outlined color="info" v-on:click="edit(item)" small>
           Edit
@@ -165,6 +172,7 @@ export default {
       options: {},
       cities: [],
       headers: [
+         { text: "Status", align: "start", value: "status", sortable: true },
         {
           text: "ID",
           align: "start",
@@ -177,12 +185,12 @@ export default {
           sortable: true,
           value: "name",
         },
-        {
-          text: "Status",
-          align: "start",
-          sortable: true,
-          value: "isActive",
-        },
+        // {
+        //   text: "Status",
+        //   align: "start",
+        //   sortable: true,
+        //   value: "isActive",
+        // },
         { text: "Actions",  align: 'end', value: "actions", sortable: false },
       ],
       rules: {
@@ -233,6 +241,20 @@ export default {
           this.cityModel = false;
         }
       }
+    },
+    updateStatus: async function (item) {
+       let formData = {
+          name: item.name,
+          isActive: item.isActive,
+        };
+        var res = await cityservice.update(
+          formData,
+          parseInt(item.id)
+        );
+        if (res.status == 1) {
+          this.$toaster.success("City status has been updated successfully.");
+          this.getDataFromApi();
+        }
     },
     UpdateCity: async function (event) {
       event.preventDefault();
