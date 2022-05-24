@@ -68,7 +68,7 @@ export default {
   },
   methods:{
      async getAllPermissions() {
-      let res = await PermissionService.getlist('?isActive=true');
+      let res = await PermissionService.getPermissions();
       this.permissions = res.data;
     },
   },

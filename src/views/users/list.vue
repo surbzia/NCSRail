@@ -33,26 +33,21 @@
       </template>
       <template v-slot:[`item.status`]="{ item }">
         <v-switch
-      v-model="item.isActive"
-       color="info"
-       @change="updateUserStatus(item)"
-    ></v-switch>
-        </template>
-        <template v-slot:[`item.roleName`]="{ item }">
-         <v-chip
-         outlined
-      color="dark"
-    >
-    {{item.roleName}}
-    </v-chip>
-        </template>
-        <template v-slot:[`item.isActive`]="{ item }">
-         <v-chip
-       v-bind:color="item.isActive == true?'success' :'error'"
-    >
-    {{item.isActive == true?'Active' :'In-Active'}}
-    </v-chip>
-        </template>
+          v-model="item.isActive"
+          color="info"
+          @change="updateUserStatus(item)"
+        ></v-switch>
+      </template>
+      <template v-slot:[`item.roleName`]="{ item }">
+        <v-chip outlined color="dark">
+          {{ item.roleName }}
+        </v-chip>
+      </template>
+      <template v-slot:[`item.isActive`]="{ item }">
+        <v-chip v-bind:color="item.isActive == true ? 'success' : 'error'">
+          {{ item.isActive == true ? "Active" : "In-Active" }}
+        </v-chip>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           rounded
@@ -144,7 +139,7 @@ export default {
       ],
     };
   },
-   watch: {
+  watch: {
     search() {
       this.getDataFromApi();
     },
@@ -153,7 +148,7 @@ export default {
     this.getDataFromApi();
   },
   methods: {
-  async deleteItem(item) {
+    async deleteItem(item) {
       if (confirm("Are you sure you want to delete this User.. ??")) {
         var res = await UserService.delete(parseInt(item.systemUserID));
         if (res.status == 1) {
@@ -166,27 +161,23 @@ export default {
       }
     },
 
-  
     updateUserStatus: async function (item) {
-         let data = {
-          fullName: item.fullName,
-          email: item.email,
-          roleID: item.roleID,
-          employeeID: item.employeeID,
-          password: item.password,
-          isActive: item.isActive,
-        };
-        if(item.password == null){
-          data.password = '';
-        }
-        var res = await UserService.update(
-          data,
-          parseInt(item.systemUserID)
-        );
-        if (res.status == 1) {
-          this.$toaster.success("User status has been updated successfully.");
-          this.getDataFromApi();
-        }
+      let data = {
+        fullName: item.fullName,
+        email: item.email,
+        roleID: item.roleID,
+        employeeID: item.employeeID,
+        password: item.password,
+        isActive: item.isActive,
+      };
+      if (item.password == null) {
+        data.password = "";
+      }
+      var res = await UserService.update(data, parseInt(item.systemUserID));
+      if (res.status == 1) {
+        this.$toaster.success("User status has been updated successfully.");
+        this.getDataFromApi();
+      }
     },
     async getDataFromApi() {
       var res = await this.getAllUsers();

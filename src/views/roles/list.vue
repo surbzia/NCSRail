@@ -12,7 +12,7 @@
       class="elevation-1"
     >
       <template v-slot:top>
-      <v-row>
+        <v-row>
           <v-spacer></v-spacer>
           <v-dialog v-model="RoleModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
@@ -37,10 +37,10 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" md="6">
-                           <v-checkbox
-                        v-model="form.isActive"
-                        label="Active"
-                      ></v-checkbox>
+                        <v-checkbox
+                          v-model="form.isActive"
+                          label="Active"
+                        ></v-checkbox>
                       </v-col>
                       <v-col cols="12" md="12">
                         <v-btn class="mr-4 btn-primary" type="submit">
@@ -62,9 +62,9 @@
                 <span class="text-h5">Update Role</span>
               </v-card-title>
               <v-card-text>
-               <v-form @submit="updateStation" ref="form" lazy-validation>
+                <v-form @submit="updateStation" ref="form" lazy-validation>
                   <v-container>
-                   <v-row>
+                    <v-row>
                       <v-col cols="6" md="6">
                         <v-text-field
                           v-model="edit_form.roleName"
@@ -73,14 +73,14 @@
                           required
                         ></v-text-field>
                       </v-col>
-                          <v-col cols="6" md="6">
-                           <v-checkbox
-                        v-model="edit_form.isActive"
-                        label="Active"
-                      ></v-checkbox>
+                      <v-col cols="6" md="6">
+                        <v-checkbox
+                          v-model="edit_form.isActive"
+                          label="Active"
+                        ></v-checkbox>
                       </v-col>
-                     </v-row>
-                     <v-row>
+                    </v-row>
+                    <v-row>
                       <v-col cols="12" md="12">
                         <v-btn class="mr-4 btn-primary" type="submit">
                           Submit
@@ -100,19 +100,17 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.status`]="{ item }">
-         <v-switch
-      v-model="item.isActive"
-      @change="updateRoleStatus(item)"
-       color="info"
-    ></v-switch>
-        </template>
+        <v-switch
+          v-model="item.isActive"
+          @change="updateRoleStatus(item)"
+          color="info"
+        ></v-switch>
+      </template>
       <template v-slot:[`item.isActive`]="{ item }">
-         <v-chip
-       v-bind:color="item.isActive == true?'success' :'error'"
-    >
-    {{item.isActive == true?'Active' :'In-Active'}}
-    </v-chip>
-        </template>
+        <v-chip v-bind:color="item.isActive == true ? 'success' : 'error'">
+          {{ item.isActive == true ? "Active" : "In-Active" }}
+        </v-chip>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           rounded
@@ -123,13 +121,7 @@
         >
           Manage Permissions
         </v-btn>
-        <v-btn
-          rounded
-          outlined
-          color="info"
-         v-on:click="edit(item)"
-          small
-        >
+        <v-btn rounded outlined color="info" v-on:click="edit(item)" small>
           Edit
         </v-btn>
         <v-btn
@@ -152,8 +144,8 @@ export default {
   data() {
     return {
       search: "",
-      RoleModel:false,
-      RoleEditModel:false,
+      RoleModel: false,
+      RoleEditModel: false,
       bread: [
         {
           text: "Dashboard",
@@ -171,15 +163,15 @@ export default {
       loading: true,
       valid: false,
       options: {},
-      form:{
-        roleId:null,
-        roleName:'',
-        isActive:false,
+      form: {
+        roleId: null,
+        roleName: "",
+        isActive: false,
       },
-      edit_form:{
-        roleId:null,
-        roleName:'',
-        isActive:false,
+      edit_form: {
+        roleId: null,
+        roleName: "",
+        isActive: false,
       },
       roles: [],
       routes: [],
@@ -216,9 +208,9 @@ export default {
       this.edit_form.roleId = item.roleId;
       this.edit_form.roleName = item.roleName;
       this.edit_form.isActive = item.isActive;
-      this.RoleEditModel = true;  
+      this.RoleEditModel = true;
     },
-   async deleteItem(item) {
+    async deleteItem(item) {
       if (confirm("Are you sure you want to delete this Role.. ??")) {
         var res = await RoleService.delete(parseInt(item.roleId));
         if (res.status == 1) {
@@ -263,19 +255,16 @@ export default {
         }
       }
     },
-        updateRoleStatus: async function (item) {
-         let data = {
-         roleName:  item.roleName,
-         isActive: item.isActive,
-        };
-        var res = await RoleService.update(
-          data,
-          parseInt(item.roleId)
-        );
-        if (res.status == 1) {
-          this.$toaster.success("Role status has been updated successfully.");
-          this.getDataFromApi();
-        }
+    updateRoleStatus: async function (item) {
+      let data = {
+        roleName: item.roleName,
+        isActive: item.isActive,
+      };
+      var res = await RoleService.update(data, parseInt(item.roleId));
+      if (res.status == 1) {
+        this.$toaster.success("Role status has been updated successfully.");
+        this.getDataFromApi();
+      }
     },
     async getDataFromApi() {
       var res = await this.getAllRoles();
