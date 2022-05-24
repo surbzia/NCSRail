@@ -34,8 +34,8 @@
       <template v-slot:[`item.status`]="{ item }">
         <v-switch
       v-model="item.isActive"
-      disabled
        color="info"
+       @change="updateUserStatus(item)"
     ></v-switch>
         </template>
       <!-- <template v-slot:[`item.is_active`]="{ item }">
@@ -126,7 +126,7 @@ export default {
           text: "Role",
           align: "start",
           sortable: true,
-          value: "roleID",
+          value: "roleName",
         },
         // {
         //   text: "Status",
@@ -138,14 +138,18 @@ export default {
       ],
     };
   },
-  watch: {},
+   watch: {
+    search() {
+      this.getDataFromApi();
+    },
+  },
   mounted() {
     this.getDataFromApi();
   },
   methods: {
-    deleteItem(item) {
+  async deleteItem(item) {
       if (confirm("Are you sure you want to delete this User.. ??")) {
-        var res = RouteService.delete(parseInt(item.id));
+        var res = await UserService.delete(parseInt(item.systemUserID));
         if (res.status == 1) {
           this.$toaster.success("User has been deleted Successfully.");
           this.getDataFromApi();
@@ -155,41 +159,21 @@ export default {
         }
       }
     },
-    addStation: async function (event) {
-      event.preventDefault();
-      if (this.$refs.form.validate()) {
-        var res = await RouteService.create({
-          title: this.form.name,
-          code: this.form.code,
-          CityID: this.form.city,
-        });
-        if (res.status == 1) {
-          this.$toaster.success("Station Added Successfully.");
-          this.getDataFromApi();
-          this.stationModel = false;
-        }
-      }
-    },
-    updateStation: async function (event) {
-      event.preventDefault();
-      if (this.$refs.form.validate()) {
-        let formData = {
-          id: this.edit_form.id,
-          title: this.edit_form.name,
-          code: this.edit_form.code,
-          CityID: this.edit_form.city,
-        };
 
-        var res = await RouteService.update(
-          formData,
-          parseInt(this.edit_form.id)
+  
+    updateUserStatus: async function (item) {
+         let data = {
+          isActive: item.isActive,
+        };
+        var res = await UserService.update(
+          data,
+          parseInt(item.systemUserID)
         );
         if (res.status == 1) {
-          this.$toaster.success("Train Updated Successfully.");
+          this.$toaster.success("User status has been updated successfully.");
           this.getDataFromApi();
-          this.stationModelEdit = false;
         }
-      }
+      
     },
     async getDataFromApi() {
       var res = await this.getAllUsers();

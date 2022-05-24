@@ -14,32 +14,40 @@
       <template v-slot:top>
       <v-row>
           <v-spacer></v-spacer>
-          <v-dialog v-model="RoleModel" max-width="800px">
+          <v-dialog v-model="PermissionModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                Add Role
+                Add Permission
               </v-btn>
             </template>
             <v-card>
               <v-card-title>
-                <span class="text-h5">Add Role</span>
+                <span class="text-h5">Add Permission</span>
               </v-card-title>
               <v-card-text>
-                <v-form @submit="addRole" ref="form" lazy-validation>
+                <v-form @submit="addPermission" ref="form" lazy-validation>
                   <v-container>
                     <v-row>
                       <v-col cols="6" md="6">
                         <v-text-field
-                          v-model="form.roleName"
-                          :rules="[(v) => !!v || 'Role Name is required']"
-                          label="Role Name"
+                          v-model="form.permissionTitle"
+                          :rules="[(v) => !!v || 'Permission Title is required']"
+                          label="Permission Title"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" md="6">
+                        <v-text-field
+                          v-model="form.permissionSubTitle"
+                          :rules="[(v) => !!v || 'Module Name is required']"
+                          label="Module Name"
                           required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="6" md="6">
                            <v-checkbox
                         v-model="form.isActive"
-                        label="Active"
+                        label="Status"
                       ></v-checkbox>
                       </v-col>
                       <v-col cols="12" md="12">
@@ -56,27 +64,35 @@
         </v-row>
         <v-row>
           <v-spacer></v-spacer>
-          <v-dialog v-model="RoleEditModel" max-width="800px">
+          <v-dialog v-model="PermissionEditModel" max-width="800px">
             <v-card>
               <v-card-title>
-                <span class="text-h5">Update Role</span>
+                <span class="text-h5">Update Permission</span>
               </v-card-title>
               <v-card-text>
-               <v-form @submit="updateStation" ref="form" lazy-validation>
+               <v-form @submit="updatePermission" ref="form" lazy-validation>
                   <v-container>
                    <v-row>
-                      <v-col cols="6" md="6">
+                     <v-col cols="6" md="6">
                         <v-text-field
-                          v-model="edit_form.roleName"
-                          :rules="[(v) => !!v || 'Role Name is required']"
-                          label="Role Name"
+                          v-model="edit_form.permissionTitle"
+                          :rules="[(v) => !!v || 'Permission Title is required']"
+                          label="Permission Title"
                           required
                         ></v-text-field>
                       </v-col>
-                          <v-col cols="6" md="6">
+                      <v-col cols="6" md="6">
+                        <v-text-field
+                          v-model="edit_form.permissionSubTitle"
+                          :rules="[(v) => !!v || 'Module Name is required']"
+                          label="Module Name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6" md="6">
                            <v-checkbox
                         v-model="edit_form.isActive"
-                        label="Active"
+                        label="Status"
                       ></v-checkbox>
                       </v-col>
                      </v-row>
@@ -110,15 +126,6 @@
         <v-btn
           rounded
           outlined
-          color="light"
-          :to="{ name: 'auth.roles.permissions', params: { id: item.roleId } }"
-          small
-        >
-          Manage Permissions
-        </v-btn>
-        <v-btn
-          rounded
-          outlined
           color="info"
          v-on:click="edit(item)"
           small
@@ -139,14 +146,14 @@
   </div>
 </template>
 <script>
-import RoleService from "@/services/role";
+import PermissionService from "@/services/permission";
 export default {
-  name: "auth.station.listing",
+  name: "auth.permissions.listing",
   data() {
     return {
       search: "",
-      RoleModel:false,
-      RoleEditModel:false,
+      PermissionModel:false,
+      PermissionEditModel:false,
       bread: [
         {
           text: "Dashboard",
@@ -155,8 +162,8 @@ export default {
           exact: true,
         },
         {
-          text: "Roles",
-          to: { name: "auth.roles.listing" },
+          text: "Permissions",
+          to: { name: "auth.permissions.listing" },
           disabled: false,
           exact: true,
         },
@@ -165,13 +172,15 @@ export default {
       valid: false,
       options: {},
       form:{
-        roleId:null,
-        roleName:'',
+        permissionId:null,
+        permissionTitle:'',
+        permissionSubTitle:'',
         isActive:false,
       },
       edit_form:{
-        roleId:null,
-        roleName:'',
+        permissionId:null,
+        permissionTitle:'',
+        permissionSubTitle:'',
         isActive:false,
       },
       roles: [],
@@ -182,19 +191,25 @@ export default {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "roleId",
+          value: "permissionId",
         },
         {
-          text: "Role Name",
+          text: "Permission Title",
           align: "start",
           sortable: true,
-          value: "roleName",
+          value: "permissionSubTitle",
         },
         {
-          text: "Status",
+          text: "Slug",
           align: "start",
           sortable: true,
-          value: "isActive",
+          value: "permissionSubTitle",
+        },
+        {
+          text: "Module",
+          align: "start",
+          sortable: true,
+          value: "permissionTitle",
         },
         { text: "Actions", align: "end", value: "actions", sortable: false },
       ],
@@ -206,16 +221,17 @@ export default {
   },
   methods: {
     edit(item) {
-      this.edit_form.roleId = item.roleId;
-      this.edit_form.roleName = item.roleName;
+      this.edit_form.permissionId = item.permissionId;
+      this.edit_form.permissionTitle = item.permissionSubTitle;
+      this.edit_form.permissionSubTitle = item.permissionTitle;
       this.edit_form.isActive = item.isActive;
-      this.RoleEditModel = true;  
+      this.PermissionEditModel = true;  
     },
    async deleteItem(item) {
-      if (confirm("Are you sure you want to delete this Role.. ??")) {
-        var res = await RoleService.delete(parseInt(item.roleId));
+      if (confirm("Are you sure you want to delete this Permission.. ??")) {
+        var res = await PermissionService.delete(parseInt(item.permissionId));
         if (res.status == 1) {
-          this.$toaster.success("User has been deleted Successfully.");
+          this.$toaster.success("Permission has been deleted Successfully.");
           this.getDataFromApi();
         } else {
           this.$toaster.error(res.data);
@@ -223,36 +239,42 @@ export default {
         }
       }
     },
-    addRole: async function (event) {
+    addPermission: async function (event) {
       event.preventDefault();
       if (this.$refs.form.validate()) {
-        var res = await RoleService.create({
-          roleName: this.form.roleName,
+        var res = await PermissionService.create({
+          permissionTitle: this.form.permissionSubTitle,
+          permissionSubTitle : this.form.permissionTitle,
           isActive: this.form.isActive,
         });
         if (res.status == 1) {
-          this.$toaster.success("Role Added Successfully.");
+          this.$toaster.success("Permission has been added successfully.");
           this.getDataFromApi();
-          this.RoleModel = false;
+          this.PermissionModel = false;
+          this.permissionId = null;
+          this.permissionTitle = '';
+          this.permissionSubTitle = '';
+          this.isActive = false;
         }
       }
     },
-    updateStation: async function (event) {
+    updatePermission: async function (event) {
       event.preventDefault();
       if (this.$refs.form.validate()) {
-        let formData = {
-          roleName: this.edit_form.roleName,
+        let data = {
+          permissionTitle: this.edit_form.permissionSubTitle,
+          permissionSubTitle : this.edit_form.permissionTitle,
           isActive: this.edit_form.isActive,
         };
 
-        var res = await RoleService.update(
-          formData,
-          parseInt(this.edit_form.roleId)
+        var res = await PermissionService.update(
+          data,
+          parseInt(this.edit_form.permissionId)
         );
         if (res.status == 1) {
-          this.$toaster.success("Role Updated Successfully.");
+          this.$toaster.success("Permission Updated Successfully.");
           this.getDataFromApi();
-          this.RoleEditModel = false;
+          this.PermissionEditModel = false;
         }
       }
     },
@@ -267,7 +289,7 @@ export default {
       if (this.search != "") {
         query += "&search=" + this.search;
       }
-      return RoleService.getlist(query);
+      return PermissionService.getlist(query);
     },
   },
 };

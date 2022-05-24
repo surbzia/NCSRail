@@ -1,7 +1,7 @@
 const axios = require('axios');
-class UserService{
+class PermissionService{
 	getlist(params){
-		return axios.get(`/api/Systemuser/GetAllUsers${params}`)
+		return axios.get(`/api/Permissions/GetAllPermissions${params}`)
             .then(function (response) {
 			return {data:response.data};
 		})
@@ -10,7 +10,7 @@ class UserService{
 		});
 	}
     async create(formData){
-        var res = await  axios.post('/api/Systemuser',formData).then(function(e){
+        var res = await  axios.post('/api/Permissions',formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -18,10 +18,10 @@ class UserService{
         return res;
     }
           get(id){
-		return axios.get(`/api/Systemuser/Get/${id}`).then(e=>e.data);
+		return axios.get(`/api/Permissions/Get/${id}`).then(e=>e.data);
 	}
     delete(id){
-        return axios.post(`/api/Systemuser/delete/${id}`).then(function (e) {
+        return axios.post(`/api/Permissions/delete/${id}`).then(function (e) {
             return {status: 1, data: e.data.code}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -30,7 +30,7 @@ class UserService{
     async update(formData, id){ 
 		// formData.append('_method','put')
       
-		var res = await  axios.post(`/api/Systemuser/update/${id}`,formData).then(function(e){
+		var res = await  axios.post(`/api/Permissions/update/${id}`,formData).then(function(e){
             return {status: 1, data: e.data}
         }).catch(function(e){
             return {status: 0, data: e};
@@ -38,4 +38,4 @@ class UserService{
         return res;
 	}
 }
-export default new UserService();
+export default new PermissionService();

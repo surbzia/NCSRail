@@ -20,7 +20,7 @@
           <h2>{{ title }}</h2>
         </v-container>
       </div>
-      <v-form @submit="AddUser" ref="form" lazy-validation>
+      <v-form v-model="valid">
         <v-container>
           <v-row>
             <v-col cols="6" md="6">
@@ -45,8 +45,8 @@
               <v-select
                 v-model="form.role_id"
                 :items="roles"
-                item-text="roleName"
-                item-value="roleId"
+                item-text="name"
+                item-value="id"
                 :rules="[(v) => !!v || 'Role is required']"
                 label="Select Role"
                 required
@@ -63,26 +63,20 @@
             <v-col cols="6" md="6">
               <v-text-field
                 v-model="form.password"
-                :rules="[(v) => !!is_edit || 'Password is required']"
-                :label="password_placeholder"
+                :rules="[(v) => !!v || 'Password is required']"
+                label="Password"
                 required
               ></v-text-field>
             </v-col>
           </v-row>
 
           <v-row>
-            <v-col cols="8" md="8">
+            <v-col cols="12" md="12">
                <v-file-input
                v-model="form.image"
                show-size
                label="File input"
              ></v-file-input>
-            </v-col>
-            <v-col cols="4" md="4">
-                <v-checkbox
-                    v-model="form.isActive"
-                    label="Active"
-                  ></v-checkbox>
             </v-col>
           </v-row>
           <v-row>
@@ -98,15 +92,16 @@
   </div>
 </template>
 <script>
-import UserService from "@/services/user";
-import RoleService from "@/services/role";
 export default {
   data: () => ({
     is_edit :false,
-    password_placeholder :'Password',
     title: "Add User",
     button: "Submit",
-    roles: [],
+    roles: [
+      { id: 1, name: "admin" },
+      { id: 2, name: "Sub-Admin" },
+      { id: 3, name: "Customer" },
+    ],
     form: {
       id: null,
       name: "",
@@ -115,7 +110,6 @@ export default {
       role_id: "",
       employee_id: "",
       password: "",
-      isActive: "",
     },
       bread: [
         {
@@ -133,57 +127,13 @@ export default {
       ],
   }),
   methods: {
-async getUser(){
- let res = await UserService.get(this.form.id);
- this.password_placeholder = 'Write if want to change password';
- this.form.id = res.systemUserID;
- this.form.name = res.fullName;
- this.form.email = res.email;
- this.form.role_id = res.roleID;
- this.form.employee_id = res.employeeID;
- this.form.isActive = res.isActive;
-},
-    AddUser: async function (event) {
-      event.preventDefault();
-      if (this.$refs.form.validate()) {
-        let data = {
-          fullName: this.form.name,
-          email: this.form.email,
-          roleID: this.form.role_id,
-          employeeID: this.form.employee_id,
-          password: this.form.password,
-          isActive: this.form.isActive,
-          image: this.form.image,
-        };
-       if(!this.is_edit){
-          var res = await UserService.create(data);
-       }else{
-           var res = await UserService.update(data,this.form.id);
-       }
-        if (res.status == 1) {
-            if(!this.is_edit){
-          this.$toaster.success("User has been added Successfully.");
-          }else{
-          this.$toaster.success("User has been updated Successfully.");
-          }
-          this.$router.push({ name: "auth.users.listing" });
-          
-        }
-      }
-    },
-   async getAllRoles(){
-    let res = await RoleService.getlist('?isActive=true');
-    this.roles = res.data;
-    }
+
   },
   mounted(){
-    this.getAllRoles();
      if (this.$route.params.id) {
-    this.form.id = this.$route.params.id;
      this.is_edit = true;
      this.title= 'Update User';
      this.button = 'Update';
-     this.getUser();
       this.bread.push({text:'Update',disabled:true,href:'#'});
      }else{
       this.bread.push({text:'Add',disabled:true,href:'#'});

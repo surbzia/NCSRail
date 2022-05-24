@@ -173,6 +173,12 @@ const routes = [
     component: ()=> import('@/views/roles/permissions.vue'),
     meta: { showsidebar: false , title: 'Permissions'}
   },
+    {
+    path: '/permissions',
+    name: 'auth.permissions.listing',
+    component: ()=> import('@/views/permissions/list.vue'),
+    meta: { showsidebar: false , title: 'Permissions'}
+  },
 ]
 
 const router = new VueRouter({
