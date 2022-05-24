@@ -251,10 +251,10 @@ export default {
           this.$toaster.success("Permission has been added successfully.");
           this.getDataFromApi();
           this.PermissionModel = false;
-          this.permissionId = null;
-          this.permissionTitle = '';
-          this.permissionSubTitle = '';
-          this.isActive = false;
+          this.form.permissionId = null;
+          this.form.permissionTitle = '';
+          this.form.permissionSubTitle = '';
+          this.form.isActive = false;
         }
       }
     },

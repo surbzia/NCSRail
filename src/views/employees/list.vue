@@ -19,9 +19,9 @@
               color="primary"
               dark
               class="mb-2"
-              :to="{ name: 'auth.users.add' }"
+              :to="{ name: 'auth.employees.add' }"
             >
-              Add User
+             Add Employee
             </v-btn>
           </v-col>
         </v-row>
@@ -35,23 +35,15 @@
         <v-switch
       v-model="item.isActive"
        color="info"
-       @change="updateUserStatus(item)"
+       @change="updateEmployeeStatus(item)"
     ></v-switch>
-        </template>
-        <template v-slot:[`item.roleName`]="{ item }">
-         <v-chip
-         outlined
-      color="dark"
-    >
-    {{item.roleName}}
-    </v-chip>
         </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           rounded
           outlined
           color="info"
-          :to="{ name: 'auth.users.edit', params: { id: item.systemUserID } }"
+          :to="{ name: 'auth.employees.edit', params: { id: item.employeeID } }"
           small
         >
           Edit
@@ -70,7 +62,7 @@
   </div>
 </template>
 <script>
-import UserService from "@/services/user";
+import EmployeeService from "@/services/employee";
 export default {
   name: "auth.station.listing",
   data() {
@@ -84,7 +76,7 @@ export default {
           exact: true,
         },
         {
-          text: "Users",
+          text: "Employees",
           to: { name: "auth.users.listing" },
           disabled: false,
           exact: true,
@@ -101,7 +93,7 @@ export default {
           text: "ID",
           align: "start",
           sortable: true,
-          value: "systemUserID",
+          value: "employeeID",
         },
         // {
         //   text: "Employee ID",
@@ -122,17 +114,17 @@ export default {
           value: "email",
         },
         {
-          text: "Role",
+          text: "CNIC",
           align: "start",
           sortable: true,
-          value: "roleName",
+          value: "cnic",
         },
-        // {
-        //   text: "Status",
-        //   align: "start",
-        //   sortable: true,
-        //   value: "isActive",
-        // },
+        {
+          text: "Mobile",
+          align: "start",
+          sortable: true,
+          value: "mobileNumber",
+        },
         { text: "Actions", align: "end", value: "actions", sortable: false },
       ],
     };
@@ -148,7 +140,7 @@ export default {
   methods: {
   async deleteItem(item) {
       if (confirm("Are you sure you want to delete this User.. ??")) {
-        var res = await UserService.delete(parseInt(item.systemUserID));
+        var res = await EmployeeService.delete(parseInt(item.employeeID));
         if (res.status == 1) {
           this.$toaster.success("User has been deleted Successfully.");
           this.getDataFromApi();
@@ -160,19 +152,13 @@ export default {
     },
 
   
-    updateUserStatus: async function (item) {
+    updateEmployeeStatus: async function (item) {
          let data = {
-          fullName: item.name,
-          email: item.email,
-          roleID: item.role_id,
-          employeeID: item.employee_id,
-          password: item.password,
           isActive: item.isActive,
-          image: item.image,
         };
-        var res = await UserService.update(
+        var res = await EmployeeService.update(
           data,
-          parseInt(item.systemUserID)
+          parseInt(item.employeeID)
         );
         if (res.status == 1) {
           this.$toaster.success("User status has been updated successfully.");
@@ -191,7 +177,7 @@ export default {
       if (this.search != "") {
         query += "&search=" + this.search;
       }
-      return UserService.getlist(query);
+      return EmployeeService.getlist(query);
     },
   },
 };

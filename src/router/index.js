@@ -179,6 +179,24 @@ const routes = [
     component: ()=> import('@/views/permissions/list.vue'),
     meta: { showsidebar: false , title: 'Permissions'}
   },
+    {
+    path: '/employees/',
+    name: 'auth.employees.listing',
+    component: ()=> import('@/views/employees/list.vue'),
+    meta: { showsidebar: false , title: 'Employees'}
+  },
+      {
+    path: '/employees/add',
+    name: 'auth.employees.add',
+    component: ()=> import('@/views/employees/form.vue'),
+    meta: { showsidebar: false , title: 'Employee Add'}
+  },
+  {
+    path: '/employees/edit/:id',
+    name: 'auth.employees.edit',
+    component: ()=> import('@/views/employees/form.vue'),
+    meta: { showsidebar: false , title: 'Employee Edit'}
+  },
 ]
 
 const router = new VueRouter({

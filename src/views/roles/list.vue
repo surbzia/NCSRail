@@ -106,6 +106,13 @@
        color="info"
     ></v-switch>
         </template>
+      <template v-slot:[`item.isActive`]="{ item }">
+         <v-chip
+       v-bind:color="item.isActive == true?'success' :'error'"
+    >
+    {{item.isActive == true?'Active' :'In-Active'}}
+    </v-chip>
+        </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           rounded
