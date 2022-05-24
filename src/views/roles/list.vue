@@ -102,7 +102,7 @@
       <template v-slot:[`item.status`]="{ item }">
          <v-switch
       v-model="item.isActive"
-      disabled
+      @change="updateRoleStatus(item)"
        color="info"
     ></v-switch>
         </template>
@@ -262,6 +262,20 @@ export default {
           this.RoleEditModel = false;
         }
       }
+    },
+        updateRoleStatus: async function (item) {
+         let data = {
+         roleName:  item.roleName,
+         isActive: item.isActive,
+        };
+        var res = await RoleService.update(
+          data,
+          parseInt(item.roleId)
+        );
+        if (res.status == 1) {
+          this.$toaster.success("Role status has been updated successfully.");
+          this.getDataFromApi();
+        }
     },
     async getDataFromApi() {
       var res = await this.getAllRoles();

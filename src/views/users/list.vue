@@ -46,6 +46,13 @@
     {{item.roleName}}
     </v-chip>
         </template>
+        <template v-slot:[`item.isActive`]="{ item }">
+         <v-chip
+       v-bind:color="item.isActive == true?'success' :'error'"
+    >
+    {{item.isActive == true?'Active' :'In-Active'}}
+    </v-chip>
+        </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           rounded
@@ -127,12 +134,12 @@ export default {
           sortable: true,
           value: "roleName",
         },
-        // {
-        //   text: "Status",
-        //   align: "start",
-        //   sortable: true,
-        //   value: "isActive",
-        // },
+        {
+          text: "Status",
+          align: "start",
+          sortable: true,
+          value: "isActive",
+        },
         { text: "Actions", align: "end", value: "actions", sortable: false },
       ],
     };
@@ -162,14 +169,16 @@ export default {
   
     updateUserStatus: async function (item) {
          let data = {
-          fullName: item.name,
+          fullName: item.fullName,
           email: item.email,
-          roleID: item.role_id,
-          employeeID: item.employee_id,
+          roleID: item.roleID,
+          employeeID: item.employeeID,
           password: item.password,
           isActive: item.isActive,
-          image: item.image,
         };
+        if(item.password == null){
+          data.password = '';
+        }
         var res = await UserService.update(
           data,
           parseInt(item.systemUserID)
@@ -178,7 +187,6 @@ export default {
           this.$toaster.success("User status has been updated successfully.");
           this.getDataFromApi();
         }
-      
     },
     async getDataFromApi() {
       var res = await this.getAllUsers();
