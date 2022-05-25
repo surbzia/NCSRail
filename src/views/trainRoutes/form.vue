@@ -8,31 +8,38 @@
     <div class="content-body">
       <div class="sec-heading">
         <v-container>
-          <h2>Add Routes</h2>
+          <h2>{{title}}</h2>
         </v-container>
       </div>
       <v-form v-model="valid">
         <v-container>
-          <v-row>
+          <v-row  style="margin-bottom: -37px;">
             <v-col cols="6" md="6">
               <v-text-field
                 v-model="form.name"
                 :rules="nameRules"
                 label="Route Name"
                 required
+                 dense
+                  filled
               ></v-text-field>
             </v-col>
             <v-col cols="6" md="6">
               <v-select
                 v-model="form.train"
-                :items="cityname"
+                :items="trains"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Select Train"
+                 item-text="name"
+                item-value="id"
                 required
+                 dense
+                  filled
               ></v-select>
             </v-col>
-
-            <v-col cols="6" md="6">
+          </v-row>
+          <v-row class="mt-0 pt-0">
+             <v-col cols="6" md="6">
               <v-menu
                 v-model="menu2"
                 :close-on-content-click="false"
@@ -45,10 +52,11 @@
                   <v-text-field
                     v-model="date"
                     label="Arrival Date"
-                    prepend-icon="mdi-calendar"
                     readonly
                     v-bind="attrs"
                     v-on="on"
+                     dense
+                      filled
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -73,10 +81,11 @@
                   <v-text-field
                     v-model="time"
                     label="Arrival Time"
-                    prepend-icon="mdi-clock-time-four-outline"
                     readonly
                     v-bind="attrs"
                     v-on="on"
+                     dense
+                      filled
                   ></v-text-field>
                 </template>
                 <v-time-picker
@@ -89,7 +98,11 @@
             </v-col>
           </v-row>
 
-          <h1>Add Stations</h1>
+          <div class="sec-heading">
+        <v-container>
+          <h2>Add Stations</h2>
+        </v-container>
+      </div>
           <hr class="mb-3" />
           <v-row
             v-for="(station, index) in form.stations"
@@ -166,7 +179,7 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="12">
-              <v-btn class="mr-4 btn-primary" type="submit"> Save </v-btn>
+              <v-btn class="mr-4 btn-primary" type="submit"> {{button}} </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -175,9 +188,13 @@
   </div>
 </template>
 <script>
+import TrainService from '@/services/train';
+import RouteService from '@/services/routes';
 export default {
   data: () => ({
     valid: false,
+    title: 'Add Route',
+    button: 'Submit',
     time: null,
     waiting_time_picker: false,
     form: {
@@ -197,7 +214,7 @@ export default {
       // (v) => !!v || "Name is required",
       // (v) => v.length <= 10 || "Name must be less than 10 characters",
     ],
-    cityname: ["Karachi", "Lahore", "Rawalpindi", "Margalla"],
+    trains: [],
     stationlist: ["Karachi Cantt", "Lahore Junction"],
     items: [
       {
@@ -209,11 +226,6 @@ export default {
         text: "Routes",
         disabled: false,
         to: { name: "auth.routes.listing" },
-      },
-      {
-        text: "Add Routes",
-        disabled: true,
-        href: "#",
       },
     ],
     start: null,
@@ -240,6 +252,27 @@ export default {
       this.form.arrival_time =  time;
       // this.arrival_time_modal = false;
     },
+   async getTrains() {
+       let res = await TrainService.getlist('');
+       this.trains = res.data;
+    },
+   async getRouteByTrainId() {
+       let res = await RouteService.get(this.form.id);
+       console.log(res);
+    },
   },
+    mounted(){
+        this.getTrains();
+     if (this.$route.params.id) {
+    this.form.id = this.$route.params.id;
+     this.is_edit = true;
+     this.title= 'Update Route';
+     this.button = 'Update';
+    this.getRouteByTrainId();
+      this.items.push({text:'Update',disabled:true,href:'#'});
+     }else{
+      this.items.push({text:'Add',disabled:true,href:'#'});
+     }
+  }
 };
 </script>
