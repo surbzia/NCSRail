@@ -6,6 +6,7 @@ class helper{
         return false;
       }
     }
+
     isOneNotNullInObject(array) {
         const arrayFailed = Object.entries(array).map((arr) => {
             if (arr[1] == null || arr[1] == "") {

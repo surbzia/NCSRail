@@ -11,6 +11,7 @@
           <v-btn :to="{ name: 'auth.bookings.add' }" rounded color="success">
             Add Booking
           </v-btn>
+        
         </div>
       </div>
     </div>
@@ -222,6 +223,10 @@ export default {
         this.$toaster.error("One parameter is required for filter data.");
       }
     },
+    // hasPermission(id) {
+    //   let Permission = this.$store.getters.getPermissions;
+    //  return Permission.includes(id);
+    // },
     async getDataFromApi() {
       var res = await this.getAllBookings();
       this.bookings = res.data;

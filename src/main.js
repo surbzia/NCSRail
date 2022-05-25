@@ -40,6 +40,14 @@ router.beforeEach(async (to, from, next) => {
     else next()
   }
 })
+Vue.mixin({
+  methods: {
+    hasPermission: function (id) {
+    let Permission = this.$store.getters.getPermissions;
+     return Permission.includes(id);
+    },
+  },
+})
 
 new Vue({
   router,
