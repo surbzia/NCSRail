@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import Toaster from 'v-toaster';
+import loginservice from '@/services/login';
 // import 'v-toaster/dist/v-toaster.css';
 // document.title = 'Admin | NCS-Rail';
 /* import the fontawesome core */
@@ -49,11 +50,14 @@ new Vue({
     if(token){
       this.$store.commit('setAuthToken',token);
       this.$store.commit('setLoginStatus',true);
-      // var user = await loginservice.me()
-      // this.$store.commit('setloggedInUser',user);
+      var res = await loginservice.me();
+      this.$store.commit('setloggedInUser', res.user);
+      if (res.permissions.length > 0) { 
+      this.$store.commit('SetPermissionIDs',res.permissions);
+      }
       // if(user.permissions.length>0){
-      //   let permissions = user.permissions.map((e)=>{
-      //     return e.permission_id
+      // let permissions_ids = res.map((e)=>{
+      //     return e.permissionId
       //   })
       //   this.$store.commit('setPermissions',permissions);
       // }

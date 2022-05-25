@@ -6,14 +6,73 @@
       
       </v-container>
     </div>
-    <v-data-table
+    <!-- <v-data-table
       :headers="headers"
       :items="routes"
       :loading="loading"
       class="elevation-1"
-    >
+    > -->
+    <v-data-table
+          :headers="headers"
+          :items="routes"
+          :single-expand="singleExpand"
+          :expanded.sync="expanded"
+          item-key="routeName"
+          show-expand
+          class="elevation-1"
+        >
+         
+          <template v-slot:expanded-item="{ headers, item }">
+            <td
+              :colspan="headers.length"
+              v-if="item.routes.length > 0"
+              class="pa-0"
+            >
+              <v-simple-table dense style="background-color: #dfdfdf">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th>Seq#</th>
+                      <th>Station Name</th>
+                      <th>Departure</th>
+                      <th>Waiting</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="station in item.routes" :key="station.seq">
+                      <td>{{ station.seq }}</td>
+                      <td>{{ station.stationName }}</td>
+                      <td>{{ station.departure }}</td>
+                      <td>{{ station.waiting }}</td>
+                      <td>
+                        <v-btn
+                         @click="selectTrain(item,fare)"
+                          class="ma-0"
+                          outlined
+                          rounded
+                          small
+                          color="teal"
+                        >
+                          Select
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </tbody> 
+                </template>
+              </v-simple-table>
+            </td>
+            <td :colspan="headers.length" v-else>No Data Found</td>
+          </template>
       <template v-slot:top>
-        <v-row>
+        <div class="row">
+          <div class="col-md-12 text-right">
+             <v-btn link :to="{ name: 'auth.routes.add' }" color="primary" dark class="mb-2">
+                Add Routes
+              </v-btn>
+          </div>
+        </div>
+        <!-- <v-row>
           <v-spacer></v-spacer>
           <v-dialog v-model="RouteModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
@@ -179,173 +238,7 @@
               </v-card-text>
             </v-card>
           </v-dialog>
-        </v-row>
-        <v-row>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="RouteEditModel" max-width="800px">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Update Route</span>
-              </v-card-title>
-              <v-card-text>
-                <v-form v-model="valid">
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" md="12">
-                        <v-text-field
-                          v-model="edit_form.name"
-                          :rules="nameRules"
-                          label="Route Name"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6" md="6">
-                        <v-select
-                          v-model="edit_form.train"
-                          :items="trains"
-                          item-text="name"
-                          item-value="id"
-                          :rules="[(v) => !!v || 'Item is required']"
-                          label="Select Train"
-                          required
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="6" md="6">
-                        <v-select
-                          v-model="edit_form.station"
-                          :items="stations"
-                           item-text="title"
-                          item-value="id"
-                          :rules="[(v) => !!v || 'Item is required']"
-                          label="Select Station"
-                          required
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="6" md="6">
-                        <v-menu
-                          v-model="menu2"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="auto"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="edit_form.arrival_date"
-                              label="Arrival Date"
-                              prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker
-                            v-model="edit_form.arrival_date"
-                            @input="menu2 = false"
-                          ></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                      <v-col cols="6" md="6">
-                        <v-dialog
-                          ref="dialog"
-                          v-model="arrival_time_modal"
-                          :return-value.sync="edit_form.arrival_time"
-                          persistent
-                          width="290px"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="edit_form.arrival_time"
-                              label="Arrival time"
-                              prepend-icon="mdi-clock-time-four-outline"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                            ></v-text-field>
-                          </template>
-                          <v-time-picker
-                            v-if="arrival_time_modal"
-                            v-model="edit_form.arrival_time"
-                            full-width
-                          >
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              text
-                              color="primary"
-                              @click="arrival_time_modal = false"
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              text
-                              color="primary"
-                              @click="$refs.dialog.save(form.arrival_time)"
-                            >
-                              OK
-                            </v-btn>
-                          </v-time-picker>
-                        </v-dialog>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                       <v-col cols="6" md="6">
-                        <v-dialog
-                          ref="dialog"
-                          v-model="waiting_time_modal"
-                          :return-value.sync="edit_form.waiting_time"
-                          persistent
-                          width="290px"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="edit_form.waiting_time"
-                              label="Waiting time"
-                              prepend-icon="mdi-clock-time-four-outline"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                            ></v-text-field>
-                          </template>
-                          <v-time-picker
-                            v-if="waiting_time_modal"
-                            v-model="edit_form.waiting_time"
-                            full-width
-                          >
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              text
-                              color="primary"
-                              @click="waiting_time_modal = false"
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              text
-                              color="primary"
-                              @click="$refs.dialog.save(form.waiting_time)"
-                            >
-                              OK
-                            </v-btn>
-                          </v-time-picker>
-                        </v-dialog>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12" md="4">
-                        <v-btn class="mr-4 btn-primary" type="submit">
-                        Update
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-form>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-        </v-row>
+        </v-row> -->
         <v-text-field
           v-model="search"
           label="Search"
@@ -353,8 +246,6 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <!-- <v-icon v-on:click="edit(item)">mdi-pencil-plus</v-icon>
-        <v-icon v-on:click="deleteItem(item)">mdi-delete-outline</v-icon> -->
           <v-btn rounded outlined color="info" v-on:click="edit(item)" small> Edit </v-btn>
         <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
       </template>
@@ -370,6 +261,8 @@ export default {
   name: "auth.station.listing",
   data() {
     return {
+       expanded: [],
+      singleExpand: true,
       RouteModel: false,
       RouteEditModel: false,
       search: "",
@@ -425,12 +318,6 @@ export default {
     routes:[],
       headers: [
         {
-          text: "Seq",
-          align: "start",
-          sortable: true,
-          value: "seq",
-        },
-        {
           text: "Route Name",
           align: "start",
           sortable: true,
@@ -440,27 +327,22 @@ export default {
           text: "Train",
           align: "start",
           sortable: true,
-          value: "trainID",
-        },
-        {
-          text: "Station",
-          align: "start",
-          sortable: true,
-          value: "stationID",
+          value: "trainName",
         },
         {
           text: "Arrival",
           align: "start",
           sortable: true,
-          value: "departure",
+          value: "arrivalTime",
         },
         {
-          text: "Waiting Time",
+          text: "Departure Time",
           align: "start",
           sortable: true,
-          value: "waiting",
+          value: "departureTime",
         },
         { text: "Actions",  align: 'end', value: "actions", sortable: false },
+          { text: "Stations", value: "data-table-expand" },
       ],
     };
   },

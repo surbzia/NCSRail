@@ -127,7 +127,7 @@ const auth = {
             localStorage.setItem('logged_in_role_id',loggedInUser.role_id);
             state.loggedInUser = loggedInUser
         },
-          setPermissions(state, permissions){
+        SetPermissionIDs(state, permissions){
             state.permissions = permissions
         },
         setSideBarStatus(status, sideBarStatus){

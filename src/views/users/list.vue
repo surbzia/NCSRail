@@ -33,6 +33,7 @@
       </template>
       <template v-slot:[`item.status`]="{ item }">
         <v-switch
+        v-if="item.roleName != 'Super Admin'"
           v-model="item.isActive"
           color="info"
           @change="updateUserStatus(item)"
@@ -48,8 +49,9 @@
           {{ item.isActive == true ? "Active" : "In-Active" }}
         </v-chip>
       </template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-btn
+      <template v-slot:[`item.actions`]="{ item }"  >
+       <template v-if="item.roleName != 'Super Admin'">
+          <v-btn
           rounded
           outlined
           color="info"
@@ -67,6 +69,7 @@
         >
           Delete
         </v-btn>
+       </template>
       </template>
     </v-data-table>
   </div>

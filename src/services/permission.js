@@ -26,6 +26,14 @@ class PermissionService{
         });
         return res;
     }
+    async updatePermission(formData){
+        var res = await  axios.post('/api/RolePermission',formData).then(function(e){
+            return {status: 1, data: e.data}
+        }).catch(function(e){
+            return {status: 0, data: e};
+        });
+        return res;
+    }
           get(id){
 		return axios.get(`/api/Permissions/Get/${id}`).then(e=>e.data);
 	}
