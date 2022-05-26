@@ -16,7 +16,7 @@
           <v-row style="margin-bottom: -37px">
             <v-col cols="6" md="6">
               <v-text-field
-                v-model="form.name"
+                v-model="form.routeName"
                 label="Route Name"
                 required
                 dense
@@ -24,8 +24,8 @@
               ></v-text-field>
             </v-col>
             <v-col cols="6" md="6">
-              <v-select
-                v-model="form.train"
+               <v-autocomplete
+                v-model="form.trainID"
                 :items="trains"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Select Train"
@@ -34,37 +34,11 @@
                 required
                 dense
                 filled
-              ></v-select>
+              ></v-autocomplete>
             </v-col>
           </v-row>
           <v-row class="mt-0 pt-0">
-            <v-col cols="3" md="3">
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="form.arrival_date"
-                    label="Arrival Date"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    dense
-                    filled
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="form.arrival_date"
-                  @input="menu2 = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <v-col cols="3" md="3">
+            <v-col cols="6" md="6">
               <v-menu
                 ref="arrival_time"
                 v-model="arrival_time_modal"
@@ -78,7 +52,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="form.arrival_time"
+                    v-model="form.arrivalTime"
                     label="Arrival Time"
                     readonly
                     v-bind="attrs"
@@ -89,39 +63,13 @@
                 </template>
                 <v-time-picker
                   v-if="arrival_time_modal"
-                  v-model="form.arrival_time"
+                  v-model="form.arrivalTime"
                   full-width
                   @click:minute="$refs.arrival_time.save(time2)"
                 ></v-time-picker>
               </v-menu>
             </v-col>
-            <v-col cols="3" md="3">
-              <v-menu
-                v-model="menu3"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="form.departure_date"
-                    label="Departure Date"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    dense
-                    filled
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="form.departure_date"
-                  @input="menu3 = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <v-col cols="3" md="3">
+            <v-col cols="6" md="6">
               <v-menu
                 ref="departure_time"
                 v-model="departure_time_modal"
@@ -135,7 +83,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="form.departure_time"
+                    v-model="form.departureTime"
                     label="Departure Time"
                     readonly
                     v-bind="attrs"
@@ -146,7 +94,7 @@
                 </template>
                 <v-time-picker
                   v-if="departure_time_modal"
-                  v-model="form.departure_time"
+                  v-model="form.departureTime"
                   full-width
                   ampm-in-title
                   @click:minute="$refs.departure_time.save(time1)"
@@ -166,13 +114,14 @@
           </div>
           <hr class="mb-3" />
           <v-row
-            v-for="(station, index) in form.stations"
-            :key="index"
+            v-for="(station, key, index) in form.routes"
+            :key="key"
             class="mt-3"
+            style="margin-bottom: -51px;"
           >
             <v-col cols="2" md="2">
               <v-text-field
-                v-model="station.seq"
+                v-model="station.sort"
                 label="Sort Order"
                  dense
             filled
@@ -194,11 +143,11 @@
             </v-col>
             <v-col cols="4" md="4">
               <v-menu
+              
                 ref="waiting_time_menu"
-                v-model="waiting_time_picker"
+                v-model="station.isWaiting"
                 :close-on-content-click="false"
                 :nudge-right="40"
-                :return-value.sync="station.waiting"
                 transition="scale-transition"
                 offset-y
                 max-width="290px"
@@ -216,12 +165,10 @@
                   ></v-text-field>
                 </template>
                 <v-time-picker
-                  v-if="waiting_time_picker"
+                  v-if="station.isWaiting"
                   v-model="station.waiting"
                   full-width
-                  @click:minute="
-                    $refs.waiting_time_menu[index].save(station.waiting)
-                  "
+                  @click:minute="$refs.waiting_time_menu[key].save(station.waiting)"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -232,10 +179,13 @@
                 fab
                 dark
                 small
-                color="primary"
+                color="info"
+                v-if="form.routes != null && key ==Object.keys(form.routes).length - 1"
               >
+           
                 <v-icon dark> mdi-plus </v-icon>
               </v-btn>
+         
               <v-btn
                 v-if="index != 0"
                 @click="removeStation(station)"
@@ -243,14 +193,14 @@
                 fab
                 dark
                 small
-                color="primary"
+                color="error"
               >
                 <v-icon dark> mdi-minus </v-icon>
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="text-right">
               <v-btn class="mr-4 btn-primary" type="submit">
                 {{ button }}
               </v-btn>
@@ -277,14 +227,11 @@ export default {
     station_count: null,
     form: {
       id: null,
-      name: "",
-      train: "",
-      stations: [{ id: 1, sort_order: 1, station: "", waiting_time: "" }],
-      arrival_date: "",
-      arrival_time: "",
-      departure_date: "",
-      departure_time: "",
-      waiting_time: [],
+      routeName: "",
+      trainID: "",
+      routes: [],
+      arrivalTime: "",
+      departureTime: "",
     },
     arrival_time_modal: false,
     departure_time_modal: false,
@@ -310,21 +257,41 @@ export default {
     menu3: false,
   }),
   computed: {},
+  watch:{
+    questions(){
+  
+    }
+  },
   methods: {
     addStation(item) {
-      this.form.stations.push({
-        id: item.id + 1,
-        sort_order: item.sort_order + 1,
-        station: null,
-        waiting_time: null,
+      this.form.routes.push({
+        arrival: null,
+        departure: null,
+        id: null,
+        seq: item.seq + 1,
+        sort: item.sort + 1,
+        stationID: null,
+        stationName: null,
+        waiting: null,
       });
     },
     removeStation(item) {
-      this.form.stations.splice(this.form.stations.indexOf(item), 1);
+      this.form.routes.splice(this.form.routes.indexOf(item), 1);
+      this.removeSta();
     },
-    close(time) {
-      this.form.arrival_time = time;
-      // this.arrival_time_modal = false;
+    removeSta() {
+      // let res1 = this.form.routes.map((v,index) => ({...v, isWaiting: false, sort:index+1}));
+      let res1 = this.form.routes.map((v,index) => ({
+        arrival: v.arrival,
+        departure: v.departure,
+        id: v.id,
+        seq: v.seq,
+        sort: index +1,
+        stationID: v.stationID,
+        stationName: v.stationName,
+        waiting: v.waiting,
+        }));
+        this.form.routes = res1;
     },
     async getTrains() {
       let res1 = await TrainService.getlist("");
@@ -333,40 +300,41 @@ export default {
       this.stations = res2.data;
     },
     async getRouteByTrainId() {
-      let query = "?TrainID=" + this.form.id + "&RouteName=" + this.form.name;
+      let query = "?TrainID=" + this.form.id + "&RouteName=" + this.form.routeName;
       let res = await RouteService.getRouteByTrainId(query);
-      this.form.name = res.routeName;
-      this.form.train = res.trainID;
-      this.form.stations = res.routes;
+      this.form.routeName = res.routeName;
+      this.form.trainID = res.trainID;
+      this.form.routes = res.routes;
       this.station_count = res.routes.length;
-      this.form.arrival_date = new Date(res.arrivalTime)
-        .toISOString()
-        .substr(0, 10);
-      this.form.arrival_time = new Date(res.arrivalTime)
-        .toLocaleTimeString()
-        .replace("AM", "")
-        .replace("PM", "");
-      this.form.departure_date = new Date(res.departureTime)
-        .toISOString()
-        .substr(0, 10);
-      this.form.departure_time = new Date(res.departureTime)
-        .toLocaleTimeString()
-        .replace("AM", "")
-        .replace("PM", "");
+      this.form.arrivalTime = res.arrivalTime;
+      this.form.departureTime = res.departureTime;
+
+      let res1 =  res.routes.map((v,index) => ({...v, isWaiting: false, sort:index+1}));
+        this.form.routes = res1;
     },
   },
   mounted() {
     this.getTrains();
     if (this.$route.params.id) {
       this.form.id = this.$route.params.id;
-      this.form.name = this.$route.params.name;
+      this.form.routeName = this.$route.params.name;
       this.is_edit = true;
       this.title = "Update Route";
       this.button = "Update";
       this.getRouteByTrainId();
       this.items.push({ text: "Update", disabled: true, href: "#" });
     } else {
-      this.items.push({ text: "Add", disabled: true, href: "#" });
+      this.stations.push({ text: "Add", disabled: true, href: "#" });
+        this.form.routes.push({
+        arrival: null,
+        departure: null,
+        id: null,
+        seq: 1,
+        sort: 1,
+        stationID: null,
+        stationName: null,
+        waiting: null,
+      });
     }
   },
 };
