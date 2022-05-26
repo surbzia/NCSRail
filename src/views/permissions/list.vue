@@ -72,7 +72,7 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12" md="12">
+                     <v-col cols="12" md="12" class="text-right">
                         <v-btn class="mr-4 btn-primary" type="submit">
                           Submit
                         </v-btn>
@@ -109,7 +109,7 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12" md="12">
+                      <v-col cols="12" md="12" class="text-right">
                         <v-btn class="mr-4 btn-primary" type="submit">
                           Update
                         </v-btn>
@@ -127,16 +127,19 @@
           class="mx-4"
         ></v-text-field>
       </template>
+      <template v-slot:[`item.permissionTitle`]="{ item }">
+        <b> {{item.permissionTitle}}</b>
+
+      </template>
       <template v-slot:[`item.subPermissions`]="{ item }">
         <v-chip
-          color="light"
           v-for="permission in item.subPermissions"
           :key="permission.id"
           class="ma-2"
           @click="edit(permission, item)"
+           color="dark"
+          text-color="black"
           close
-          label
-          outlined
           @click:close="deleteItem(permission)"
         >
           {{ permission.title }} &nbsp;
@@ -222,7 +225,11 @@ export default {
       ],
     };
   },
-  watch: {},
+  watch: {
+     search() {
+      this.getDataFromApi();
+    },
+  },
   mounted() {
     this.getDataFromApi();
   },
@@ -297,7 +304,11 @@ export default {
     },
     getAllPermissions() {
       this.loading = true;
-      return PermissionService.getPermissions();
+      var query = "";
+      if (this.search != "") {
+        query += "?search=" + this.search;
+      }
+      return PermissionService.getPermissions(query);
     },
   },
 };

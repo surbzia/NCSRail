@@ -9,8 +9,8 @@ class PermissionService{
 			return error;
 		});
 	}
-	getPermissions(){
-		return axios.get(`/api/Permissions/GetAllPermissionsCustom`)
+    getPermissions(params) {
+        return axios.get(`/api/Permissions/GetAllPermissionsCustom${params}`)
             .then(function (response) {
 			return {data:response.data};
 		})
