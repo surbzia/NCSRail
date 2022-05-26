@@ -96,7 +96,7 @@ const routes = [
     meta: { showsidebar: false, title: 'Train Routes Add' }
   },
   {
-    path: '/trains/route/edit/:id',
+    path: '/trains/route/edit/:id/:name',
     name: 'auth.routes.edit',
     component: ()=> import('@/views/trainRoutes/form.vue'),
     meta: { showsidebar: false, title: 'Train Routes Edit' }

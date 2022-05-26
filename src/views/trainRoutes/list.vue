@@ -6,12 +6,6 @@
       
       </v-container>
     </div>
-    <!-- <v-data-table
-      :headers="headers"
-      :items="routes"
-      :loading="loading"
-      class="elevation-1"
-    > -->
     <v-data-table
           :headers="headers"
           :items="routes"
@@ -36,7 +30,7 @@
                       <th>Station Name</th>
                       <th>Departure</th>
                       <th>Waiting</th>
-                      <th>Action</th>
+                      <!-- <th>Action</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -45,7 +39,7 @@
                       <td>{{ station.stationName }}</td>
                       <td>{{ station.departure }}</td>
                       <td>{{ station.waiting }}</td>
-                      <td>
+                      <!-- <td>
                         <v-btn
                          @click="selectTrain(item,fare)"
                           class="ma-0"
@@ -56,7 +50,7 @@
                         >
                           Select
                         </v-btn>
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody> 
                 </template>
@@ -246,7 +240,7 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-          <v-btn rounded outlined color="info" :to="{name:'auth.routes.edit',params:{id: item.trainID}}" small> Edit </v-btn>
+          <v-btn rounded outlined color="info" :to="{name:'auth.routes.edit',params:{id: item.trainID,name:item.routeName}}" small> Edit </v-btn>
         <v-btn rounded outlined color="error" v-on:click="deleteItem(item)" small> Delete </v-btn>
       </template>
     </v-data-table>

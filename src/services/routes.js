@@ -20,6 +20,9 @@ class RouteService {
     get(id) {
         return axios.get(`/api/Route/Get/${id}`).then(e => e.data);
     }
+    getRouteByTrainId(params) {
+        return axios.get(`/api/Route/GetRoutesbyID${params}`).then(e => e.data);
+    }
     delete(id) {
         return axios.post(`/api/Route/delete/${id}`).then(function (e) {
             return { status: 1, data: e.data }
