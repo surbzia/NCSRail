@@ -12,7 +12,7 @@
       class="elevation-1"
     >
       <template v-slot:top>
-      <v-row>
+        <v-row>
           <v-spacer></v-spacer>
           <v-dialog v-model="PermissionModel" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
@@ -36,38 +36,42 @@
                           required
                         ></v-text-field> -->
                         <v-select
-                           v-model="form.permissionTitle"
-                           :items="modules"
-                           :rules="[(v) => !!v || 'Module is required']"
-                           label="Select Module"
-                         ></v-select>
+                          v-model="form.permissionTitle"
+                          :items="modules"
+                          :rules="[(v) => !!v || 'Module is required']"
+                          label="Select Module"
+                        ></v-select>
                       </v-col>
                       <v-col cols="6" md="6">
                         <v-text-field
                           v-model="form.permissionSubTitle"
-                          :rules="[(v) => !!v || 'Permission Title is required']"
+                          :rules="[
+                            (v) => !!v || 'Permission Title is required',
+                          ]"
                           label="Permission Title"
                           required
                         ></v-text-field>
                       </v-col>
-                      </v-row>
-                      <v-row>
+                    </v-row>
+                    <v-row>
                       <v-col cols="6" md="6">
-                          <v-text-field
+                        <v-text-field
                           v-model="form.permissionTitle"
-                          :rules="[(v) => !!v || 'Add Permission Module is required']"
+                          :rules="[
+                            (v) => !!v || 'Add Permission Module is required',
+                          ]"
                           label="Add Module"
                           required
-                        ></v-text-field> 
+                        ></v-text-field>
                       </v-col>
                       <v-col cols="6" md="6">
-                           <v-checkbox
-                        v-model="form.isActive"
-                        label="Status"
-                      ></v-checkbox>
+                        <v-checkbox
+                          v-model="form.isActive"
+                          label="Status"
+                        ></v-checkbox>
                       </v-col>
-                      </v-row>
-                       <v-row>
+                    </v-row>
+                    <v-row>
                       <v-col cols="12" md="12">
                         <v-btn class="mr-4 btn-primary" type="submit">
                           Submit
@@ -85,41 +89,29 @@
           <v-dialog v-model="PermissionEditModel" max-width="800px">
             <v-card>
               <v-card-title>
-                <span class="text-h5">Update Permission for <b>{{edit_form.permissionTitle}}</b> </span>
+                <span class="text-h5"
+                  >Update Permission for <b>{{ edit_form.module }}</b>
+                </span>
               </v-card-title>
               <v-card-text>
-               <v-form @submit="updatePermission" ref="form" lazy-validation>
+                <v-form @submit="updatePermission" ref="form" lazy-validation>
                   <v-container>
-                   <v-row v-for="permissions in edit_form.subPermissions" :key="permissions.id">
-                      <v-col cols="4" md="4" >
+                    <v-row>
+                      <v-col cols="12" md="12">
                         <v-text-field
-                          v-model="permissions.title"
-                          :rules="[(v) => !!v || 'Permission Title is required']"
+                          v-model="edit_form.permission"
+                          :rules="[
+                            (v) => !!v || 'Permission Title is required',
+                          ]"
                           label="Permission Title"
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4" md="4">
-                           <!-- <v-checkbox
-                        v-model="edit_form.isActive"
-                        label="Status"
-                      ></v-checkbox> -->
-                                <v-btn
-                          @click="addStation(permissions)"
-                          class="mx-2"
-                          fab
-                          dark
-                          small
-                          color="primary"
-                        >
-                          <v-icon dark> mdi-plus </v-icon>
-                        </v-btn>
-                      </v-col>
-                     </v-row>
-                     <v-row>
+                    </v-row>
+                    <v-row>
                       <v-col cols="12" md="12">
                         <v-btn class="mr-4 btn-primary" type="submit">
-                          Submit
+                          Update
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -136,23 +128,23 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.subPermissions`]="{ item }">
-        <!-- <v-row> -->
-          <!-- <v-col v-for="permission in item.subPermissions" :key="permission.id"> -->
-           <v-chip color="light" v-for="permission in item.subPermissions" :key="permission.id"
-            class="ma-2"
-      close
-      label
-      outlined
-      @click:close="deleteItem(permission)"> 
-              {{permission.title}} &nbsp;
-           </v-chip>
-           
-          <!-- </v-col> -->
-        <!-- </v-row> -->
+        <v-chip
+          color="light"
+          v-for="permission in item.subPermissions"
+          :key="permission.id"
+          class="ma-2"
+          @click="edit(permission, item)"
+          close
+          label
+          outlined
+          @click:close="deleteItem(permission)"
+        >
+          {{ permission.title }} &nbsp;
+        </v-chip>
       </template>
 
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-btn
+      <!-- <template v-slot:[`item.actions`]="{ item }">
+         <v-btn
           rounded
           outlined
           color="info"
@@ -160,7 +152,7 @@
           small
         >
           Edit
-        </v-btn>
+        </v-btn> 
         <v-btn
           rounded
           outlined
@@ -170,7 +162,7 @@
         >
           Delete
         </v-btn>
-      </template>
+      </template> -->
     </v-data-table>
   </div>
 </template>
@@ -181,8 +173,8 @@ export default {
   data() {
     return {
       search: "",
-      PermissionModel:false,
-      PermissionEditModel:false,
+      PermissionModel: false,
+      PermissionEditModel: false,
       bread: [
         {
           text: "Dashboard",
@@ -200,15 +192,16 @@ export default {
       loading: true,
       valid: false,
       options: {},
-      form:{
-        permissionId:null,
-        permissionTitle:'',
-        permissionSubTitle:'',
-        isActive:true,
+      form: {
+        permissionId: null,
+        permissionTitle: "",
+        permissionSubTitle: "",
+        isActive: true,
       },
-      edit_form:{
-        permissionTitle:'',
-        subPermissions:'',
+      edit_form: {
+        permissionId: null,
+        module: "",
+        permission: "",
       },
       permissions: [],
       modules: [],
@@ -225,7 +218,7 @@ export default {
           sortable: true,
           value: "subPermissions",
         },
-        { text: "Actions", align: "end", value: "actions", sortable: false },
+        // { text: "Actions", align: "end", value: "actions", sortable: false },
       ],
     };
   },
@@ -234,12 +227,13 @@ export default {
     this.getDataFromApi();
   },
   methods: {
-    edit(item) {
-      this.edit_form.permissionTitle = item.permissionTitle;
-      this.edit_form.subPermissions = item.subPermissions;
-      this.PermissionEditModel = true;  
+    edit(permission, module) {
+      this.edit_form.permissionId = permission.id;
+      this.edit_form.module = module.permissionTitle;
+      this.edit_form.permission = permission.title;
+      this.PermissionEditModel = true;
     },
-   async deleteItem(item) {
+    async deleteItem(item) {
       if (confirm("Are you sure you want to delete this Permission.. ??")) {
         var res = await PermissionService.delete(parseInt(item.id));
         if (res.status == 1) {
@@ -256,7 +250,7 @@ export default {
       if (this.$refs.form.validate()) {
         var res = await PermissionService.create({
           permissionTitle: this.form.permissionTitle,
-          permissionSubTitle : this.form.permissionSubTitle,
+          permissionSubTitle: this.form.permissionSubTitle,
           isActive: this.form.isActive,
         });
         if (res.status == 1) {
@@ -264,8 +258,8 @@ export default {
           this.getDataFromApi();
           this.PermissionModel = false;
           this.form.permissionId = null;
-          this.form.permissionTitle = '';
-          this.form.permissionSubTitle = '';
+          this.form.permissionTitle = "";
+          this.form.permissionSubTitle = "";
           this.form.isActive = false;
         }
       }
@@ -274,9 +268,9 @@ export default {
       event.preventDefault();
       if (this.$refs.form.validate()) {
         let data = {
-          permissionTitle: this.edit_form.permissionSubTitle,
-          permissionSubTitle : this.edit_form.permissionTitle,
-          isActive: this.edit_form.isActive,
+          isActive: true,
+          permissionTitle: this.edit_form.module,
+          PermissionSubTitle: this.edit_form.permission,
         };
 
         var res = await PermissionService.update(
@@ -293,17 +287,16 @@ export default {
     async getDataFromApi() {
       var res = await this.getAllPermissions();
       this.permissions = res.data;
-    
-       let mod = res.data.map((e)=>{
-          return e.permissionTitle
-        });
-        this.modules = mod;
-       
+
+      let mod = res.data.map((e) => {
+        return e.permissionTitle;
+      });
+      this.modules = mod;
+
       this.loading = false;
     },
     getAllPermissions() {
       this.loading = true;
-      // return PermissionService.getlist(query);
       return PermissionService.getPermissions();
     },
   },
