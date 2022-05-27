@@ -11,7 +11,7 @@
           <h2>{{ title }}</h2>
         </v-container>
       </div>
-      <v-form v-model="valid">
+      <v-form ref="form" lazy-validation @submit="SubmitRoutes">
         <v-container>
           <v-row style="margin-bottom: -37px">
             <v-col cols="6" md="6">
@@ -24,7 +24,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="6" md="6">
-               <v-autocomplete
+              <v-autocomplete
                 v-model="form.trainID"
                 :items="trains"
                 :rules="[(v) => !!v || 'Item is required']"
@@ -103,10 +103,6 @@
             </v-col>
           </v-row>
 
-
-
-
-
           <div class="sec-heading">
             <v-container>
               <h2>Add Stations</h2>
@@ -117,33 +113,32 @@
             v-for="(station, key, index) in form.routes"
             :key="key"
             class="mt-3"
-            style="margin-bottom: -51px;"
+            style="margin-bottom: -51px"
           >
             <v-col cols="2" md="2">
               <v-text-field
                 v-model="station.sort"
                 label="Sort Order"
-                 dense
-            filled
-            small
+                dense
+                filled
+                small
               ></v-text-field>
             </v-col>
             <v-col cols="4" md="4">
               <v-autocomplete
                 v-model="station.stationID"
                 :items="stations"
-                 item-text="title"
+                item-text="title"
                 item-value="id"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Select Station"
                 required
                 dense
-            filled
+                filled
               ></v-autocomplete>
             </v-col>
             <v-col cols="4" md="4">
               <v-menu
-              
                 ref="waiting_time_menu"
                 v-model="station.isWaiting"
                 :close-on-content-click="false"
@@ -159,8 +154,8 @@
                     label="Waiting Time"
                     v-bind="attrs"
                     v-on="on"
-                     dense
-                     small
+                    dense
+                    small
                     filled
                   ></v-text-field>
                 </template>
@@ -168,7 +163,9 @@
                   v-if="station.isWaiting"
                   v-model="station.waiting"
                   full-width
-                  @click:minute="$refs.waiting_time_menu[key].save(station.waiting)"
+                  @click:minute="
+                    $refs.waiting_time_menu[key].save(station.waiting)
+                  "
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -180,12 +177,14 @@
                 dark
                 small
                 color="info"
-                v-if="form.routes != null && key ==Object.keys(form.routes).length - 1"
+                v-if="
+                  form.routes != null &&
+                  key == Object.keys(form.routes).length - 1
+                "
               >
-           
                 <v-icon dark> mdi-plus </v-icon>
               </v-btn>
-         
+
               <v-btn
                 v-if="index != 0"
                 @click="removeStation(station)"
@@ -257,11 +256,6 @@ export default {
     menu3: false,
   }),
   computed: {},
-  watch:{
-    questions(){
-  
-    }
-  },
   methods: {
     addStation(item) {
       this.form.routes.push({
@@ -279,19 +273,39 @@ export default {
       this.form.routes.splice(this.form.routes.indexOf(item), 1);
       this.removeSta();
     },
+    SubmitRoutes: async function (event) {
+      event.preventDefault();
+      if (this.$refs.form.validate()) {
+        console.log(this.form);
+        let res = null;
+        if (!this.is_edit) {
+          res = await RouteService.create(this.form);
+        } else {
+          res = await RouteService.update(this.form);
+        }
+
+        if (res.status == 1) {
+          if (!this.is_edit) {
+            this.$toaster.success("Route has been added successfully.");
+          } else {
+            this.$toaster.success("Route has been updated successfully.");
+          }
+        }
+      }
+    },
+
     removeSta() {
-      // let res1 = this.form.routes.map((v,index) => ({...v, isWaiting: false, sort:index+1}));
-      let res1 = this.form.routes.map((v,index) => ({
+      let res1 = this.form.routes.map((v, index) => ({
         arrival: v.arrival,
         departure: v.departure,
         id: v.id,
         seq: v.seq,
-        sort: index +1,
+        sort: index + 1,
         stationID: v.stationID,
         stationName: v.stationName,
         waiting: v.waiting,
-        }));
-        this.form.routes = res1;
+      }));
+      this.form.routes = res1;
     },
     async getTrains() {
       let res1 = await TrainService.getlist("");
@@ -300,7 +314,8 @@ export default {
       this.stations = res2.data;
     },
     async getRouteByTrainId() {
-      let query = "?TrainID=" + this.form.id + "&RouteName=" + this.form.routeName;
+      let query =
+        "?TrainID=" + this.form.trainID + "&RouteName=" + this.form.routeName;
       let res = await RouteService.getRouteByTrainId(query);
       this.form.routeName = res.routeName;
       this.form.trainID = res.trainID;
@@ -309,14 +324,18 @@ export default {
       this.form.arrivalTime = res.arrivalTime;
       this.form.departureTime = res.departureTime;
 
-      let res1 =  res.routes.map((v,index) => ({...v, isWaiting: false, sort:index+1}));
-        this.form.routes = res1;
+      let res1 = res.routes.map((v, index) => ({
+        ...v,
+        isWaiting: false,
+        sort: index + 1,
+      }));
+      this.form.routes = res1;
     },
   },
   mounted() {
     this.getTrains();
     if (this.$route.params.id) {
-      this.form.id = this.$route.params.id;
+      this.form.trainID = this.$route.params.id;
       this.form.routeName = this.$route.params.name;
       this.is_edit = true;
       this.title = "Update Route";
@@ -325,7 +344,7 @@ export default {
       this.items.push({ text: "Update", disabled: true, href: "#" });
     } else {
       this.stations.push({ text: "Add", disabled: true, href: "#" });
-        this.form.routes.push({
+      this.form.routes.push({
         arrival: null,
         departure: null,
         id: null,

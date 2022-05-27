@@ -139,10 +139,10 @@ export default {
   },
   methods: {
   async deleteItem(item) {
-      if (confirm("Are you sure you want to delete this User.. ??")) {
+      if (confirm("Are you sure you want to delete this Employee.. ??")) {
         var res = await EmployeeService.delete(parseInt(item.employeeID));
         if (res.status == 1) {
-          this.$toaster.success("User has been deleted Successfully.");
+          this.$toaster.success("Employee has been deleted Successfully.");
           this.getDataFromApi();
         } else {
           this.$toaster.error(res.data);
@@ -153,7 +153,11 @@ export default {
 
   
     updateEmployeeStatus: async function (item) {
-         let data = {
+          let data = {
+          fullName: item.fullName,
+          email: item.email,
+          cnic: item.cnic,
+          mobileNumber: item.mobileNumber,
           isActive: item.isActive,
         };
         var res = await EmployeeService.update(
@@ -161,7 +165,7 @@ export default {
           parseInt(item.employeeID)
         );
         if (res.status == 1) {
-          this.$toaster.success("User status has been updated successfully.");
+          this.$toaster.success("Employee status has been updated successfully.");
           this.getDataFromApi();
         }
       

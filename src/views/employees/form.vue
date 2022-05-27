@@ -47,12 +47,13 @@
                 :rules="[(v) => !!v || 'CNIC  is required']"
                 label="CNIC"
                 required
+                v-mask="'#####-#######-#'"
               ></v-text-field>
 
             </v-col>
               <v-col cols="4" md="4">
               <v-text-field
-                v-model="form.contactNumber"
+                 v-model="form.MobileNumber"
                 :rules="[(v) => !!v || 'Contact Number is required']"
                 label="Contact Number"
                 required
@@ -90,7 +91,7 @@ export default {
       name: "",
       email: "",
       cnic: "",
-      contactNumber: "",
+      MobileNumber: "",
       isActive: "",
     },
       bread: [
@@ -112,11 +113,11 @@ export default {
 async getUser(){
  let res = await EmployeeService.get(this.form.id);
  this.password_placeholder = 'Write if want to change password';
- this.form.id = res.systemUserID;
+ this.form.id = res.employeeID;
  this.form.name = res.fullName;
  this.form.email = res.email;
  this.form.cnic = res.cnic;
- this.form.contactNumber = res.contactNumber;
+ this.form.MobileNumber = res.contactNumber;
  this.form.isActive = res.isActive;
 },
     AddUser: async function (event) {
@@ -126,7 +127,7 @@ async getUser(){
           fullName: this.form.name,
           email: this.form.email,
           cnic: this.form.cnic,
-          contactNumber: this.form.contactNumber,
+          mobileNumber: this.form.MobileNumber,
           isActive: this.form.isActive,
         };
        if(!this.is_edit){

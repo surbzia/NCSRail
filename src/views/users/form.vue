@@ -53,12 +53,23 @@
               ></v-select>
             </v-col>
             <v-col cols="3" md="3">
-              <v-text-field
+              <!-- <v-text-field
                 v-model="form.employee_id"
                 :rules="[(v) => !!v || 'Employee Id is required']"
                 label="Employee Id"
                 required
-              ></v-text-field>
+              ></v-text-field> -->
+              <v-select
+                v-model="form.employee_id"
+                :items="employees"
+                item-text="fullName"
+                item-value="employeeID"
+                :rules="[(v) => !!v || 'Employee is required']"
+                label="Select Employee"
+                @change="selectEmployee()"
+                required
+                :disabled="is_edit?true:false"
+              ></v-select>
             </v-col>
             <v-col cols="6" md="6">
               <v-text-field
@@ -100,6 +111,7 @@
 <script>
 import UserService from "@/services/user";
 import RoleService from "@/services/role";
+import EmployeeService from "@/services/employee";
 export default {
   data: () => ({
     is_edit :false,
@@ -107,13 +119,14 @@ export default {
     title: "Add User",
     button: "Submit",
     roles: [],
+    employees: [],
     form: {
       id: null,
       name: "",
       email: "",
       image: undefined,
       role_id: "",
-      employee_id: "",
+      employee_id: null,
       password: "",
       isActive: "",
     },
@@ -155,12 +168,14 @@ async getUser(){
           isActive: this.form.isActive,
           image: this.form.image,
         };
+         let res = null;
        if(!this.is_edit){
-          var res = await UserService.create(data);
+           res = await UserService.create(data);
        }else{
-           var res = await UserService.update(data,this.form.id);
+            res = await UserService.update(data,this.form.id);
        }
         if (res.status == 1) {
+         
             if(!this.is_edit){
           this.$toaster.success("User has been added Successfully.");
           }else{
@@ -171,9 +186,17 @@ async getUser(){
         }
       }
     },
+   async selectEmployee(){
+    let data = await EmployeeService.get(this.form.employee_id);
+    this.form.name = data.fullName;
+    this.form.email = data.email;
+    // console.log(data);
+    },
    async getAllRoles(){
     let res = await RoleService.getlist('?isActive=true');
     this.roles = res.data;
+    let res1 = await EmployeeService.getlist('?isActive=true');
+    this.employees = res1.data;
     }
   },
   mounted(){

@@ -15,6 +15,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import { faUserSecret, faBed, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
+
+import { VueMaskDirective } from 'v-mask'
+
+Vue.directive('mask', VueMaskDirective);
 library.add(faUserSecret,faBed, faLocationDot)
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon)
