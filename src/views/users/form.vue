@@ -42,7 +42,7 @@
           </v-row>
           <v-row>
             <v-col cols="3" md="3">
-              <v-select
+              <v-autocomplete
                 v-model="form.role_id"
                 :items="roles"
                 item-text="roleName"
@@ -50,7 +50,7 @@
                 :rules="[(v) => !!v || 'Role is required']"
                 label="Select Role"
                 required
-              ></v-select>
+              ></v-autocomplete>
             </v-col>
             <v-col cols="3" md="3">
               <!-- <v-text-field
@@ -59,7 +59,7 @@
                 label="Employee Id"
                 required
               ></v-text-field> -->
-              <v-select
+              <v-autocomplete
                 v-model="form.employee_id"
                 :items="employees"
                 item-text="fullName"
@@ -68,8 +68,8 @@
                 label="Select Employee"
                 @change="selectEmployee()"
                 required
-                :disabled="is_edit?true:false"
-              ></v-select>
+                :disabled="form.employee_id!= null && is_edit?true:false"
+              ></v-autocomplete>
             </v-col>
             <v-col cols="6" md="6">
               <v-text-field
