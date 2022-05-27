@@ -75,7 +75,7 @@ export default {
      }
     },
      async getAllPermissions() {
-      let res = await PermissionService.getPermissions();
+      let res = await PermissionService.getPermissions('');
       this.permissions = res.data;
     },
      async getPermissionsByRoleID() {
