@@ -232,6 +232,7 @@ export default {
       arrivalTime: "",
       departureTime: "",
     },
+
     arrival_time_modal: false,
     departure_time_modal: false,
     waiting_time_modal: false,
@@ -276,12 +277,20 @@ export default {
     SubmitRoutes: async function (event) {
       event.preventDefault();
       if (this.$refs.form.validate()) {
-        console.log(this.form);
+     let res1 = this.form.routes.map((v) => ({
+        ...v,
+      routeName: this.form.routeName,
+      trainID: this.form.trainID,
+      arrivalTime: this.form.arrivalTime,
+      departureTime: this.form.departureTime,
+      }));
+      this.form.routes = res1;
+
         let res = null;
         if (!this.is_edit) {
-          res = await RouteService.create(this.form);
+          res = await RouteService.create(this.form.routes);
         } else {
-          res = await RouteService.update(this.form);
+          res = await RouteService.update(this.form.routes);
         }
 
         if (res.status == 1) {
