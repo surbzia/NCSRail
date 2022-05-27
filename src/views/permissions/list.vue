@@ -10,6 +10,7 @@
       :items="permissions"
       :loading="loading"
       class="elevation-1"
+      dense
     >
       <template v-slot:top>
         <v-row>
@@ -29,12 +30,6 @@
                   <v-container>
                     <v-row>
                       <v-col cols="6" md="6">
-                        <!-- <v-text-field
-                          v-model="form.permissionTitle"
-                          :rules="[(v) => !!v || 'Permission Title is required']"
-                          label="Permission Title"
-                          required
-                        ></v-text-field> -->
                         <v-select
                           v-model="form.permissionTitle"
                           :items="modules"
@@ -121,11 +116,6 @@
             </v-card>
           </v-dialog>
         </v-row>
-        <v-text-field
-          v-model="search"
-          label="Search"
-          class="mx-4"
-        ></v-text-field>
       </template>
       <template v-slot:[`item.permissionTitle`]="{ item }">
         <b> {{item.permissionTitle}}</b>
@@ -172,7 +162,6 @@
 <script>
 import PermissionService from "@/services/permission";
 export default {
-  name: "auth.permissions.listing",
   data() {
     return {
       search: "",
@@ -304,11 +293,7 @@ export default {
     },
     getAllPermissions() {
       this.loading = true;
-      var query = "";
-      if (this.search != "") {
-        query += "?search=" + this.search;
-      }
-      return PermissionService.getPermissions(query);
+      return PermissionService.getPermissions('');
     },
   },
 };
