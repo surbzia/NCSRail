@@ -26,10 +26,10 @@ GET https://nscrail.himsportal.com/api/Train/Get/{id}
 
 ------------------- Route
 -- GET https://nscrail.himsportal.com/api/Route/GetAllRoutes
-GET https://nscrail.himsportal.com/api/Route/Get/{id}
-POST https://nscrail.himsportal.com/api/Route
-PUT https://nscrail.himsportal.com/api/Route/{id}
-DELETE https://nscrail.himsportal.com/api/Route/{id}
+-- GET https://nscrail.himsportal.com/api/Route/Get/{id}
+-- POST https://nscrail.himsportal.com/api/Route
+-- PUT https://nscrail.himsportal.com/api/Route/{id}
+-- DELETE https://nscrail.himsportal.com/api/Route/{id}
 
 
 -- ------------------Train Coaches
