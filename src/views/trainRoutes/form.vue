@@ -119,92 +119,90 @@
             :key="key"
             class="mt-3"
             style="margin-bottom: -51px"
-            v-if="!station.isDeleted"
+            v-if="station.isActive"
           >
-            <template >
-              <v-col cols="2" md="2">
-                <v-text-field
-                  v-model="station.sort"
-                  label="Sort Order"
-                  dense
-                  filled
-                  small
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4">
-                <v-autocomplete
-                  v-model="station.stationID"
-                  :items="stations"
-                  item-text="title"
-                  item-value="id"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="Select Station"
-                  required
-                  dense
-                  filled
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="4" md="4">
-                <v-menu
-                  ref="waiting_time_menu"
-                  v-model="station.isWaiting"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="station.waiting"
-                      label="Waiting Time"
-                      v-bind="attrs"
-                      v-on="on"
-                      dense
-                      small
-                      filled
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="station.isWaiting"
+            <v-col cols="2" md="2">
+              <v-text-field
+                v-model="station.sort"
+                label="Sort Order"
+                dense
+                filled
+                small
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4" md="4">
+              <v-autocomplete
+                v-model="station.stationID"
+                :items="stations"
+                item-text="title"
+                item-value="id"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Select Station"
+                required
+                dense
+                filled
+              ></v-autocomplete>
+            </v-col>
+            <v-col cols="4" md="4">
+              <v-menu
+                ref="waiting_time_menu"
+                v-model="station.isWaiting"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
                     v-model="station.waiting"
-                    full-width
-                    @click:minute="
-                      $refs.waiting_time_menu[key].save(station.waiting)
-                    "
-                  ></v-time-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="2" md="2">
-                <v-btn
-                  @click="addStation(station)"
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="info"
-                  v-if="
-                    form.stations != null &&
-                    key == Object.keys(form.stations).length - 1
+                    label="Waiting Time"
+                    v-bind="attrs"
+                    v-on="on"
+                    dense
+                    small
+                    filled
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-if="station.isWaiting"
+                  v-model="station.waiting"
+                  full-width
+                  @click:minute="
+                    $refs.waiting_time_menu[key].save(station.waiting)
                   "
-                >
-                  <v-icon dark> mdi-plus </v-icon>
-                </v-btn>
+                ></v-time-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="2" md="2">
+              <v-btn
+                @click="addStation(station)"
+                class="mx-2"
+                fab
+                dark
+                small
+                color="info"
+                v-if="
+                  form.stations != null &&
+                  key == Object.keys(form.stations).length - 1
+                "
+              >
+                <v-icon dark> mdi-plus </v-icon>
+              </v-btn>
 
-                <v-btn
-                  v-if="index != 0"
-                  @click="removeStation(station, key)"
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="error"
-                >
-                  <v-icon dark> mdi-minus </v-icon>
-                </v-btn>
-              </v-col>
-            </template>
+              <v-btn
+                v-if="index != 0"
+                @click="removeStation(station, key)"
+                class="mx-2"
+                fab
+                dark
+                small
+                color="error"
+              >
+                <v-icon dark> mdi-minus </v-icon>
+              </v-btn>
+            </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" md="12" class="text-right">
@@ -274,24 +272,28 @@ export default {
         sort: item.sort + 1,
         stationID: null,
         waiting: null,
-        isDeleted: false,
+        isActive: true,
       });
     },
-    removeStation(item, i) {
+    removeStation(item) {
+      
       if (item.id == 0) {
         this.form.stations.splice(this.form.stations.indexOf(item), 1);
       } else {
-        let res2 = this.form.stations.map((v, index) => ({
+        let res2 = this.form.stations.map((v) => 
+        ({
           id: v.id,
           seq: v.seq,
-          sort: index + 1,
+          sort: (item.stationID == v.stationID)? false : (!v.isActive? false:true),
           stationID: v.stationID,
           waiting: v.waiting,
-          isDeleted: index == i ? true : false,
+          isActive: (item.stationID==v.stationID) ? false : (!v.isActive? false:true),
         }));
+
         this.form.stations = res2;
-        this.removeSta();
       }
+     
+      this.removeSta();
     },
     SubmitRoutes: async function (event) {
       event.preventDefault();
@@ -314,13 +316,15 @@ export default {
     },
 
     removeSta() {
-      let res1 = this.form.stations.map((v, index) => ({
+      let count = 1;
+      let res1 = this.form.stations.map((v) => (
+        {
         id: v.id,
         seq: v.seq,
-        sort: index + 1,
+        sort: v.sort == false ? false : count++,
         stationID: v.stationID,
         waiting: v.waiting,
-        isDeleted: v.isDeleted,
+        isActive: v.isActive == false ? false : true,
       }));
       this.form.stations = res1;
     },
@@ -344,11 +348,12 @@ export default {
       this.form.route.arrivalTime = res.arrivalTime;
       this.form.route.departureTime = res.departureTime;
 
-      let res1 = res.routes.map((v, index) => ({
+      let count = 1;
+      let res1 = res.routes.map((v) => ({
         ...v,
         isWaiting: false,
-        isDeleted: false,
-        sort: index + 1,
+        isActive: true,
+        sort: count++,
       }));
       this.form.stations = res1;
     },
@@ -372,7 +377,7 @@ export default {
         seq: 1,
         sort: 1,
         waiting: null,
-        isDeleted: false,
+        isActive: true,
       });
     }
   },
