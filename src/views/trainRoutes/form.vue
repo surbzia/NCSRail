@@ -321,7 +321,7 @@ export default {
         {
         id: v.id,
         seq: v.seq,
-        sort: v.sort == false ? false : count++,
+        sort: v.sort == false ? 0 : count++,
         stationID: v.stationID,
         waiting: v.waiting,
         isActive: v.isActive == false ? false : true,
