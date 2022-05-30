@@ -11,7 +11,7 @@ class RouteService {
     }
     async create(formData) {
         var res = await axios.post('/api/Route', formData).then(function (e) {
-            return { status: 1, data: e.data }
+            return { status: 1, data: e.code }
         }).catch(function (e) {
             return { status: 0, data: e };
         });

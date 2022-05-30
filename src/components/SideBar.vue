@@ -6,8 +6,8 @@
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn href="https://nscrail.himsportal.com/"  target="_blank" text>
-        <v-icon style="font-size: 35px;">mdi-web</v-icon>
+      <v-btn href="https://nscrail.himsportal.com/" target="_blank" text>
+        <v-icon style="font-size: 35px">mdi-web</v-icon>
       </v-btn>
       <v-btn :to="{ name: 'auth.dashboard' }" text>
         <span class="mr-2">Dashboard</span>
@@ -31,7 +31,7 @@
         </template>
 
         <v-list>
-           <v-list-item link :to="{ name: 'auth.bookings.add' }">
+          <v-list-item link :to="{ name: 'auth.bookings.add' }">
             <v-list-item-title
               ><v-icon>mdi-plus</v-icon>Add Booking</v-list-item-title
             >
@@ -68,17 +68,20 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list dense>
-          <v-list-item class="px-2" link :to="{ name: 'auth.bookings.listing' }">
+          <v-list-item
+            class="px-2"
+            link
+            :to="{ name: 'auth.bookings.listing' }"
+          >
             <v-list-item-title> Bookings</v-list-item-title>
           </v-list-item>
-           <v-list-item
+          <v-list-item
             class="px-2"
             link
             :to="{ name: 'auth.stations.listing' }"
           >
-
             <v-list-item-title>Station</v-list-item-title>
-          </v-list-item> 
+          </v-list-item>
           <v-list-item class="px-2" link :to="{ name: 'auth.cities.listing' }">
             <v-list-item-title>Cities</v-list-item-title>
           </v-list-item>
@@ -88,24 +91,31 @@
           <v-list-item class="px-2" link :to="{ name: 'auth.coaches.listing' }">
             <v-list-item-title>Coaches</v-list-item-title>
           </v-list-item>
-           <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
+          <v-list-item class="px-2" link :to="{ name: 'auth.routes.listing' }">
             <v-list-item-title>Routes</v-list-item-title>
-          </v-list-item> 
           </v-list-item>
-           <v-list-item class="px-2" link :to="{ name: 'auth.users.listing' }">
-            <v-list-item-title>Users</v-list-item-title>
-          </v-list-item> 
-           <v-list-item class="px-2" link :to="{ name: 'auth.roles.listing' }">
-            <v-list-item-title>Roles</v-list-item-title>
-          </v-list-item> 
-           <v-list-item class="px-2" link :to="{ name: 'auth.permissions.listing' }">
-            <v-list-item-title>Permissions</v-list-item-title>
-          </v-list-item> 
-           <v-list-item class="px-2" link :to="{ name: 'auth.employees.listing' }">
-            <v-list-item-title>Employees</v-list-item-title>
-          </v-list-item> 
 
-          
+          <v-list-item class="px-2" link :to="{ name: 'auth.users.listing' }">
+            <v-list-item-title>Users</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="px-2" link :to="{ name: 'auth.roles.listing' }">
+            <v-list-item-title>Roles</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            class="px-2"
+            link
+            :to="{ name: 'auth.permissions.listing' }"
+          >
+            <v-list-item-title>Permissions</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            class="px-2"
+            link
+            :to="{ name: 'auth.employees.listing' }"
+          >
+            <v-list-item-title>Employees</v-list-item-title>
+          </v-list-item>
+
           <!-- <v-list-item class="px-2" link :to="{ name: 'auth.addstation' }">
             <v-list-item-title>Add Station</v-list-item-title>
           </v-list-item>
@@ -129,7 +139,7 @@
 </template>
 <script>
 export default {
-  name: "sidebar",
+  name: "showsidebar",
   components: {},
   props: ["showsidebar"],
   data: () => ({
@@ -137,23 +147,23 @@ export default {
     mini: true,
   }),
   methods: {
-        logout() {
+    logout() {
       this.$store.commit("setLoginStatus", false);
       this.$store.commit("setAuthToken", "");
       // this.$store.commit("setloggedInUser", {});
       this.$router.push({ name: "auth.login" });
     },
   },
-    computed: {
+  computed: {
     user() {
       return this.$store.getters.loggedInUser;
     },
     loggedIn() {
       return this.$store.getters.loggedIn;
     },
-    permissions(){
-      return this.$store.getters.getPermissions
-    }
+    permissions() {
+      return this.$store.getters.getPermissions;
+    },
   },
 };
 </script>

@@ -122,9 +122,9 @@
 
       </template>
       <template v-slot:[`item.subPermissions`]="{ item }">
-        <v-chip
+        <!-- <v-chip
           v-for="permission in item.subPermissions"
-          :key="permission.id"
+          
           class="ma-2"
           @click="edit(permission, item)"
            color="dark"
@@ -133,7 +133,26 @@
           @click:close="deleteItem(permission)"
         >
           {{ permission.title }} &nbsp;
-        </v-chip>
+        </v-chip> -->
+        <v-btn
+      class="ma-1"
+      rounded
+      
+      color="light"
+      v-for="permission in item.subPermissions"
+      :key="permission.id"
+    >
+     {{ permission.title }} &nbsp;
+      <v-icon rounded left @click="edit(permission, item)">
+        mdi-pencil
+      </v-icon>
+      &nbsp;
+      <v-icon rounded left @click="deleteItem(permission)">
+        mdi-delete
+      </v-icon>
+      
+    </v-btn>
+   
       </template>
 
       <!-- <template v-slot:[`item.actions`]="{ item }">
