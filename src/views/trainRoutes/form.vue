@@ -373,9 +373,9 @@ export default {
       this.stations.push({ text: "Add", disabled: true, href: "#" });
       this.form.stations.push({
         id: 0,
-        stationID: null,
-        seq: 1,
+         seq: 1,
         sort: 1,
+        stationID: null,
         waiting: null,
         isActive: true,
       });
