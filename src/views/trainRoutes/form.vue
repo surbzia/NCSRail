@@ -17,7 +17,7 @@
         </v-container>
       </div>
       <v-form ref="form" lazy-validation @submit="SubmitRoutes">
-        <v-container style="padding: 0px 0px 0px 0px;">
+        <v-container style="padding: 0px 0px 0px 0px">
           <v-row style="margin-bottom: -37px">
             <v-col cols="6" md="6">
               <v-text-field
@@ -119,89 +119,92 @@
             :key="key"
             class="mt-3"
             style="margin-bottom: -51px"
+            v-if="!station.isDeleted"
           >
-            <v-col cols="2" md="2">
-              <v-text-field
-                v-model="station.sort"
-                label="Sort Order"
-                dense
-                filled
-                small
-              ></v-text-field>
-            </v-col>
-            <v-col cols="4" md="4">
-              <v-autocomplete
-                v-model="station.stationID"
-                :items="stations"
-                item-text="title"
-                item-value="id"
-                :rules="[(v) => !!v || 'Item is required']"
-                label="Select Station"
-                required
-                dense
-                filled
-              ></v-autocomplete>
-            </v-col>
-            <v-col cols="4" md="4">
-              <v-menu
-                ref="waiting_time_menu"
-                v-model="station.isWaiting"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
+            <template >
+              <v-col cols="2" md="2">
+                <v-text-field
+                  v-model="station.sort"
+                  label="Sort Order"
+                  dense
+                  filled
+                  small
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4">
+                <v-autocomplete
+                  v-model="station.stationID"
+                  :items="stations"
+                  item-text="title"
+                  item-value="id"
+                  :rules="[(v) => !!v || 'Item is required']"
+                  label="Select Station"
+                  required
+                  dense
+                  filled
+                ></v-autocomplete>
+              </v-col>
+              <v-col cols="4" md="4">
+                <v-menu
+                  ref="waiting_time_menu"
+                  v-model="station.isWaiting"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="station.waiting"
+                      label="Waiting Time"
+                      v-bind="attrs"
+                      v-on="on"
+                      dense
+                      small
+                      filled
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="station.isWaiting"
                     v-model="station.waiting"
-                    label="Waiting Time"
-                    v-bind="attrs"
-                    v-on="on"
-                    dense
-                    small
-                    filled
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="station.isWaiting"
-                  v-model="station.waiting"
-                  full-width
-                  @click:minute="
-                    $refs.waiting_time_menu[key].save(station.waiting)
+                    full-width
+                    @click:minute="
+                      $refs.waiting_time_menu[key].save(station.waiting)
+                    "
+                  ></v-time-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="2" md="2">
+                <v-btn
+                  @click="addStation(station)"
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="info"
+                  v-if="
+                    form.stations != null &&
+                    key == Object.keys(form.stations).length - 1
                   "
-                ></v-time-picker>
-              </v-menu>
-            </v-col>
-            <v-col cols="2" md="2">
-              <v-btn
-                @click="addStation(station)"
-                class="mx-2"
-                fab
-                dark
-                small
-                color="info"
-                v-if="
-                  form.stations != null &&
-                  key == Object.keys(form.stations).length - 1
-                "
-              >
-                <v-icon dark> mdi-plus </v-icon>
-              </v-btn>
+                >
+                  <v-icon dark> mdi-plus </v-icon>
+                </v-btn>
 
-              <v-btn
-                v-if="index != 0"
-                @click="removeStation(station)"
-                class="mx-2"
-                fab
-                dark
-                small
-                color="error"
-              >
-                <v-icon dark> mdi-minus </v-icon>
-              </v-btn>
-            </v-col>
+                <v-btn
+                  v-if="index != 0"
+                  @click="removeStation(station, key)"
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="error"
+                >
+                  <v-icon dark> mdi-minus </v-icon>
+                </v-btn>
+              </v-col>
+            </template>
           </v-row>
           <v-row>
             <v-col cols="12" md="12" class="text-right">
@@ -271,14 +274,24 @@ export default {
         sort: item.sort + 1,
         stationID: null,
         waiting: null,
+        isDeleted: false,
       });
     },
-    removeStation(item) {
-      this.form.stations.splice(
-        this.form.stations.indexOf(item),
-        1
-      );
-      this.removeSta();
+    removeStation(item, i) {
+      if (item.id == 0) {
+        this.form.stations.splice(this.form.stations.indexOf(item), 1);
+      } else {
+        let res2 = this.form.stations.map((v, index) => ({
+          id: v.id,
+          seq: v.seq,
+          sort: index + 1,
+          stationID: v.stationID,
+          waiting: v.waiting,
+          isDeleted: index == i ? true : false,
+        }));
+        this.form.stations = res2;
+        this.removeSta();
+      }
     },
     SubmitRoutes: async function (event) {
       event.preventDefault();
@@ -287,7 +300,7 @@ export default {
         if (!this.is_edit) {
           res = await RouteService.create(this.form);
         } else {
-          res = await RouteService.update(this.form,this.form.route.trainID);
+          res = await RouteService.update(this.form, this.form.route.trainID);
         }
         if (res.status == 1) {
           if (!this.is_edit) {
@@ -295,13 +308,9 @@ export default {
           } else {
             this.$toaster.success("Route has been updated successfully.");
           }
-          this.$router.push({name:'auth.routes.listing'});
+          this.$router.push({ name: "auth.routes.listing" });
         }
       }
-    },
-    formateDateToDate(val){
-       let date = new Date(val);
-       return date;
     },
 
     removeSta() {
@@ -311,6 +320,7 @@ export default {
         sort: index + 1,
         stationID: v.stationID,
         waiting: v.waiting,
+        isDeleted: v.isDeleted,
       }));
       this.form.stations = res1;
     },
@@ -322,7 +332,10 @@ export default {
     },
     async getRouteByTrainId() {
       let query =
-        "?TrainID=" + this.form.route.trainID + "&RouteName=" + this.form.route.routeName;
+        "?TrainID=" +
+        this.form.route.trainID +
+        "&RouteName=" +
+        this.form.route.routeName;
       let res = await RouteService.getRouteByTrainId(query);
       this.form.route.routeName = res.routeName;
       this.form.route.trainID = res.trainID;
@@ -334,6 +347,7 @@ export default {
       let res1 = res.routes.map((v, index) => ({
         ...v,
         isWaiting: false,
+        isDeleted: false,
         sort: index + 1,
       }));
       this.form.stations = res1;
@@ -358,6 +372,7 @@ export default {
         seq: 1,
         sort: 1,
         waiting: null,
+        isDeleted: false,
       });
     }
   },
